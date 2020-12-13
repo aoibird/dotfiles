@@ -1,0 +1,7 @@
+# -*- mode: Shell-script -*-
+# ~/.bash_profile
+#
+
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
