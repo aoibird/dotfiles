@@ -1,3 +1,7 @@
 #+TITLE: Dotfiles
 
 My peronsal configurations.
+
+- ~cd ~/dotfiles~
+- ~stow -S --dotfiles <config_dir>~ to install
+- ~stow -D --dotfiles <config_dir>~ to uninstall
