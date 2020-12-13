@@ -1,6 +1,6 @@
 #+TITLE: Dotfiles
 
-My peronsal configurations.
+My personal configurations.
 
 - ~cd ~/dotfiles~
 - ~stow -S --dotfiles <config_dir>~ to install
