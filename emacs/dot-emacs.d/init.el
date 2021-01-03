@@ -104,6 +104,8 @@
   :bind
   ("C-c a" . org-agenda)
   ("C-c c" . org-capture)
+  :init
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle))) ; tangle on save
   :config
   (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
   (setq org-tags-column 40)        ; set position of tags
@@ -122,7 +124,7 @@
 
   ;; --- babel ---
   (setq org-confirm-babel-evaluate nil)
-  (setq org-babel-python-command "python")
+  (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
    'org-babel-load-languages '((R . t)
                    (C . t)
@@ -305,3 +307,5 @@
   :ensure t
   :config
   (setq python-shell-interpreter "python3"))
+
+(use-package php-mode)
