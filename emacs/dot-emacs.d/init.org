@@ -52,8 +52,8 @@
 
 ** Color theme
 #+begin_src elisp
-(use-package doom-themes
-  :init (load-theme 'doom-solarized-light t))
+  (use-package doom-themes
+    :init (load-theme 'doom-solarized-light t))
 #+end_src
 
 ** Frame size
@@ -64,8 +64,8 @@
 
 ** =all-the-icons=
 #+begin_src elisp
-(use-package all-the-icons
-  :ensure t) ;; and M-x all-the-icons-install-fonts
+  (use-package all-the-icons
+    :ensure t) ;; and M-x all-the-icons-install-fonts
 #+end_src
 
 ** Mode line
@@ -107,9 +107,9 @@
 
 ** Indentation
 #+begin_src elisp
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default c-basic-offset 4)
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq-default c-basic-offset 4)
 #+end_src
 
 * macOS
@@ -130,31 +130,31 @@
 
 * Keybindings
 #+begin_src elisp
-(global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
-(global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
-(global-set-key (kbd "C-c m n") 'my/open-notes-directory)
-(global-set-key (kbd "C-c m n") 'my/open-init-file)
-(global-set-key (kbd "M-[") 'previous-buffer)
-(global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "s-，") 'customize)
-(global-set-key (kbd "M-【") 'previous-buffer)
-(global-set-key (kbd "M-】") 'next-buffer)
+  (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
+  (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
+  (global-set-key (kbd "C-c m n") 'my/open-notes-directory)
+  (global-set-key (kbd "C-c m n") 'my/open-init-file)
+  (global-set-key (kbd "M-[") 'previous-buffer)
+  (global-set-key (kbd "M-]") 'next-buffer)
+  (global-set-key (kbd "s-，") 'customize)
+  (global-set-key (kbd "M-【") 'previous-buffer)
+  (global-set-key (kbd "M-】") 'next-buffer)
 #+end_src
 
 * Functions
 
 ** Add AucTeX file variables
 #+begin_src elisp
-;; https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi
-(defun my/add-auctex-file-variables ()
-  (interactive)
-  (if (and (not buffer-read-only)
-           (string= (file-name-extension (buffer-file-name)) "tex"))
-      (progn
-        ;; (add-file-local-variable 'mode 'latex)
-        (add-file-local-variable 'TeX-engine 'xetex)
-        (goto-char (point-min)))))
-;; (add-hook 'LaTeX-mode-hook 'my/add-auctex-file-variables)
+  ;; https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi
+  (defun my/add-auctex-file-variables ()
+    (interactive)
+    (if (and (not buffer-read-only)
+             (string= (file-name-extension (buffer-file-name)) "tex"))
+        (progn
+          ;; (add-file-local-variable 'mode 'latex)
+          (add-file-local-variable 'TeX-engine 'xetex)
+          (goto-char (point-min)))))
+  ;; (add-hook 'LaTeX-mode-hook 'my/add-auctex-file-variables)
 #+end_src
 
 * Org
@@ -189,14 +189,14 @@
     (setq org-babel-python-command "python3")
     (org-babel-do-load-languages
      'org-babel-load-languages '((R . t)
-                     (C . t)
-                     (python . t)
-                     (shell . t)
-                     (ruby . t)
-                     (haskell . t)
-                     (scheme . t)
-                     (awk . t)
-                     (octave . t)))
+                                 (C . t)
+                                 (python . t)
+                                 (shell . t)
+                                 (ruby . t)
+                                 (haskell . t)
+                                 (scheme . t)
+                                 (awk . t)
+                                 (octave . t)))
 
     ;; --- capture ---
     (setq org-capture-templates
@@ -231,80 +231,80 @@
 
 ** =org-roam=
 #+begin_src elisp
-(use-package org-roam
-  :ensure t
-  :hook
-  (after-init . org-roam-mode)
-  :custom
-  (org-roam-directory "~/ea/roam")
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph-show)
-               ("C-c n j" . org-roam-jump-to-index))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate)))
-  :config
-  (setq org-roam-graph-executable "/usr/local/bin/dot")
-  (setq org-roam-index-file "~/ea/roam/index.org"))
+  (use-package org-roam
+    :ensure t
+    :hook
+    (after-init . org-roam-mode)
+    :custom
+    (org-roam-directory "~/ea/roam")
+    :bind (:map org-roam-mode-map
+                (("C-c n l" . org-roam)
+                 ("C-c n f" . org-roam-find-file)
+                 ("C-c n g" . org-roam-graph-show)
+                 ("C-c n j" . org-roam-jump-to-index))
+                :map org-mode-map
+                (("C-c n i" . org-roam-insert))
+                (("C-c n I" . org-roam-insert-immediate)))
+    :config
+    (setq org-roam-graph-executable "/usr/local/bin/dot")
+    (setq org-roam-index-file "~/ea/roam/index.org"))
 #+end_src
 
 ** =htmlize=
 #+begin_src elisp
-(use-package htmlize
-  :ensure t)
+  (use-package htmlize
+    :ensure t)
 #+end_src
 
 * Yasnippet
 #+begin_src elisp
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'org-mode-hook #'yas-minor-mode)
-  (setq yas-indent-line 'fixed))
+  (use-package yasnippet
+    :ensure t
+    :config
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook #'yas-minor-mode)
+    (add-hook 'org-mode-hook #'yas-minor-mode)
+    (setq yas-indent-line 'fixed))
 #+end_src
 
 * Magit
 #+begin_src elisp
-(use-package magit
-  :ensure t
-  :init
-  :bind
-  ("C-x g" . magit-status))
+  (use-package magit
+    :ensure t
+    :init
+    :bind
+    ("C-x g" . magit-status))
 #+end_src
 
 * Ibuffer
 #+begin_src elisp
-(use-package ibuffer
-  :ensure t
-  :bind
-  ("C-x C-b" . ibuffer)
-  :config
-  (setq ibuffer-saved-filter-groups
-        '(("default"
-           ("planner" (or
-                       (name . "^\\*Calendar\\*$")
-                       (name . "^diary$")))
-           ("emacs" (or
-                     (name . "^\\*scratch\\*$")
-                     (name . "^\\*Messages\\*$")))
-           ("emacs-config" (or (filename . ".emacs.d")
-                               (filename . "init.el")))
-           ("magit" (or
-                     (name . "magit\*")
-                     (mode . Magit)
-                     ))
-           ("dired" (mode . dired-mode))
-           ("org" (mode . org-mode))
-           ("manual" (or
-                      (name . "\\*Man")
-                      (name . "\\*info\\*"))))))
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default"))))
+  (use-package ibuffer
+    :ensure t
+    :bind
+    ("C-x C-b" . ibuffer)
+    :config
+    (setq ibuffer-saved-filter-groups
+          '(("default"
+             ("planner" (or
+                         (name . "^\\*Calendar\\*$")
+                         (name . "^diary$")))
+             ("emacs" (or
+                       (name . "^\\*scratch\\*$")
+                       (name . "^\\*Messages\\*$")))
+             ("emacs-config" (or (filename . ".emacs.d")
+                                 (filename . "init.el")))
+             ("magit" (or
+                       (name . "magit\*")
+                       (mode . Magit)
+                       ))
+             ("dired" (mode . dired-mode))
+             ("org" (mode . org-mode))
+             ("manual" (or
+                        (name . "\\*Man")
+                        (name . "\\*info\\*"))))))
+    (add-hook 'ibuffer-mode-hook
+              (lambda ()
+                (ibuffer-switch-to-saved-filter-groups "default"))))
 #+end_src
 
 * Ivy
@@ -364,9 +364,9 @@
 
 * =dired-sidebar=                       :Dired:
 #+begin_src elisp
-(use-package dired-sidebar
-  :ensure t
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
+  (use-package dired-sidebar
+    :ensure t
+    :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
 #+end_src
 
 * =rainbow-delimiters=
@@ -387,10 +387,10 @@
 
 * =slime=                               :Programming:
 #+begin_src elisp
-(use-package slime
-  :ensure t
-  :init
-  (setq inferior-lisp-program "/usr/local/bin/ccl64"))
+  (use-package slime
+    :ensure t
+    :init
+    (setq inferior-lisp-program "/usr/local/bin/ccl64"))
 #+end_src
 
 * =sml-mode=                            :Programming:
@@ -400,33 +400,33 @@
 #+end_src
 * =rust-mode=                           :Programming:
 #+begin_src elisp
-(use-package rust-mode
-  :ensure t)
+  (use-package rust-mode
+    :ensure t)
 #+end_src
 
 * =haskell-mode=                        :Programming:
 #+begin_src elisp
-(use-package haskell-mode
-  :ensure t)
+  (use-package haskell-mode
+    :ensure t)
 #+end_src
 
 * =racket-mode=                         :Programming:
 #+begin_src elisp
-(use-package racket-mode
-  :ensure t)
+  (use-package racket-mode
+    :ensure t)
 #+end_src
 
 * =python-mode=                         :Programming:
 #+begin_src elisp
-(use-package python-mode
-  :ensure t
-  :config
-  (setq python-shell-interpreter "python3"))
+  (use-package python-mode
+    :ensure t
+    :config
+    (setq python-shell-interpreter "python3"))
 #+end_src
 
 * =php-mode=                            :Programming:
 #+begin_src elisp
-(use-package php-mode)
+  (use-package php-mode)
 #+end_src
 
 * INACTIVE
@@ -436,16 +436,15 @@
 
 ** =frog-jump-buffer=
 #+begin_src elisp
-(use-package frog-jump-buffer
-  :ensure t
-  :bind
-  ("C-c f" . frog-jump-buffer))
-
+  (use-package frog-jump-buffer
+    :ensure t
+    :bind
+    ("C-c f" . frog-jump-buffer))
 #+end_src
 
 ** =recentf-mode=
 #+begin_src elisp
-(recentf-mode 1)
+  (recentf-mode 1)
 #+end_src
 
 ** Install packages

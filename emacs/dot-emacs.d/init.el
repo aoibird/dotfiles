@@ -127,14 +127,14 @@
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
    'org-babel-load-languages '((R . t)
-                   (C . t)
-                   (python . t)
-                   (shell . t)
-                   (ruby . t)
-                   (haskell . t)
-                   (scheme . t)
-                   (awk . t)
-                   (octave . t)))
+                               (C . t)
+                               (python . t)
+                               (shell . t)
+                               (ruby . t)
+                               (haskell . t)
+                               (scheme . t)
+                               (awk . t)
+                               (octave . t)))
 
   ;; --- capture ---
   (setq org-capture-templates
