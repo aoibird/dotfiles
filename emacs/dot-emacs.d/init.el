@@ -80,8 +80,6 @@
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
-(global-set-key (kbd "C-c m n") 'my/open-notes-directory)
-(global-set-key (kbd "C-c m n") 'my/open-init-file)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "s-，") 'customize)
@@ -105,7 +103,7 @@
   ("C-c a" . org-agenda)
   ("C-c c" . org-capture)
   :init
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle))) ; tangle on save
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook 'org-babel-tangle nil t))) ; tangle on save
   :config
   (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
   (setq org-tags-column 40)        ; set position of tags
