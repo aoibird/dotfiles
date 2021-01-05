@@ -81,13 +81,16 @@
 #+end_src
 
 ** Line
+The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
+
 #+begin_src elisp
   (setq-default cursor-type 'bar)
   (setq-default show-trailing-whitespace t)
   (setq-default show-paren-delay 0)
   (show-paren-mode 1)                     ; parentheses matching
   (global-hl-line-mode t)                 ; line highlighting
-  (global-linum-mode 1)                   ; line number
+  (global-display-line-numbers-mode)
+  ;; (global-linum-mode 1)                   ; line number
   (global-visual-line-mode t)             ; line wrap
 #+end_src
 

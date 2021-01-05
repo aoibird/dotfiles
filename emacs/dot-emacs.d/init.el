@@ -50,7 +50,8 @@
 (setq-default show-paren-delay 0)
 (show-paren-mode 1)                     ; parentheses matching
 (global-hl-line-mode t)                 ; line highlighting
-(global-linum-mode 1)                   ; line number
+(global-display-line-numbers-mode)
+;; (global-linum-mode 1)                   ; line number
 (global-visual-line-mode t)             ; line wrap
 
 (set-face-attribute 'default nil :font "Fira Code-14")
