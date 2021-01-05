@@ -1,4 +1,4 @@
-# -*- mode: shell-script -*-
+#!/usr/bin/env zsh
 #
 # ~/.zshrc
 #
@@ -11,6 +11,10 @@ if [ -f ~/.path ]; then
     . ~/.path
 fi
 
+autoload -Uz compinit && compinit
+
+# last/two %
+export PROMPT='%F{green}%B%2~%b%f %# '
 
 HISTSIZE=1000
 SAVEHIST=1000
