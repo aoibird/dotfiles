@@ -96,6 +96,7 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 
 ** Font
 #+begin_src elisp
+  (setq inhibit-compacting-font-caches t)
   (set-face-attribute 'default nil :font "Fira Code-14")
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
@@ -197,7 +198,8 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
                                  (haskell . t)
                                  (scheme . t)
                                  (awk . t)
-                                 (octave . t)))
+                                 (octave . t)
+                                 (lua . t)))
 
     ;; --- capture ---
     (setq org-capture-templates
@@ -356,6 +358,14 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
 #+end_src
 
+* Projectile
+#+begin_src elisp
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :bind-keymap ("C-c p" . projectile-command-map))
+#+end_src
+
 * =all-the-icons-dired=                 :Dired:
 #+begin_src elisp
   (use-package all-the-icons-dired
@@ -384,6 +394,16 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "/usr/local/bin/multimarkdown"))
+#+end_src
+
+* =yaml-mode=
+#+begin_src elisp
+  (use-package yaml-mode)
+#+end_src
+
+* =dockerfile-mode=
+#+begin_src elisp
+  (use-package dockerfile-mode)
 #+end_src
 
 * =slime=                               :Programming:
@@ -428,6 +448,16 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 * =php-mode=                            :Programming:
 #+begin_src elisp
   (use-package php-mode)
+#+end_src
+
+* =typescript-mode=
+#+begin_src elisp
+  (use-package typescript-mode)
+#+end_src
+
+* =lua-mode=
+#+begin_src elisp
+  (use-package lua-mode)
 #+end_src
 
 * INACTIVE

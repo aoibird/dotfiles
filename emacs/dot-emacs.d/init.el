@@ -54,6 +54,7 @@
 ;; (global-linum-mode 1)                   ; line number
 (global-visual-line-mode t)             ; line wrap
 
+(setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Fira Code-14")
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
@@ -133,7 +134,8 @@
                                (haskell . t)
                                (scheme . t)
                                (awk . t)
-                               (octave . t)))
+                               (octave . t)
+                               (lua . t)))
 
   ;; --- capture ---
   (setq org-capture-templates
@@ -267,6 +269,11 @@
   (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
 
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :bind-keymap ("C-c p" . projectile-command-map))
+
 (use-package all-the-icons-dired
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -284,6 +291,10 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "/usr/local/bin/multimarkdown"))
+
+(use-package yaml-mode)
+
+(use-package dockerfile-mode)
 
 (use-package slime
   :ensure t
@@ -308,3 +319,7 @@
   (setq python-shell-interpreter "python3"))
 
 (use-package php-mode)
+
+(use-package typescript-mode)
+
+(use-package lua-mode)
