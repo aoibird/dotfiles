@@ -136,6 +136,7 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 #+begin_src elisp
   (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
   (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
+  (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
   (global-set-key (kbd "M-[") 'previous-buffer)
   (global-set-key (kbd "M-]") 'next-buffer)
   (global-set-key (kbd "s-，") 'customize)
@@ -146,8 +147,8 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 * Functions
 
 ** Add AucTeX file variables
+From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi.
 #+begin_src elisp
-  ;; https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi
   (defun my/add-auctex-file-variables ()
     (interactive)
     (if (and (not buffer-read-only)
@@ -160,9 +161,7 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 #+end_src
 
 * Org
-
-** =org=
-#+begin_src elisp
+#+begin_src elisp :noweb yes
   (use-package org
     :ensure t
     :bind
@@ -172,67 +171,93 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook 'org-babel-tangle nil t))) ; tangle on save
     :config
     (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
-    (setq org-tags-column 40)        ; set position of tags
+    (setq org-tags-column 60)        ; set position of tags
     (setq org-habit-graph-column 50) ; set position of habit graph
 
-    ;; --- todo ---
     (add-to-list 'org-modules 'org-habit)
     (add-to-list 'org-modules 'org-tempo)
     (add-to-list 'org-modules 'org-attach-git)
-    (setq org-agenda-files '("~/ea/schedule/"))
-    (setq org-log-into-drawer t)
-    (setq org-log-done 'time)          ; record close time for todo item
-    (setq org-duration-format 'h:mm)   ; time format
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
-    ;; --- babel ---
-    (setq org-confirm-babel-evaluate nil)
-    (setq org-babel-python-command "python3")
-    (org-babel-do-load-languages
-     'org-babel-load-languages '((R . t)
-                                 (C . t)
-                                 (python . t)
-                                 (shell . t)
-                                 (ruby . t)
-                                 (haskell . t)
-                                 (scheme . t)
-                                 (awk . t)
-                                 (octave . t)
-                                 (lua . t)))
+    <<org-planning>>
 
-    ;; --- capture ---
-    (setq org-capture-templates
-          '(("i" "Idea" entry
-             (file+headline "~/ea/refile/refile.org" "Ideas")
-             "* %U%?\n%i\n")
-            ("t" "Task" entry
-             (file+headline "~/ea/refile/refile.org" "Tasks")
-             "* TODO %?\n %i\n %a")
-            ("c" "Clipboard" entry
-             (file+headline "~/ea/refile/refile.org" "Clipboard")
-             "* %?\n%i\n%a")))
+    <<org-babel>>
 
-    ;; --- export ---
-    (setq org-export-backends
-          '(ascii beamer html icalendar latex man md odt texinfo))
-    (setq org-export-coding-system 'utf-8)
-    (setq org-latex-listings 'listings)
+    <<org-capture>>
 
-    ;; --- tempo ---
-    (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
+    <<org-export>>
+
+    <<org-tempo>>
     )
 #+end_src
 
-** =org-bullets=
+** Planning
+#+NAME: org-planning
+#+begin_src elisp :tangle no
+  (setq org-agenda-files '("~/ea/schedule/"))
+  (setq org-log-into-drawer t)
+  (setq org-log-done 'time)          ; record close time for todo item
+  (setq org-duration-format 'h:mm)   ; time format
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+#+end_src
+
+** Babel
+#+NAME: org-babel
+#+begin_src elisp :tangle no
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-babel-python-command "python3")
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((R . t)
+                               (C . t)
+                               (python . t)
+                               (shell . t)
+                               (ruby . t)
+                               (haskell . t)
+                               (scheme . t)
+                               (awk . t)
+                               (octave . t)
+                               (lua . t)))
+#+end_src
+
+** Capture
+#+NAME: org-capture
+#+begin_src elisp :tangle no
+  (setq org-capture-templates
+        '(("i" "Idea" entry
+           (file+headline "~/ea/refile/refile.org" "Ideas")
+           "* %U%?\n%i\n")
+          ("t" "Task" entry
+           (file+headline "~/ea/refile/refile.org" "Tasks")
+           "* TODO %?\n %i\n %a")
+          ("c" "Clipboard" entry
+           (file+headline "~/ea/refile/refile.org" "Clipboard")
+           "* %?\n%i\n%a")))
+#+end_src
+
+** Export
+#+NAME: org-export
+#+begin_src elisp :tangle no
+  (setq org-export-backends
+        '(ascii beamer html icalendar latex man md odt texinfo))
+  (setq org-export-coding-system 'utf-8)
+  (setq org-latex-listings 'listings)
+#+end_src
+
+** Tempo
+#+NAME: org-tempo
+#+begin_src elisp :tangle no
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
+#+end_src
+
+* Org bullets
 #+begin_src elisp
   (use-package org-bullets
     :ensure t
     :hook (org-mode . org-bullets-mode))
 #+end_src
 
-** =org-roam=
+* Org roam
 #+begin_src elisp
   (use-package org-roam
     :ensure t
@@ -251,12 +276,6 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     :config
     (setq org-roam-graph-executable "/usr/local/bin/dot")
     (setq org-roam-index-file "~/ea/roam/index.org"))
-#+end_src
-
-** =htmlize=
-#+begin_src elisp
-  (use-package htmlize
-    :ensure t)
 #+end_src
 
 * Yasnippet
@@ -345,6 +364,14 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 #+end_src
 
+* Which key
+#+begin_src elisp
+  (use-package which-key
+    :init (which-key-mode)
+    :config
+    (setq which-key-idle-delay 1))
+#+end_src
+
 * AuCTeX
 #+begin_src elisp
   (use-package tex
@@ -366,6 +393,18 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     :bind-keymap ("C-c p" . projectile-command-map))
 #+end_src
 
+* Outline
+#+begin_src elisp
+  (use-package bicycle
+    :after outline
+    :bind (:map outline-minor-mode-map
+                ([C-tab] . bicycle-cycle)
+                ([S-tab] . bicycle-cycle-global))
+    :hook
+    (prog-mode . outline-minor-mode)
+    (prog-mode . hs-minor-mode))
+#+end_src
+
 * =all-the-icons-dired=                 :Dired:
 #+begin_src elisp
   (use-package all-the-icons-dired
@@ -384,6 +423,21 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
 #+begin_src elisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+* =visual-fill-column=
+#+begin_src elisp
+  (use-package visual-fill-column
+    :config
+    (setq-default visual-fill-column-width 120
+                  visual-fill-column-center-text t)
+    (global-visual-fill-column-mode))
+#+end_src
+
+* =htmlize=
+#+begin_src elisp
+  (use-package htmlize
+    :ensure t)
 #+end_src
 
 * =markdown-mode=
@@ -419,6 +473,7 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (use-package sml-mode
     :ensure t)
 #+end_src
+
 * =rust-mode=                           :Programming:
 #+begin_src elisp
   (use-package rust-mode
@@ -450,14 +505,28 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (use-package php-mode)
 #+end_src
 
-* =typescript-mode=
+* =typescript-mode=                     :Programming:
 #+begin_src elisp
   (use-package typescript-mode)
 #+end_src
 
-* =lua-mode=
+* =lua-mode=                            :Programming:
 #+begin_src elisp
   (use-package lua-mode)
+#+end_src
+
+* =web-mode=
+#+begin_src elisp
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
 #+end_src
 
 * INACTIVE
@@ -495,3 +564,33 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
       (when (not (package-installed-p pkg))
         (package-install pkg))))
 #+end_src
+** =outline=
+#+begin_src elisp
+  (use-package outline
+    :hook (prog-mode . outline-minor-mode))
+#+end_src
+
+From https://www.emacswiki.org/emacs/EasyCodeOutline
+#+begin_src elisp
+  (defun cjm-outline-bindings ()
+    "sets shortcut bindings for outline minor mode"
+    (interactive)
+    (local-set-key [?\C-,] 'hide-sublevels)
+    (local-set-key [?\C-.] 'show-all)
+    (local-set-key [C-up] 'outline-previous-visible-heading)
+    (local-set-key [C-down] 'outline-next-visible-heading)
+    (local-set-key [M-up] 'outline-backward-same-level)
+    (local-set-key [M-down] 'outline-forward-same-level)
+    (local-set-key [M-left] 'hide-subtree)
+    (local-set-key [M-right] 'show-subtree))
+
+  (add-hook 'outline-minor-mode-hook
+              'cjm-outline-bindings)
+#+end_src
+
+** =outshine=
+#+begin_src elisp
+  (use-package outshine
+    :hook (prog-mode . outshine-mode))
+#+end_src
+

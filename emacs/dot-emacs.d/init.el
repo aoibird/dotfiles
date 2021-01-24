@@ -82,13 +82,13 @@
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
+(global-set-key (kbd "C-c m 0") 'text-scale-adjust)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "s-，") 'customize)
 (global-set-key (kbd "M-【") 'previous-buffer)
 (global-set-key (kbd "M-】") 'next-buffer)
 
-;; https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi
 (defun my/add-auctex-file-variables ()
   (interactive)
   (if (and (not buffer-read-only)
@@ -108,13 +108,13 @@
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook 'org-babel-tangle nil t))) ; tangle on save
   :config
   (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
-  (setq org-tags-column 40)        ; set position of tags
+  (setq org-tags-column 60)        ; set position of tags
   (setq org-habit-graph-column 50) ; set position of habit graph
 
-  ;; --- todo ---
   (add-to-list 'org-modules 'org-habit)
   (add-to-list 'org-modules 'org-tempo)
   (add-to-list 'org-modules 'org-attach-git)
+
   (setq org-agenda-files '("~/ea/schedule/"))
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
@@ -122,7 +122,6 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
-  ;; --- babel ---
   (setq org-confirm-babel-evaluate nil)
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
@@ -137,7 +136,6 @@
                                (octave . t)
                                (lua . t)))
 
-  ;; --- capture ---
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file+headline "~/ea/refile/refile.org" "Ideas")
@@ -149,13 +147,11 @@
            (file+headline "~/ea/refile/refile.org" "Clipboard")
            "* %?\n%i\n%a")))
 
-  ;; --- export ---
   (setq org-export-backends
         '(ascii beamer html icalendar latex man md odt texinfo))
   (setq org-export-coding-system 'utf-8)
   (setq org-latex-listings 'listings)
 
-  ;; --- tempo ---
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
   )
@@ -181,9 +177,6 @@
   :config
   (setq org-roam-graph-executable "/usr/local/bin/dot")
   (setq org-roam-index-file "~/ea/roam/index.org"))
-
-(use-package htmlize
-  :ensure t)
 
 (use-package yasnippet
   :ensure t
@@ -259,6 +252,11 @@
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
+(use-package which-key
+  :init (which-key-mode)
+  :config
+  (setq which-key-idle-delay 1))
+
 (use-package tex
   :defer t
   :ensure auctex
@@ -274,6 +272,15 @@
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map))
 
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global))
+  :hook
+  (prog-mode . outline-minor-mode)
+  (prog-mode . hs-minor-mode))
+
 (use-package all-the-icons-dired
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -284,6 +291,15 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package visual-fill-column
+  :config
+  (setq-default visual-fill-column-width 120
+                visual-fill-column-center-text t)
+  (global-visual-fill-column-mode))
+
+(use-package htmlize
+  :ensure t)
 
 (use-package markdown-mode
   :ensure t
@@ -323,3 +339,14 @@
 (use-package typescript-mode)
 
 (use-package lua-mode)
+
+(use-package web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
