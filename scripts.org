@@ -30,3 +30,50 @@
 
 #+end_src
 
+* =mybackup=
+#+begin_src bash :shebang #!/usr/bin/env bash :tangle scripts/mybackup
+  # mybackup -- backups given files and directories to the backup volume
+
+  BACKUPVOL="$HOME/backup"        # ln -s /Volumes/backup_volume $HOME/backup
+
+  if [ $# -eq 0 ]; then
+      echo "Usage: $(basename "$0") list of files or directories"
+      exit 1
+  fi
+
+  if [ -d "$BACKUPVOL" ]; then
+      dayofweek="$(date "+%A")"
+      mkdir -p "$BACKUPVOL/$dayofweek"
+
+      # Skip invalid files or directories
+      params=( "$@" )
+      pos=0
+      for file in "${params[@]}"
+      do
+        if [ ! -e "$file" ]; then
+            echo "$(basename "$0"): WARNING: \"$file\" does not exist. Skipped."
+            unset params["$pos"]
+        fi
+
+        pos=$(( $pos + 1 ))
+      done
+
+      if [ "${#params[@]}" = 0 ]; then
+          echo "$(basename "$0"): ERROR: no files were transferred."
+          exit 1
+      fi
+
+      ###### EXECUTE ######
+      exec rsync -av --delete "${params[@]}" "$BACKUPVOL/$dayofweek"
+  else
+      echo "$(basename "$0"): ERROR: the backup volume $BACKUPVOL cannot be found"
+      exit 1
+  fi
+
+
+  exit 0
+#+end_src
+
+#+begin_src sh
+mybackup "$HOME/test/My Dir" ~/test/Does\ Not\ Exist ~/test/hello.txt
+#+end_src
