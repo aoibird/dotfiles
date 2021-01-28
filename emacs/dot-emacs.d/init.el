@@ -138,15 +138,16 @@
                                (octave . t)
                                (lua . t)))
 
+  (setq org-default-notes-file "~/ea/refile.org")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file+headline "~/ea/refile/refile.org" "Ideas")
+           (file+headline org-default-notes-file "Ideas")
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file+headline "~/ea/refile/refile.org" "Tasks")
+           (file+headline org-default-notes-file "Tasks")
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
-           (file+headline "~/ea/refile/refile.org" "Clipboard")
+           (file+headline org-default-notes-file "Clipboard")
            "* %?\n%i\n%a")))
 
   (setq org-export-backends
