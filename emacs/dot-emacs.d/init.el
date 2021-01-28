@@ -78,11 +78,13 @@
   (setenv "PATH" (concat "/usr/local/bin" ":" (getenv "PATH")))
   (setenv "PATH" (concat "/usr/local/smlnj/bin" ":" (getenv "PATH")))
   (setq exec-path (cons "/usr/local/smlnj/bin"  exec-path))
+  (setq exec-path (cons (expand-file-name "~/dotfiles/scripts/") exec-path))
   )
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
+(global-set-key (kbd "C-c m g") 'goto-line)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "s-，") 'customize)
@@ -178,6 +180,40 @@
   (setq org-roam-graph-executable "/usr/local/bin/dot")
   (setq org-roam-index-file "~/ea/roam/index.org"))
 
+(require 'appt)
+(setq appt-time-msg-list nil)    ;; clear existing appt list
+(setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
+(setq
+ appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
+ appt-display-mode-line nil     ;; don't show in the modeline
+ appt-display-format 'window)   ;; pass warnings to the designated window function
+(setq appt-disp-window-function (function ct/appt-display-native))
+
+(appt-activate 1)                ;; activate appointment notification
+                                      ; (display-time) ;; Clock in modeline
+
+(defun ct/send-notification (title msg)
+  (let ((notifier-path (executable-find "alerter")))
+    (start-process
+     "Appointment Alert"
+     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
+     notifier-path
+     "-message" msg
+     "-title" title
+     "-sender" "org.gnu.Emacs"
+     "-activate" "org.gnu.Emacs")))
+
+(defun ct/appt-display-native (min-to-app new-time msg)
+  (ct/send-notification
+   (format "Appointment in %s minutes" min-to-app) ; Title
+   (format "%s" msg)))                             ; Message/detail text
+
+
+;; Agenda-to-appointent hooks
+(org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
+(run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
+(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
+
 (use-package yasnippet
   :ensure t
   :config
@@ -220,6 +256,8 @@
             (lambda ()
               (ibuffer-switch-to-saved-filter-groups "default"))))
 
+(setq dired-listing-switches "-alh")
+
 (use-package ivy
   :ensure t)
 
@@ -251,11 +289,6 @@
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
-
-(use-package which-key
-  :init (which-key-mode)
-  :config
-  (setq which-key-idle-delay 1))
 
 (use-package tex
   :defer t
