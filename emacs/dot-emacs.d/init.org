@@ -133,6 +133,15 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     )
 #+end_src
 
+** =exec-path-from-shell=
+#+begin_src elisp
+  (use-package exec-path-from-shell
+    :init
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+
+#+end_src
+
 * Keybindings
 #+begin_src elisp
   (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
@@ -440,6 +449,12 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :diminish projectile-mode
     :config (projectile-mode)
     :bind-keymap ("C-c p" . projectile-command-map))
+#+end_src
+
+* Flycheck
+#+begin_src elisp
+  (use-package flycheck
+    :hook (after-init . global-flycheck-mode))
 #+end_src
 
 * Outline

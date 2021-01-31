@@ -81,6 +81,11 @@
   (setq exec-path (cons (expand-file-name "~/dotfiles/scripts/") exec-path))
   )
 
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
@@ -305,6 +310,9 @@
   :diminish projectile-mode
   :config (projectile-mode)
   :bind-keymap ("C-c p" . projectile-command-map))
+
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode))
 
 (use-package bicycle
   :after outline
