@@ -551,12 +551,24 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :ensure t)
 #+end_src
 
-* =python-mode=                         :Programming:
+* =python=                              :Programming:
 #+begin_src elisp
-  (use-package python-mode
-    :ensure t
+  (use-package python
     :config
     (setq python-shell-interpreter "python3"))
+#+end_src
+
+* =python-mode=                         :Programming:
+#+begin_src elisp
+  (use-package python-mode)
+#+end_src
+
+* =virtualenvwrapper=                   :Programming:
+#+begin_src elisp
+  (use-package virtualenvwrapper
+    :config
+    (venv-initialize-interactive-shells)
+    (venv-initialize-eshell))
 #+end_src
 
 * =php-mode=                            :Programming:

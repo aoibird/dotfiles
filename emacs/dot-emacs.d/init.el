@@ -366,10 +366,16 @@
 (use-package racket-mode
   :ensure t)
 
-(use-package python-mode
-  :ensure t
+(use-package python
   :config
   (setq python-shell-interpreter "python3"))
+
+(use-package python-mode)
+
+(use-package virtualenvwrapper
+  :config
+  (venv-initialize-interactive-shells)
+  (venv-initialize-eshell))
 
 (use-package php-mode)
 
