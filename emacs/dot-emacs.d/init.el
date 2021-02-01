@@ -72,14 +72,7 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . light))
   (setq ns-use-proxy-icon  nil)
-  (setq frame-title-format nil)
-  ;; PATH
-  (setenv "PATH" (concat "/Library/TeX/texbin" ":" (getenv "PATH")))
-  (setenv "PATH" (concat "/usr/local/bin" ":" (getenv "PATH")))
-  (setenv "PATH" (concat "/usr/local/smlnj/bin" ":" (getenv "PATH")))
-  (setq exec-path (cons "/usr/local/smlnj/bin"  exec-path))
-  (setq exec-path (cons (expand-file-name "~/dotfiles/scripts/") exec-path))
-  )
+  (setq frame-title-format nil))
 
 (use-package exec-path-from-shell
   :init
