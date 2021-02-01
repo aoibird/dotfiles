@@ -349,6 +349,8 @@
 
 (use-package dockerfile-mode)
 
+(use-package cmake-mode)
+
 (use-package slime
   :ensure t
   :init

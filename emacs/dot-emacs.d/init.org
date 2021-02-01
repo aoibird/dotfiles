@@ -519,6 +519,11 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
   (use-package dockerfile-mode)
 #+end_src
 
+* =cmake=
+#+begin_src elisp
+(use-package cmake-mode)
+#+end_src
+
 * =slime=                               :Programming:
 #+begin_src elisp
   (use-package slime
