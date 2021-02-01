@@ -43,7 +43,9 @@
 (setq-default display-time-format "%Y-%m-%d %a %H:%M")
 (display-time-mode t)                   ; datetime
 (use-package doom-modeline
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-buffer-encoding nil))
 
 (setq-default cursor-type 'bar)
 (setq-default show-trailing-whitespace t)
