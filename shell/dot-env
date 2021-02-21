@@ -7,10 +7,14 @@ export PATH=/usr/local/opt/ruby/bin:$PATH
 export PATH=$HOME/.gem/ruby/2.6.0/bin:$PATH
 
 # LaTeX
-export PATH=/Library/TeX/texbin/:$PATH
+export PATH=/Library/TeX/texbin:$PATH
 
 # Homebrew
 export PATH=/usr/local/sbin:"$PATH"
 
 # Standard ML
 export PATH=/usr/local/smlnj/bin:"$PATH"
+
+# Virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
