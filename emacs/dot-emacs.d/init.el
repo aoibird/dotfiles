@@ -172,7 +172,8 @@
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph-show)
+               ("C-c n g" . org-roam-graph)
+               ("C-c n r" . org-roam-random-note)
                ("C-c n j" . org-roam-jump-to-index))
               :map org-mode-map
               (("C-c n i" . org-roam-insert))
@@ -322,10 +323,6 @@
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package dired-sidebar
-  :ensure t
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
-
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
@@ -350,6 +347,10 @@
 (use-package dockerfile-mode)
 
 (use-package cmake-mode)
+
+(use-package geiser
+  :config
+  (setq geiser-default-implementation 'mit))
 
 (use-package slime
   :ensure t
@@ -394,4 +395,7 @@
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (setq web-mode-code-indent-offset 4)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-markup-indent-offset 2))

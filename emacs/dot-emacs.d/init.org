@@ -275,7 +275,8 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     :bind (:map org-roam-mode-map
                 (("C-c n l" . org-roam)
                  ("C-c n f" . org-roam-find-file)
-                 ("C-c n g" . org-roam-graph-show)
+                 ("C-c n g" . org-roam-graph)
+                 ("C-c n r" . org-roam-random-note)
                  ("C-c n j" . org-roam-jump-to-index))
                 :map org-mode-map
                 (("C-c n i" . org-roam-insert))
@@ -471,13 +472,6 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-* =dired-sidebar=                       :Dired:
-#+begin_src elisp
-  (use-package dired-sidebar
-    :ensure t
-    :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
-#+end_src
-
 * =rainbow-delimiters=
 #+begin_src elisp
   (use-package rainbow-delimiters
@@ -524,7 +518,16 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 (use-package cmake-mode)
 #+end_src
 
+* =geiser=
+For Scheme.
+#+begin_src elisp
+  (use-package geiser
+    :config
+    (setq geiser-default-implementation 'mit))
+#+end_src
+
 * =slime=                               :Programming:
+For Common Lisp.
 #+begin_src elisp
   (use-package slime
     :ensure t
@@ -602,7 +605,10 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2))
 #+end_src
 
 * INACTIVE
@@ -668,5 +674,20 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
 #+begin_src elisp
   (use-package outshine
     :hook (prog-mode . outshine-mode))
+#+end_src
+
+** =neotree=                                                :Dired:
+#+begin_src elisp
+  (use-package neotree
+    :bind ("C-x C-n" . neotree-toggle)
+    :config
+    (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+#+end_src
+
+** =dired-sidebar=                                          :Dired:
+#+begin_src elisp
+  (use-package dired-sidebar
+    :ensure t
+    :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
 #+end_src
 
