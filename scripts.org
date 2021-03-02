@@ -14,20 +14,23 @@
       exit 1
   fi
 
-  if [ "$1" = "-s" ]; then
-      # Silent
-      shift
-  else
-      echo "$(date "+%Y-%m-%d %H.%M.%S"): $@" >> $installlog
-  fi
-
   if [ "$(uname)" = "Darwin" ]; then
-      exec brew install "$@"
+      if brew install "$@"; then
+          if [ "$1" = "-s" ]; then
+              shift               # Silent
+          else
+              echo "$(date "+%Y-%m-%d %H.%M.%S"): $*" >> "$installlog"
+          fi
+      else
+          echo "Error: failed to install"
+          exit 1
+      fi
   else
       echo "Error: unknown operating system"
       exit 1
   fi
 
+  exit 0
 #+end_src
 
 * =mybackup=
