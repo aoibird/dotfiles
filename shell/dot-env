@@ -15,6 +15,9 @@ export PATH=/usr/local/sbin:"$PATH"
 # Standard ML
 export PATH=/usr/local/smlnj/bin:"$PATH"
 
+# Rust
+export PATH=$HOME/.cargo/bin:"$PATH"
+
 # Virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
