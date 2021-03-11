@@ -2,14 +2,13 @@
 #+STARTUP: content
 #+PROPERTY: header-args :tangle init.el
 
-* NOTE
 #+begin_src elisp
   ;; NOTE: This file is generated from init.org.
 #+end_src
 
-* Package management
+* Start up
 
-** =package=
+** Setup package system
 #+begin_src elisp
   (require 'package)
   (setq package-enable-at-startup nil)
@@ -17,10 +16,7 @@
                            ("gnu"   . "https://elpa.gnu.org/packages/")
                            ("melpa" . "https://melpa.org/packages/")))
   (package-initialize)
-#+end_src
 
-** =use-package=
-#+begin_src elisp
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
@@ -28,75 +24,26 @@
   (setq use-package-always-ensure t)
 #+end_src
 
-* Basic
-
-** UTF-8 encoding
+** Set frame size and title
 #+begin_src elisp
-  (setq utf-translate-cjk-mode nil)
-  (set-language-environment 'utf-8)
-  (setq locale-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
-  (setq default-file-name-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+  (add-to-list 'default-frame-alist '(height . 36)) ; frame height
+  (add-to-list 'default-frame-alist '(width . 80))  ; frame width
+
+  (when (memq window-system '(mac ns))
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+    (add-to-list 'default-frame-alist '(ns-appearance . light))
+    (setq ns-use-proxy-icon  nil)
+    (setq frame-title-format nil))
 #+end_src
 
-** Minimize UI
+** Inhibit unnecessary elements
 #+begin_src elisp
   (setq-default inhibit-startup-screen t)
   (tool-bar-mode -1)                      ; hide toolbar
   (scroll-bar-mode -1)                    ; hide scrollbar
 #+end_src
 
-** Color theme
-#+begin_src elisp
-  (use-package doom-themes
-    :init (load-theme 'doom-solarized-light t))
-#+end_src
-
-** Frame size
-#+begin_src elisp
-  (add-to-list 'default-frame-alist '(height . 36)) ; frame height
-  (add-to-list 'default-frame-alist '(width . 80))  ; frame width
-#+end_src
-
-** =all-the-icons=
-#+begin_src elisp
-  (use-package all-the-icons
-    :ensure t) ;; and M-x all-the-icons-install-fonts
-#+end_src
-
-** Mode line
-#+begin_src elisp
-  (display-battery-mode t)                ; battary
-  (column-number-mode t)                  ; column number
-  (setq-default display-time-interval 30)
-  (setq-default display-time-default-load-average nil)
-  (setq-default display-time-format "%Y-%m-%d %a %H:%M")
-  (display-time-mode t)                   ; datetime
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-buffer-encoding nil))
-#+end_src
-
-** Line
-The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
-
-#+begin_src elisp
-  (setq-default cursor-type 'bar)
-  (setq-default show-trailing-whitespace t)
-  (setq-default show-paren-delay 0)
-  (show-paren-mode 1)                     ; parentheses matching
-  (global-hl-line-mode t)                 ; line highlighting
-  (global-display-line-numbers-mode)
-  ;; (global-linum-mode 1)                   ; line number
-  (global-visual-line-mode t)             ; line wrap
-#+end_src
-
-** Font
+** Config fonts
 #+begin_src elisp
   (setq inhibit-compacting-font-caches t)
   (set-face-attribute 'default nil :font "Fira Code-14")
@@ -106,35 +53,88 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (setq face-font-rescale-alist '(("STKaiti" . 1.3)))
 #+end_src
 
-** Backup files
+** Config mode line
 #+begin_src elisp
-  (setq-default make-backup-files nil)
+  (display-battery-mode t)                ; battary
+  (column-number-mode t)                  ; column number
+  (setq-default display-time-interval 30)
+  (setq-default display-time-default-load-average nil)
+  (setq-default display-time-format "%Y-%m-%d %a %H:%M")
+  (display-time-mode t)                   ; datetime
 #+end_src
 
-** Indentation
+** Use =all-the-icons=
 #+begin_src elisp
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-  (setq-default c-basic-offset 4)
+  (use-package all-the-icons
+    :ensure t) ;; and M-x all-the-icons-install-fonts
 #+end_src
 
-* macOS
+** Choose a color theme
 #+begin_src elisp
-  (when (memq window-system '(mac ns))
-    ;; Frame
-    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-    (add-to-list 'default-frame-alist '(ns-appearance . light))
-    (setq ns-use-proxy-icon  nil)
-    (setq frame-title-format nil))
+  (use-package doom-themes
+    :init (load-theme 'doom-solarized-light t))
 #+end_src
 
-** =exec-path-from-shell=
+** Better mode line
+#+begin_src elisp
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-buffer-encoding nil))
+#+end_src
+
+** =exec-path-from-shell= for macOS
 #+begin_src elisp
   (use-package exec-path-from-shell
     :init
     (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize)))
+#+end_src
 
+** More display config
+#+begin_src elisp
+  (setq-default cursor-type 'bar)
+#+end_src
+
+#+begin_src elisp
+  (setq-default show-trailing-whitespace t)
+#+end_src
+
+#+begin_src elisp
+  (setq-default show-paren-delay 0)
+  (show-paren-mode 1)                     ; parentheses matching
+#+end_src
+
+#+begin_src elisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+#+begin_src elisp
+  (use-package visual-fill-column
+    :config
+    (setq-default visual-fill-column-width 120
+                  visual-fill-column-center-text t)
+    (global-visual-fill-column-mode))
+#+end_src
+
+The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
+
+#+begin_src elisp
+  (global-display-line-numbers-mode)
+  (global-hl-line-mode t)                 ; line highlighting
+  (global-visual-line-mode t)             ; line wrap
+#+end_src
+
+** More editing config
+#+begin_src elisp
+  (setq-default make-backup-files nil)
+#+end_src
+
+#+begin_src elisp
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq-default c-basic-offset 4)
 #+end_src
 
 * Keybindings
@@ -210,19 +210,20 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 ** Babel
 #+NAME: org-babel
 #+begin_src elisp :tangle no
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-babel-python-command "python3")
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((R . t)
-                               (C . t)
-                               (python . t)
-                               (shell . t)
-                               (ruby . t)
-                               (haskell . t)
-                               (scheme . t)
-                               (awk . t)
-                               (octave . t)
-                               (lua . t)))
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-babel-python-command "python3")
+    (org-babel-do-load-languages
+     'org-babel-load-languages '((R . t)
+                                 (C . t)
+                                 (python . t)
+                                 (shell . t)
+                                 (ruby . t)
+                                 (haskell . t)
+                                 (scheme . t)
+                                 (awk . t)
+                                 (octave . t)
+                                 (lua . t)
+                                 (js . t)))
 #+end_src
 
 ** Capture
@@ -231,10 +232,10 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
   (setq org-default-notes-file "~/ea/refile.org")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file+headline org-default-notes-file "Ideas")
+           (file "~/ea/roam/ideas.org")
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file+headline org-default-notes-file "Tasks")
+           (file "~/ea/schedule/tasks.org")
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
@@ -286,7 +287,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     (setq org-roam-index-file "~/ea/roam/index.org"))
 #+end_src
 
-* Notification
+* Notifications
 From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+begin_src elisp
   (require 'appt)
@@ -415,17 +416,6 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 #+end_src
 
-* Which key
-:PROPERTIES:
-:header-args: tangle no
-:END:
-#+begin_src elisp
-  (use-package which-key
-    :init (which-key-mode)
-    :config
-    (setq which-key-idle-delay 1))
-#+end_src
-
 * AuCTeX
 #+begin_src elisp
   (use-package tex
@@ -453,38 +443,11 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :hook (after-init . global-flycheck-mode))
 #+end_src
 
-* Outline
-#+begin_src elisp
-  (use-package bicycle
-    :after outline
-    :bind (:map outline-minor-mode-map
-                ([C-tab] . bicycle-cycle)
-                ([S-tab] . bicycle-cycle-global))
-    :hook
-    (prog-mode . outline-minor-mode)
-    (prog-mode . hs-minor-mode))
-#+end_src
-
-* =all-the-icons-dired=                 :Dired:
+* =all-the-icons-dired=                                     :Dired:
 #+begin_src elisp
   (use-package all-the-icons-dired
     :ensure t
     :hook (dired-mode . all-the-icons-dired-mode))
-#+end_src
-
-* =rainbow-delimiters=
-#+begin_src elisp
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-#+end_src
-
-* =visual-fill-column=
-#+begin_src elisp
-  (use-package visual-fill-column
-    :config
-    (setq-default visual-fill-column-width 120
-                  visual-fill-column-center-text t)
-    (global-visual-fill-column-mode))
 #+end_src
 
 * =htmlize=
@@ -518,7 +481,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 (use-package cmake-mode)
 #+end_src
 
-* =geiser=
+* =geiser=                                                  :Programming:
 For Scheme.
 #+begin_src elisp
   (use-package geiser
@@ -526,7 +489,7 @@ For Scheme.
     (setq geiser-default-implementation 'mit))
 #+end_src
 
-* =slime=                               :Programming:
+* =slime=                                                   :Programming:
 For Common Lisp.
 #+begin_src elisp
   (use-package slime
@@ -535,43 +498,43 @@ For Common Lisp.
     (setq inferior-lisp-program "/usr/local/bin/ccl64"))
 #+end_src
 
-* =sml-mode=                            :Programming:
+* =sml-mode=                                                :Programming:
 #+begin_src elisp
   (use-package sml-mode
     :ensure t)
 #+end_src
 
-* =rust-mode=                           :Programming:
+* =rust-mode=                                               :Programming:
 #+begin_src elisp
   (use-package rust-mode
     :ensure t)
 #+end_src
 
-* =haskell-mode=                        :Programming:
+* =haskell-mode=                                            :Programming:
 #+begin_src elisp
   (use-package haskell-mode
     :ensure t)
 #+end_src
 
-* =racket-mode=                         :Programming:
+* =racket-mode=                                             :Programming:
 #+begin_src elisp
   (use-package racket-mode
     :ensure t)
 #+end_src
 
-* =python=                              :Programming:
+* =python=                                                  :Programming:
 #+begin_src elisp
   (use-package python
     :config
     (setq python-shell-interpreter "python3"))
 #+end_src
 
-* =python-mode=                         :Programming:
+* =python-mode=                                             :Programming:
 #+begin_src elisp
   (use-package python-mode)
 #+end_src
 
-* =virtualenvwrapper=                   :Programming:
+* =virtualenvwrapper=                                       :Programming:
 #+begin_src elisp
   (use-package virtualenvwrapper
     :config
@@ -579,55 +542,50 @@ For Common Lisp.
     (venv-initialize-eshell))
 #+end_src
 
-* =php-mode=                            :Programming:
+* =php-mode=                                                :Programming:
 #+begin_src elisp
   (use-package php-mode)
 #+end_src
 
-* =typescript-mode=                     :Programming:
+* =typescript-mode=                                         :Programming:
 #+begin_src elisp
   (use-package typescript-mode)
 #+end_src
 
-* =lua-mode=                            :Programming:
+* =lua-mode=                                                :Programming:
 #+begin_src elisp
   (use-package lua-mode)
 #+end_src
 
-* =web-mode=
+* =web-mode=                                                :Programming:
 #+begin_src elisp
-  (use-package web-mode
+    (use-package web-mode
+      :config
+      (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+      (setq web-mode-code-indent-offset 2)
+      (setq web-mode-css-indent-offset 2)
+      (setq web-mode-markup-indent-offset 2))
+#+end_src
+
+* =js=
+#+begin_src elisp
+  (use-package js
     :config
-    (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (setq web-mode-code-indent-offset 4)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-markup-indent-offset 2))
+    (setq js-indent-level 2))
 #+end_src
 
 * INACTIVE
 :PROPERTIES:
 :header-args: tangle no
 :END:
-
-** =frog-jump-buffer=
-#+begin_src elisp
-  (use-package frog-jump-buffer
-    :ensure t
-    :bind
-    ("C-c f" . frog-jump-buffer))
-#+end_src
-
-** =recentf-mode=
-#+begin_src elisp
-  (recentf-mode 1)
-#+end_src
 
 ** Install packages
 #+begin_src elisp
@@ -646,6 +604,19 @@ For Common Lisp.
       (when (not (package-installed-p pkg))
         (package-install pkg))))
 #+end_src
+** =frog-jump-buffer=
+#+begin_src elisp
+  (use-package frog-jump-buffer
+    :ensure t
+    :bind
+    ("C-c f" . frog-jump-buffer))
+#+end_src
+
+** =recentf-mode=
+#+begin_src elisp
+  (recentf-mode 1)
+#+end_src
+
 ** =outline=
 #+begin_src elisp
   (use-package outline
@@ -676,6 +647,18 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     :hook (prog-mode . outshine-mode))
 #+end_src
 
+** =bicycle=
+#+begin_src elisp
+  (use-package bicycle
+    :after outline
+    :bind (:map outline-minor-mode-map
+                ([C-tab] . bicycle-cycle)
+                ([S-tab] . bicycle-cycle-global))
+    :hook
+    (prog-mode . outline-minor-mode)
+    (prog-mode . hs-minor-mode))
+#+end_src
+
 ** =neotree=                                                :Dired:
 #+begin_src elisp
   (use-package neotree
@@ -689,5 +672,13 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
   (use-package dired-sidebar
     :ensure t
     :bind (("C-x C-n" . dired-sidebar-toggle-sidebar)))
+#+end_src
+
+** Which key
+#+begin_src elisp
+  (use-package which-key
+    :init (which-key-mode)
+    :config
+    (setq which-key-idle-delay 1))
 #+end_src
 

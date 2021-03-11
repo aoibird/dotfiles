@@ -13,48 +13,18 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(setq utf-translate-cjk-mode nil)
-(set-language-environment 'utf-8)
-(setq locale-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(setq default-file-name-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+(add-to-list 'default-frame-alist '(height . 36)) ; frame height
+(add-to-list 'default-frame-alist '(width . 80))  ; frame width
+
+(when (memq window-system '(mac ns))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . light))
+  (setq ns-use-proxy-icon  nil)
+  (setq frame-title-format nil))
 
 (setq-default inhibit-startup-screen t)
 (tool-bar-mode -1)                      ; hide toolbar
 (scroll-bar-mode -1)                    ; hide scrollbar
-
-(use-package doom-themes
-  :init (load-theme 'doom-solarized-light t))
-
-(add-to-list 'default-frame-alist '(height . 36)) ; frame height
-(add-to-list 'default-frame-alist '(width . 80))  ; frame width
-
-(use-package all-the-icons
-  :ensure t) ;; and M-x all-the-icons-install-fonts
-
-(display-battery-mode t)                ; battary
-(column-number-mode t)                  ; column number
-(setq-default display-time-interval 30)
-(setq-default display-time-default-load-average nil)
-(setq-default display-time-format "%Y-%m-%d %a %H:%M")
-(display-time-mode t)                   ; datetime
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-buffer-encoding nil))
-
-(setq-default cursor-type 'bar)
-(setq-default show-trailing-whitespace t)
-(setq-default show-paren-delay 0)
-(show-paren-mode 1)                     ; parentheses matching
-(global-hl-line-mode t)                 ; line highlighting
-(global-display-line-numbers-mode)
-;; (global-linum-mode 1)                   ; line number
-(global-visual-line-mode t)             ; line wrap
 
 (setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Fira Code-14")
@@ -63,23 +33,54 @@
                     charset (font-spec :family "STKaiti")))
 (setq face-font-rescale-alist '(("STKaiti" . 1.3)))
 
-(setq-default make-backup-files nil)
+(display-battery-mode t)                ; battary
+(column-number-mode t)                  ; column number
+(setq-default display-time-interval 30)
+(setq-default display-time-default-load-average nil)
+(setq-default display-time-format "%Y-%m-%d %a %H:%M")
+(display-time-mode t)                   ; datetime
 
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default c-basic-offset 4)
+(use-package all-the-icons
+  :ensure t) ;; and M-x all-the-icons-install-fonts
 
-(when (memq window-system '(mac ns))
-  ;; Frame
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . light))
-  (setq ns-use-proxy-icon  nil)
-  (setq frame-title-format nil))
+(use-package doom-themes
+  :init (load-theme 'doom-solarized-light t))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-buffer-encoding nil))
 
 (use-package exec-path-from-shell
   :init
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
+
+(setq-default cursor-type 'bar)
+
+(setq-default show-trailing-whitespace t)
+
+(setq-default show-paren-delay 0)
+(show-paren-mode 1)                     ; parentheses matching
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package visual-fill-column
+  :config
+  (setq-default visual-fill-column-width 120
+                visual-fill-column-center-text t)
+  (global-visual-fill-column-mode))
+
+(global-display-line-numbers-mode)
+(global-hl-line-mode t)                 ; line highlighting
+(global-visual-line-mode t)             ; line wrap
+
+(setq-default make-backup-files nil)
+
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default c-basic-offset 4)
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
@@ -136,15 +137,16 @@
                                (scheme . t)
                                (awk . t)
                                (octave . t)
-                               (lua . t)))
+                               (lua . t)
+                               (js . t)))
 
   (setq org-default-notes-file "~/ea/refile.org")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file+headline org-default-notes-file "Ideas")
+           (file "~/ea/roam/ideas.org")
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file+headline org-default-notes-file "Tasks")
+           (file "~/ea/schedule/tasks.org")
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
@@ -310,27 +312,9 @@
 (use-package flycheck
   :hook (after-init . global-flycheck-mode))
 
-(use-package bicycle
-  :after outline
-  :bind (:map outline-minor-mode-map
-              ([C-tab] . bicycle-cycle)
-              ([S-tab] . bicycle-cycle-global))
-  :hook
-  (prog-mode . outline-minor-mode)
-  (prog-mode . hs-minor-mode))
-
 (use-package all-the-icons-dired
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package visual-fill-column
-  :config
-  (setq-default visual-fill-column-width 120
-                visual-fill-column-center-text t)
-  (global-visual-fill-column-mode))
 
 (use-package htmlize
   :ensure t)
@@ -396,6 +380,11 @@
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (setq web-mode-code-indent-offset 4)
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-markup-indent-offset 2))
+
+(use-package js
+  :config
+  (setq js-indent-level 2))
