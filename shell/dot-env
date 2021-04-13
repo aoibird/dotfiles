@@ -21,3 +21,9 @@ export PATH=$HOME/.cargo/bin:"$PATH"
 # Virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+
+source virtualenvwrapper.sh
+
+# Password store
+export PASSWORD_STORE_DIR=~/pass
+
