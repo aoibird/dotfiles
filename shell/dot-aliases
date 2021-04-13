@@ -4,9 +4,12 @@ alias gitgraph='git log --graph --oneline --branches '
 alias gcc='gcc -Wall -std=c11 -g '
 alias g++='g++ -Wall -std=c++11 -g '
 
-# if [ "$(uname)" = "Darwin" ]; then
-alias firefox='/Applications/Firefox.app/Contents/MacOS/firefox-bin '
-alias ls='ls -Gh '
-alias less='less -G '
-alias echopath="echo $PATH | tr ':' '\n'"
-# fi
+if [ "$(uname)" = "Darwin" ]; then
+    alias firefox='/Applications/Firefox.app/Contents/MacOS/firefox-bin '
+    alias ls='ls -Gh '
+    alias less='less -G '
+    alias echopath="echo $PATH | tr ':' '\n'"
+fi
+
+alias dateiso='date +"%Y-%m-%d"'
+alias datetimeiso='date +"%Y-%m-%d %H:%M"'
