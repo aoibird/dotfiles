@@ -91,6 +91,7 @@
 (global-set-key (kbd "s-，") 'customize)
 (global-set-key (kbd "M-【") 'previous-buffer)
 (global-set-key (kbd "M-】") 'next-buffer)
+(global-set-key (kbd "C-<tab>") 'other-window)
 
 (defun my/add-auctex-file-variables ()
   (interactive)

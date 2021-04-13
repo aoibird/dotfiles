@@ -148,6 +148,7 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (global-set-key (kbd "s-，") 'customize)
   (global-set-key (kbd "M-【") 'previous-buffer)
   (global-set-key (kbd "M-】") 'next-buffer)
+  (global-set-key (kbd "C-<tab>") 'other-window)
 #+end_src
 
 * Functions
