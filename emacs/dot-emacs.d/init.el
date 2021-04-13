@@ -44,7 +44,7 @@
   :ensure t) ;; and M-x all-the-icons-install-fonts
 
 (use-package doom-themes
-  :init (load-theme 'doom-solarized-light t))
+  :init (load-theme 'doom-one-light t))
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
@@ -383,7 +383,10 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
-  (setq web-mode-markup-indent-offset 2))
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-part-padding 0)
+  (setq web-mode-script-padding 0)
+  (setq web-mode-style-padding 0))
 
 (use-package js
   :config
