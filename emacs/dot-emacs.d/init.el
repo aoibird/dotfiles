@@ -307,7 +307,9 @@
   :bind-keymap ("C-c p" . projectile-command-map))
 
 (use-package flycheck
-  :hook (after-init . global-flycheck-mode))
+  :hook (after-init . global-flycheck-mode)
+  :config
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package all-the-icons-dired
   :ensure t

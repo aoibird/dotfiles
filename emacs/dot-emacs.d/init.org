@@ -437,7 +437,9 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 * Flycheck
 #+begin_src elisp
   (use-package flycheck
-    :hook (after-init . global-flycheck-mode))
+    :hook (after-init . global-flycheck-mode)
+    :config
+    (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+end_src
 
 * =all-the-icons-dired=                                     :Dired:
