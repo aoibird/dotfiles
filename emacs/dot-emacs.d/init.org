@@ -110,14 +110,6 @@
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-#+begin_src elisp
-  (use-package visual-fill-column
-    :config
-    (setq-default visual-fill-column-width 120
-                  visual-fill-column-center-text t)
-    (global-visual-fill-column-mode))
-#+end_src
-
 The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
 
 #+begin_src elisp
@@ -685,4 +677,14 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     :config
     (setq which-key-idle-delay 1))
 #+end_src
+
+** =visual-fill-column=
+#+begin_src elisp
+  (use-package visual-fill-column
+    :config
+    (setq-default visual-fill-column-width 140
+                  visual-fill-column-center-text t)
+    (global-visual-fill-column-mode))
+#+end_src
+
 

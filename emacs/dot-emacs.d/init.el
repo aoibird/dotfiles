@@ -66,12 +66,6 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package visual-fill-column
-  :config
-  (setq-default visual-fill-column-width 120
-                visual-fill-column-center-text t)
-  (global-visual-fill-column-mode))
-
 (global-display-line-numbers-mode)
 (global-hl-line-mode t)                 ; line highlighting
 (global-visual-line-mode t)             ; line wrap
