@@ -1,0 +1,4 @@
+# key: tangledir
+# name: tangledir
+# --
+`(org-entry-get nil "tangle-dir" t)`
