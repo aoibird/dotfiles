@@ -27,3 +27,5 @@ source virtualenvwrapper.sh
 # Password store
 export PASSWORD_STORE_DIR=~/pass
 
+# gpg 2.3.1 cannot select card
+export PATH="/usr/local/opt/gnupg@2.2/bin:$PATH"
