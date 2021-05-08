@@ -129,6 +129,10 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (setq-default c-basic-offset 4)
 #+end_src
 
+#+begin_src elisp
+  (setq mac-right-option-modifier 'none)
+#+end_src
+
 * Keybindings
 #+begin_src elisp
   (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)

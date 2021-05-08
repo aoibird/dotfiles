@@ -76,6 +76,8 @@
 (setq-default indent-tabs-mode nil)
 (setq-default c-basic-offset 4)
 
+(setq mac-right-option-modifier 'none)
+
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
