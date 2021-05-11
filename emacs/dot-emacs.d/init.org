@@ -498,6 +498,15 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+end_src
 
+* GPG (EasyPG)
+#+begin_src elisp
+  (use-package epa-file
+    :ensure nil
+    :config
+    (epa-file-enable)
+    (setq epa-pinentry-mode 'loopback))
+#+end_src
+
 * =all-the-icons-dired=                                     :Dired:
 #+begin_src elisp
   (use-package all-the-icons-dired

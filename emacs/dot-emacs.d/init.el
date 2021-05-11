@@ -356,6 +356,12 @@
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
+(use-package epa-file
+  :ensure nil
+  :config
+  (epa-file-enable)
+  (setq epa-pinentry-mode 'loopback))
+
 (use-package all-the-icons-dired
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
