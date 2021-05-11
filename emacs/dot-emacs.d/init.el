@@ -110,7 +110,11 @@
                  (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
                  (match-string 1))))))
 
-(define-key dired-mode-map (kbd "?") 'my/dired-get-size)
+(use-package dired
+  :ensure nil
+  :bind (:map dired-mode-map
+              (("?" . my/dired-get-size))))
+;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
 
 (use-package org
   :ensure t
@@ -385,7 +389,7 @@
 (use-package geiser
   :config
   (setq geiser-mit-binary "mit-scheme")
-  (setq geiser-active-implementations '(mit chez guile)
+  (setq geiser-active-implementations '(mit chez guile))
   (setq geiser-default-implementation 'mit))
 
 (use-package slime

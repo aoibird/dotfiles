@@ -178,7 +178,11 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 #+end_src
 
 #+begin_src elisp
-  (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
+  (use-package dired
+    :ensure nil
+    :bind (:map dired-mode-map
+                (("?" . my/dired-get-size))))
+  ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
 #+end_src
 
 * Org
@@ -551,7 +555,7 @@ For Scheme.
   (use-package geiser
     :config
     (setq geiser-mit-binary "mit-scheme")
-    (setq geiser-active-implementations '(mit chez guile)
+    (setq geiser-active-implementations '(mit chez guile))
     (setq geiser-default-implementation 'mit))
 #+end_src
 
