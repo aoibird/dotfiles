@@ -20,6 +20,7 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . light))
   (setq ns-use-proxy-icon  nil)
+  (setq ns-pop-up-frames nil)
   (setq frame-title-format nil))
 
 (setq-default inhibit-startup-screen t)
