@@ -122,7 +122,6 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
-  (setq org-confirm-babel-evaluate nil)
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
    'org-babel-load-languages '((R . t)
@@ -153,9 +152,42 @@
         '(ascii beamer html icalendar latex man md odt texinfo))
   (setq org-export-coding-system 'utf-8)
   (setq org-latex-listings 'listings)
+  (setq org-html-htmlize-output-type 'css)
+  (setq org-html-head-include-default-style nil)
 
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
+
+  (setq org-publish-project-alist
+        '(
+          ("roam-html-org"
+           :base-directory "~/ea/roam"
+           :base-extension "org"
+           :publishing-directory "~/ea/roam_html"
+           :eval never-export
+           :recursive t
+           :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"org.css\" />"
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :author "author"
+           :email "email"
+           :with-latex t
+           :with-drawer t
+           :with-timestamps t
+           :with-email t
+           :html-postamble auto
+           :auto-sitemap t
+           :sitemap-sort-files alphabetically
+           :sitemap-filename "sitemap.org"
+           :sitemap-title "Sitemap")
+          ("roam-html-static"
+           :base-directory "~/ea/roam"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "~/ea/roam_html"
+           :recursive t
+           :exclude "\\*proj\\*"
+           :publishing-function org-publish-attachment)
+          ("roam-html" :components ("roam-html-org" "roam-html-static"))))
   )
 
 (use-package org-bullets
@@ -333,6 +365,8 @@
 
 (use-package geiser
   :config
+  (setq geiser-mit-binary "mit-scheme")
+  (setq geiser-active-implementations '(mit chez guile)
   (setq geiser-default-implementation 'mit))
 
 (use-package slime
