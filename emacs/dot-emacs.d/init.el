@@ -156,10 +156,10 @@
   (setq org-default-notes-file "~/ea/refile.org")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file "~/ea/roam/ideas.org")
+           (file org-default-notes-file)
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file "~/ea/schedule/tasks.org")
+           (file org-default-notes-file)
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
