@@ -25,7 +25,7 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source virtualenvwrapper.sh
 
 # Password store
-export PASSWORD_STORE_DIR=~/pass
+export PASSWORD_STORE_DIR=~/ea/pass
 
 # gpg 2.3.1 cannot select card
 export PATH="/usr/local/opt/gnupg@2.2/bin:$PATH"
