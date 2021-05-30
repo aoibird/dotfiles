@@ -220,7 +220,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 ** Planning
 #+NAME: org-planning
 #+begin_src elisp :tangle no
-  (setq org-agenda-files '("~/ea/schedule/"))
+  (setq org-agenda-files '("~/hub/schedule/"))
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
   (setq org-duration-format 'h:mm)   ; time format
@@ -249,7 +249,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 ** Capture
 #+NAME: org-capture
 #+begin_src elisp :tangle no
-  (setq org-default-notes-file "~/ea/refile.org")
+  (setq org-default-notes-file "~/hub/refile.org")
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file org-default-notes-file)
@@ -286,9 +286,9 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
   (setq org-publish-project-alist
         '(
           ("roam-html-org"
-           :base-directory "~/ea/roam"
+           :base-directory "~/hub/roam"
            :base-extension "org"
-           :publishing-directory "~/ea/roam_html"
+           :publishing-directory "~/hub/roam_html"
            :eval never-export
            :recursive t
            :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"org.css\" />"
@@ -306,9 +306,9 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
            :sitemap-filename "sitemap.org"
            :sitemap-title "Sitemap")
           ("roam-html-static"
-           :base-directory "~/ea/roam"
+           :base-directory "~/hub/roam"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/ea/roam_html"
+           :publishing-directory "~/hub/roam_html"
            :recursive t
            :exclude "\\*proj\\*"
            :publishing-function org-publish-attachment)
@@ -329,7 +329,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     :hook
     (after-init . org-roam-mode)
     :custom
-    (org-roam-directory "~/ea/roam")
+    (org-roam-directory "~/hub/roam")
     :bind (:map org-roam-mode-map
                 (("C-c n l" . org-roam)
                  ("C-c n f" . org-roam-find-file)
@@ -341,7 +341,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
                 (("C-c n I" . org-roam-insert-immediate)))
     :config
     (setq org-roam-graph-executable "/usr/local/bin/dot")
-    (setq org-roam-index-file "~/ea/roam/index.org"))
+    (setq org-roam-index-file "~/hub/roam/index.org"))
 #+end_src
 
 * Org roam server
@@ -368,7 +368,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     :ensure t
     :defer t
     :config
-    (setq org-journal-dir "~/ea/journal/")
+    (setq org-journal-dir "~/hub/journal/")
     (setq org-journal-date-format "%Y-%m-%d")
     (setq org-journal-file-format "%Y")
     (setq org-journal-encrypt-journal t)
