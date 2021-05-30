@@ -549,6 +549,11 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 (use-package cmake-mode)
 #+end_src
 
+* =nix-mode=
+#+begin_src elisp
+  (use-package nix-mode)
+#+end_src
+
 * =geiser=                                                  :Programming:
 For Scheme.
 #+begin_src elisp

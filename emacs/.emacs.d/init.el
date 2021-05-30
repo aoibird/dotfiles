@@ -386,6 +386,8 @@
 
 (use-package cmake-mode)
 
+(use-package nix-mode)
+
 (use-package geiser
   :config
   (setq geiser-mit-binary "mit-scheme")
