@@ -73,7 +73,7 @@
 ** Choose a color theme
 #+begin_src elisp
   (use-package doom-themes
-    :init (load-theme 'doom-one-light t))
+    :init (load-theme 'doom-city-lights t))
 #+end_src
 
 ** Better mode line
@@ -604,14 +604,6 @@ For Common Lisp.
   (use-package python-mode)
 #+end_src
 
-* =virtualenvwrapper=                                       :Programming:
-#+begin_src elisp
-  (use-package virtualenvwrapper
-    :config
-    (venv-initialize-interactive-shells)
-    (venv-initialize-eshell))
-#+end_src
-
 * =php-mode=                                                :Programming:
 #+begin_src elisp
   (use-package php-mode)
@@ -653,33 +645,6 @@ For Common Lisp.
   (use-package js
     :config
     (setq js-indent-level 2))
-#+end_src
-
-* =lsp-mode=
-#+begin_src elisp
-    (use-package lsp-mode
-      :init
-      ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-      (setq lsp-keymap-prefix "C-c l")
-      :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-             (python-mode . lsp)
-             ;; if you want which-key integration
-             (lsp-mode . lsp-enable-which-key-integration))
-      :commands lsp
-      :config
-      (setq lsp-headerline-breadcrumb-enable t)
-      (setq lsp-pyls-plugins-jedi-definition-enabled t))
-
-    ;; optionally
-    (use-package lsp-ui :commands lsp-ui-mode)
-
-    ;; if you are ivy user
-    (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-    (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-    ;; optionally if you want to use debugger
-    (use-package dap-mode)
-    ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 #+end_src
 
 * INACTIVE
@@ -791,4 +756,39 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     (global-visual-fill-column-mode))
 #+end_src
 
+
+** =virtualenvwrapper=                                      :Programming:
+#+begin_src elisp
+  (use-package virtualenvwrapper
+    :config
+    (venv-initialize-interactive-shells)
+    (venv-initialize-eshell))
+#+end_src
+
+** =lsp-mode=
+#+begin_src elisp
+    (use-package lsp-mode
+      :init
+      ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+      (setq lsp-keymap-prefix "C-c l")
+      :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+             (python-mode . lsp)
+             ;; if you want which-key integration
+             (lsp-mode . lsp-enable-which-key-integration))
+      :commands lsp
+      :config
+      (setq lsp-headerline-breadcrumb-enable t)
+      (setq lsp-pyls-plugins-jedi-definition-enabled t))
+
+    ;; optionally
+    (use-package lsp-ui :commands lsp-ui-mode)
+
+    ;; if you are ivy user
+    (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+    (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+    ;; optionally if you want to use debugger
+    (use-package dap-mode)
+    ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
 

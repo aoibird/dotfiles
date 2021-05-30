@@ -45,7 +45,7 @@
   :ensure t) ;; and M-x all-the-icons-install-fonts
 
 (use-package doom-themes
-  :init (load-theme 'doom-one-light t))
+  :init (load-theme 'doom-city-lights t))
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
@@ -415,11 +415,6 @@
 
 (use-package python-mode)
 
-(use-package virtualenvwrapper
-  :config
-  (venv-initialize-interactive-shells)
-  (venv-initialize-eshell))
-
 (use-package php-mode)
 
 (use-package typescript-mode)
@@ -447,27 +442,3 @@
 (use-package js
   :config
   (setq js-indent-level 2))
-
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (python-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp
-  :config
-  (setq lsp-headerline-breadcrumb-enable t)
-  (setq lsp-pyls-plugins-jedi-definition-enabled t))
-
-;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
-
-;; if you are ivy user
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-;; optionally if you want to use debugger
-(use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
