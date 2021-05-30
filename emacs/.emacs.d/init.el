@@ -230,6 +230,41 @@
   (setq org-roam-graph-executable "/usr/local/bin/dot")
   (setq org-roam-index-file "~/ea/roam/index.org"))
 
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+
+(use-package org-journal
+  :ensure t
+  :defer t
+  :config
+  (setq org-journal-dir "~/ea/journal/")
+  (setq org-journal-date-format "%Y-%m-%d")
+  (setq org-journal-file-format "%Y")
+  (setq org-journal-encrypt-journal t)
+  (setq org-journal-file-type 'yearly)
+  (defun org-journal-file-header-func (time)
+    "Custom function to create journal header."
+    (concat
+     (pcase org-journal-file-type
+       (`daily "# -*- mode: org -*-\n#+TITLE: Daily Journal\n#+STARTUP: showeverything")
+       (`weekly "# -*- mode: org -*-\n#+TITLE: Weekly Journal\n#+STARTUP: folded")
+       (`monthly "# -*- mode: org -*-\n#+TITLE: Monthly Journal\n#+STARTUP: folded")
+       (`yearly "# -*- mode: org -*-\n#+TITLE: Yearly Journal\n#+STARTUP: folded"))))
+
+  (setq org-journal-file-header 'org-journal-file-header-func))
+
 (require 'appt)
 (setq appt-time-msg-list nil)    ;; clear existing appt list
 (setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
