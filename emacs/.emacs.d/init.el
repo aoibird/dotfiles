@@ -116,6 +116,30 @@
               (("?" . my/dired-get-size))))
 ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
 
+(use-package ligature
+  :load-path "ligature.el"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable ligatures in programming modes
+  (ligature-set-ligatures '(prog-mode org-mode)
+                          '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                            ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                            "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#!"
+                            "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+                            "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                            "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                            "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                            "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                            "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                            "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+
 (use-package org
   :ensure t
   :bind
@@ -432,7 +456,7 @@
 (use-package slime
   :ensure t
   :init
-  (setq inferior-lisp-program "/usr/local/bin/ccl64"))
+  (setq inferior-lisp-program "sbcl"))
 
 (use-package sml-mode
   :ensure t)
@@ -445,12 +469,6 @@
 
 (use-package racket-mode
   :ensure t)
-
-(use-package python
-  :config
-  (setq python-shell-interpreter "python3"))
-
-(use-package python-mode)
 
 (use-package php-mode)
 
@@ -475,6 +493,10 @@
   (setq web-mode-part-padding 0)
   (setq web-mode-script-padding 0)
   (setq web-mode-style-padding 0))
+
+(use-package python
+  :ensure t
+  :mode (("\\.py\\'" . text-mode)))
 
 (use-package js
   :config

@@ -185,6 +185,33 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
   ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
 #+end_src
 
+* Ligatures
+#+begin_src elisp
+  (use-package ligature
+    :load-path "ligature.el"
+    :config
+    ;; Enable the "www" ligature in every possible major mode
+    (ligature-set-ligatures 't '("www"))
+    ;; Enable traditional ligature support in eww-mode, if the
+    ;; `variable-pitch' face supports it
+    (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+    ;; Enable ligatures in programming modes
+    (ligature-set-ligatures '(prog-mode org-mode)
+                            '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                              ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                              "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#!"
+                              "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+                              "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                              "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                              "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                              "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                              "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                              "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+    ;; Enables ligature checks globally in all buffers. You can also do it
+    ;; per mode with `ligature-mode'.
+    (global-ligature-mode t))
+#+end_src
+
 * Org
 #+begin_src elisp :noweb yes
   (use-package org
@@ -565,7 +592,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :ensure t)
 #+end_src
 
-* =markdown-mode=
+* =markdown-mode=                                           :Text:
 #+begin_src elisp
   (use-package markdown-mode
     :ensure t
@@ -575,22 +602,22 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :init (setq markdown-command "/usr/local/bin/multimarkdown"))
 #+end_src
 
-* =yaml-mode=
+* =yaml-mode=                                               :Text:
 #+begin_src elisp
   (use-package yaml-mode)
 #+end_src
 
-* =dockerfile-mode=
+* =dockerfile-mode=                                         :Text:
 #+begin_src elisp
   (use-package dockerfile-mode)
 #+end_src
 
-* =cmake=
+* =cmake=                                                   :Programming:
 #+begin_src elisp
 (use-package cmake-mode)
 #+end_src
 
-* =nix-mode=
+* =nix-mode=                                                :Programming:
 #+begin_src elisp
   (use-package nix-mode)
 #+end_src
@@ -611,7 +638,7 @@ For Common Lisp.
   (use-package slime
     :ensure t
     :init
-    (setq inferior-lisp-program "/usr/local/bin/ccl64"))
+    (setq inferior-lisp-program "sbcl"))
 #+end_src
 
 * =sml-mode=                                                :Programming:
@@ -636,18 +663,6 @@ For Common Lisp.
 #+begin_src elisp
   (use-package racket-mode
     :ensure t)
-#+end_src
-
-* =python=                                                  :Programming:
-#+begin_src elisp
-  (use-package python
-    :config
-    (setq python-shell-interpreter "python3"))
-#+end_src
-
-* =python-mode=                                             :Programming:
-#+begin_src elisp
-  (use-package python-mode)
 #+end_src
 
 * =php-mode=                                                :Programming:
@@ -684,6 +699,13 @@ For Common Lisp.
       (setq web-mode-part-padding 0)
       (setq web-mode-script-padding 0)
       (setq web-mode-style-padding 0))
+#+end_src
+
+* =python=
+#+begin_src elisp
+  (use-package python
+    :ensure t
+    :mode (("\\.py\\'" . text-mode)))
 #+end_src
 
 * =js=
@@ -836,5 +858,17 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     ;; optionally if you want to use debugger
     (use-package dap-mode)
     ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
+
+** =python=                                                 :Programming:
+#+begin_src elisp
+  (use-package python
+    :config
+    (setq python-shell-interpreter "python3"))
+#+end_src
+
+** =python-mode=                                            :Programming:
+#+begin_src elisp
+  (use-package python-mode)
 #+end_src
 
