@@ -144,6 +144,7 @@
 (global-set-key (kbd "M-【") 'previous-buffer)
 (global-set-key (kbd "M-】") 'next-buffer)
 (global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-c m v") 'add-file-local-variable-prop-line)
 
 (defun my/add-auctex-file-variables ()
   (interactive)
