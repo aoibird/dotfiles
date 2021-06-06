@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; NOTE: This file is generated from init.org.
 
 (require 'package)
@@ -28,11 +29,11 @@
 (scroll-bar-mode -1)                    ; hide scrollbar
 
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Fira Code-14")
+(set-face-attribute 'default nil :font "Cascadia Code-14")
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "STKaiti")))
-(setq face-font-rescale-alist '(("STKaiti" . 1.3)))
+                    charset (font-spec :family "Kaiti SC")))
+(setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
 
 (display-battery-mode t)                ; battary
 (column-number-mode t)                  ; column number
@@ -79,6 +80,33 @@
 
 (setq mac-right-option-modifier 'none)
 
+(use-package ligature
+  :load-path "ligature.el"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  (setq my/ligature-cascadia-code-ligatures-alist '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                                    ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                                    "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                                    "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                                    "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                                    "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                                    "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                                    "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                                    ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                                    "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                                    "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                                    "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                                    "\\\\" "://"))
+  (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures-alist)
+  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
+  ;; enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
@@ -115,30 +143,6 @@
   :bind (:map dired-mode-map
               (("?" . my/dired-get-size))))
 ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
-
-(use-package ligature
-  :load-path "ligature.el"
-  :config
-  ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable ligatures in programming modes
-  (ligature-set-ligatures '(prog-mode org-mode)
-                          '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-                            ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-                            "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#!"
-                            "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-                            "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-                            "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-                            "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-                            "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-                            "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-                            "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
 
 (use-package org
   :ensure t
@@ -493,10 +497,6 @@
   (setq web-mode-part-padding 0)
   (setq web-mode-script-padding 0)
   (setq web-mode-style-padding 0))
-
-(use-package python
-  :ensure t
-  :mode (("\\.py\\'" . text-mode)))
 
 (use-package js
   :config

@@ -3,6 +3,7 @@
 #+PROPERTY: header-args :tangle init.el
 
 #+begin_src elisp
+  ;; -*- lexical-binding: t; -*-
   ;; NOTE: This file is generated from init.org.
 #+end_src
 
@@ -47,11 +48,11 @@
 ** Config fonts
 #+begin_src elisp
   (setq inhibit-compacting-font-caches t)
-  (set-face-attribute 'default nil :font "Fira Code-14")
+  (set-face-attribute 'default nil :font "Cascadia Code-14")
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "STKaiti")))
-  (setq face-font-rescale-alist '(("STKaiti" . 1.3)))
+                      charset (font-spec :family "Kaiti SC")))
+  (setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
 #+end_src
 
 ** Config mode line
@@ -134,6 +135,36 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (setq mac-right-option-modifier 'none)
 #+end_src
 
+* Ligatures
+#+begin_src elisp
+  (use-package ligature
+    :load-path "ligature.el"
+    :config
+    ;; Enable the "www" ligature in every possible major mode
+    (ligature-set-ligatures 't '("www"))
+    ;; Enable traditional ligature support in eww-mode, if the
+    ;; `variable-pitch' face supports it
+    (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+    (setq my/ligature-cascadia-code-ligatures-alist '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                                      ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                                      "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                                      "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                                      "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                                      "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                                      "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                                      "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                                      ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                                      "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                                      "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                                      "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                                      "\\\\" "://"))
+    (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures-alist)
+    (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
+    ;; enables ligature checks globally in all buffers. You can also do it
+    ;; per mode with `ligature-mode'.
+    (global-ligature-mode t))
+#+end_src
+
 * Keybindings
 #+begin_src elisp
   (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
@@ -183,33 +214,6 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     :bind (:map dired-mode-map
                 (("?" . my/dired-get-size))))
   ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
-#+end_src
-
-* Ligatures
-#+begin_src elisp
-  (use-package ligature
-    :load-path "ligature.el"
-    :config
-    ;; Enable the "www" ligature in every possible major mode
-    (ligature-set-ligatures 't '("www"))
-    ;; Enable traditional ligature support in eww-mode, if the
-    ;; `variable-pitch' face supports it
-    (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-    ;; Enable ligatures in programming modes
-    (ligature-set-ligatures '(prog-mode org-mode)
-                            '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-                              ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-                              "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#!"
-                              "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-                              "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-                              "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-                              "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-                              "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-                              "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-                              "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
-    ;; Enables ligature checks globally in all buffers. You can also do it
-    ;; per mode with `ligature-mode'.
-    (global-ligature-mode t))
 #+end_src
 
 * Org
@@ -701,13 +705,6 @@ For Common Lisp.
       (setq web-mode-style-padding 0))
 #+end_src
 
-* =python=
-#+begin_src elisp
-  (use-package python
-    :ensure t
-    :mode (("\\.py\\'" . text-mode)))
-#+end_src
-
 * =js=
 #+begin_src elisp
   (use-package js
@@ -870,5 +867,12 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
 ** =python-mode=                                            :Programming:
 #+begin_src elisp
   (use-package python-mode)
+#+end_src
+
+** =python=
+#+begin_src elisp
+  (use-package python
+    :ensure t
+    :mode (("\\.py\\'" . text-mode)))
 #+end_src
 
