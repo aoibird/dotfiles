@@ -10,12 +10,52 @@
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package))
+  (package-install 'use-package)) ; install use-package if it does not exist
 (require 'use-package)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
+
+(defvar my/packages
+  '(all-the-icons ;; and M-x all-the-icons-install-fonts
+    doom-themes
+    doom-modeline
+    exec-path-from-shell
+    org
+    org-roam org-roam-server org-bullets org-journal
+    magit yasnippet ibuffer
+    ivy counsel swiper
+    auctex
+    projectile
+    flycheck
+    all-the-icons-dired
+    rainbow-delimiters
+    htmlize
+    markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode
+    geiser slime
+    racket-mode sml-mode clojure-mode
+    rust-mode haskell-mode lua-mode
+    typescript-mode php-mode web-mode
+    try
+    )
+  "My default packages")
+(defun my/packages-installed-p ()
+  (let ((ret t))
+    (dolist (pkg my/packages)
+      (when (not (package-installed-p pkg)) (setq ret nil)))
+    ret))
+
+;; Install packages
+(setq package-selected-packages my/packages)
+(unless (my/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (package-install-selected-packages))
 
 (add-to-list 'default-frame-alist '(height . 36)) ; frame height
 (add-to-list 'default-frame-alist '(width . 80))  ; frame width
+
+(setq-default inhibit-startup-screen t)
+(tool-bar-mode -1)                      ; hide toolbar
+(scroll-bar-mode -1)                    ; hide scrollbar
 
 (when (memq window-system '(mac ns))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
@@ -24,16 +64,28 @@
   (setq ns-pop-up-frames nil)
   (setq frame-title-format nil))
 
-(setq-default inhibit-startup-screen t)
-(tool-bar-mode -1)                      ; hide toolbar
-(scroll-bar-mode -1)                    ; hide scrollbar
+(global-display-line-numbers-mode)
+(global-hl-line-mode t)                 ; line highlighting
+(global-visual-line-mode t)             ; line wrap
 
-(setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Cascadia Code-14")
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "Kaiti SC")))
-(setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
+(setq-default cursor-type 'bar)
+(setq-default show-trailing-whitespace t)
+(setq-default show-paren-delay 0)
+(show-paren-mode 1)                     ; parentheses matching
+
+(setq-default make-backup-files nil)
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default c-basic-offset 4)
+(setq mac-right-option-modifier 'none)  ; option + s --> ß
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :init
+  (exec-path-from-shell-initialize))
+
+(use-package doom-themes
+  :init (load-theme 'doom-city-lights t))
 
 (display-battery-mode t)                ; battary
 (column-number-mode t)                  ; column number
@@ -42,43 +94,31 @@
 (setq-default display-time-format "%Y-%m-%d %a %H:%M")
 (display-time-mode t)                   ; datetime
 
-(use-package all-the-icons
-  :ensure t) ;; and M-x all-the-icons-install-fonts
-
-(use-package doom-themes
-  :init (load-theme 'doom-city-lights t))
-
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
   :config
   (setq doom-modeline-buffer-encoding nil))
 
-(use-package exec-path-from-shell
-  :init
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+(setq inhibit-compacting-font-caches t)
+(set-face-attribute 'default nil :font "Cascadia Code-14")
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+                    charset (font-spec :family "Kaiti SC")))
+(setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
 
-(setq-default cursor-type 'bar)
-
-(setq-default show-trailing-whitespace t)
-
-(setq-default show-paren-delay 0)
-(show-paren-mode 1)                     ; parentheses matching
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-(global-display-line-numbers-mode)
-(global-hl-line-mode t)                 ; line highlighting
-(global-visual-line-mode t)             ; line wrap
-
-(setq-default make-backup-files nil)
-
-(setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
-(setq-default c-basic-offset 4)
-
-(setq mac-right-option-modifier 'none)
+(defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                              ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                              "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                              "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                              "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                              "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                              "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                              "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                              ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                              "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                              "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                              "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                              "\\\\" "://"))
 
 (use-package ligature
   :load-path "ligature.el"
@@ -88,21 +128,8 @@
   ;; Enable traditional ligature support in eww-mode, if the
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  (setq my/ligature-cascadia-code-ligatures-alist '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                                    ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                                    "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                                    "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                                    "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                                    "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                                    "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                                    "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                                    ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                                    "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                                    "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                                    "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                                    "\\\\" "://"))
-  (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures-alist)
-  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
+  (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
+  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "==" "..."))
   ;; enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
@@ -138,11 +165,39 @@
                  (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
                  (match-string 1))))))
 
-(use-package dired
-  :ensure nil
-  :bind (:map dired-mode-map
-              (("?" . my/dired-get-size))))
-;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
+(require 'appt)
+(setq appt-time-msg-list nil)    ;; clear existing appt list
+(setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
+(setq
+ appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
+ appt-display-mode-line nil     ;; don't show in the modeline
+ appt-display-format 'window)   ;; pass warnings to the designated window function
+(setq appt-disp-window-function (function ct/appt-display-native))
+
+(appt-activate 1)                ;; activate appointment notification
+                                      ; (display-time) ;; Clock in modeline
+
+(defun ct/send-notification (title msg)
+  (let ((notifier-path (executable-find "alerter")))
+    (start-process
+     "Appointment Alert"
+     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
+     notifier-path
+     "-message" msg
+     "-title" title
+     "-sender" "org.gnu.Emacs"
+     "-activate" "org.gnu.Emacs")))
+
+(defun ct/appt-display-native (min-to-app new-time msg)
+  (ct/send-notification
+   (format "Appointment in %s minutes" min-to-app) ; Title
+   (format "%s" msg)))                             ; Message/detail text
+
+
+;; Agenda-to-appointent hooks
+(org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
+(run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
+(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
 
 (use-package org
   :ensure t
@@ -236,11 +291,9 @@
   )
 
 (use-package org-bullets
-  :ensure t
   :hook (org-mode . org-bullets-mode))
 
 (use-package org-roam
-  :ensure t
   :hook
   (after-init . org-roam-mode)
   :custom
@@ -293,46 +346,12 @@
 
   (setq org-journal-file-header 'org-journal-file-header-func))
 
-(require 'appt)
-(setq appt-time-msg-list nil)    ;; clear existing appt list
-(setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
-(setq
- appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
- appt-display-mode-line nil     ;; don't show in the modeline
- appt-display-format 'window)   ;; pass warnings to the designated window function
-(setq appt-disp-window-function (function ct/appt-display-native))
-
-(appt-activate 1)                ;; activate appointment notification
-                                      ; (display-time) ;; Clock in modeline
-
-(defun ct/send-notification (title msg)
-  (let ((notifier-path (executable-find "alerter")))
-    (start-process
-     "Appointment Alert"
-     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
-     notifier-path
-     "-message" msg
-     "-title" title
-     "-sender" "org.gnu.Emacs"
-     "-activate" "org.gnu.Emacs")))
-
-(defun ct/appt-display-native (min-to-app new-time msg)
-  (ct/send-notification
-   (format "Appointment in %s minutes" min-to-app) ; Title
-   (format "%s" msg)))                             ; Message/detail text
-
-
-;; Agenda-to-appointent hooks
-(org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
-(run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
-(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
-
 (use-package yasnippet
-  :ensure t
+  :hook
+  (prog-mode . yas-minor-mode)
+  (org-mode . yas-minor-mode)
   :config
   (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'org-mode-hook #'yas-minor-mode)
   (setq yas-indent-line 'fixed))
 
 (use-package magit
@@ -368,8 +387,6 @@
   (add-hook 'ibuffer-mode-hook
             (lambda ()
               (ibuffer-switch-to-saved-filter-groups "default"))))
-
-(setq dired-listing-switches "-alh")
 
 (use-package ivy
   :ensure t)
@@ -429,12 +446,19 @@
   (epa-file-enable)
   (setq epa-pinentry-mode 'loopback))
 
+(use-package dired
+  :ensure nil
+  :bind (:map dired-mode-map
+              (("?" . my/dired-get-size)))
+  :config
+  (setq dired-listing-switches "-alh"))
+
 (use-package all-the-icons-dired
   :ensure t
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package htmlize
-  :ensure t)
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package markdown-mode
   :ensure t
@@ -443,14 +467,6 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "/usr/local/bin/multimarkdown"))
 
-(use-package yaml-mode)
-
-(use-package dockerfile-mode)
-
-(use-package cmake-mode)
-
-(use-package nix-mode)
-
 (use-package geiser
   :config
   (setq geiser-mit-binary "mit-scheme")
@@ -458,27 +474,8 @@
   (setq geiser-default-implementation 'mit))
 
 (use-package slime
-  :ensure t
   :init
   (setq inferior-lisp-program "sbcl"))
-
-(use-package sml-mode
-  :ensure t)
-
-(use-package rust-mode
-  :ensure t)
-
-(use-package haskell-mode
-  :ensure t)
-
-(use-package racket-mode
-  :ensure t)
-
-(use-package php-mode)
-
-(use-package typescript-mode)
-
-(use-package lua-mode)
 
 (use-package web-mode
   :config

@@ -1,5 +1,5 @@
 #+TITLE: Emacs Configuration
-#+STARTUP: content
+#+STARTUP: showall
 #+PROPERTY: header-args :tangle init.el
 
 #+begin_src elisp
@@ -7,9 +7,7 @@
   ;; NOTE: This file is generated from init.org.
 #+end_src
 
-* Start up
-
-** Setup package system
+* Package manager
 #+begin_src elisp
   (require 'package)
   (setq package-enable-at-startup nil)
@@ -20,16 +18,70 @@
 
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
-    (package-install 'use-package))
+    (package-install 'use-package)) ; install use-package if it does not exist
   (require 'use-package)
-  (setq use-package-always-ensure t)
+  (setq use-package-always-ensure nil)
 #+end_src
 
-** Set frame size and title
+* Packages
+#+begin_src elisp
+  (defvar my/packages
+    '(all-the-icons ;; and M-x all-the-icons-install-fonts
+      doom-themes
+      doom-modeline
+      exec-path-from-shell
+      org
+      org-roam org-roam-server org-bullets org-journal
+      magit yasnippet ibuffer
+      ivy counsel swiper
+      auctex
+      projectile
+      flycheck
+      all-the-icons-dired
+      rainbow-delimiters
+      htmlize
+      markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode
+      geiser slime
+      racket-mode sml-mode clojure-mode
+      rust-mode haskell-mode lua-mode
+      typescript-mode php-mode web-mode
+      try
+      )
+    "My default packages")
+  (defun my/packages-installed-p ()
+    (let ((ret t))
+      (dolist (pkg my/packages)
+        (when (not (package-installed-p pkg)) (setq ret nil)))
+      ret))
+  
+  ;; Install packages
+  (setq package-selected-packages my/packages)
+  (unless (my/packages-installed-p)
+    (message "%s" "Refreshing package database...")
+    (package-refresh-contents)
+    (package-install-selected-packages))
+#+end_src
+
+* Basic configration
+
+Set frame size:
+
 #+begin_src elisp
   (add-to-list 'default-frame-alist '(height . 36)) ; frame height
   (add-to-list 'default-frame-alist '(width . 80))  ; frame width
+#+end_src
 
+Inhibit unused elements:
+
+#+begin_src elisp
+  (setq-default inhibit-startup-screen t)
+  (tool-bar-mode -1)                      ; hide toolbar
+  (scroll-bar-mode -1)                    ; hide scrollbar
+#+end_src
+
+For macOS:
+
+#+begin_src elisp
   (when (memq window-system '(mac ns))
     (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
     (add-to-list 'default-frame-alist '(ns-appearance . light))
@@ -38,79 +90,7 @@
     (setq frame-title-format nil))
 #+end_src
 
-** Inhibit unnecessary elements
-#+begin_src elisp
-  (setq-default inhibit-startup-screen t)
-  (tool-bar-mode -1)                      ; hide toolbar
-  (scroll-bar-mode -1)                    ; hide scrollbar
-#+end_src
 
-** Config fonts
-#+begin_src elisp
-  (setq inhibit-compacting-font-caches t)
-  (set-face-attribute 'default nil :font "Cascadia Code-14")
-  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "Kaiti SC")))
-  (setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
-#+end_src
-
-** Config mode line
-#+begin_src elisp
-  (display-battery-mode t)                ; battary
-  (column-number-mode t)                  ; column number
-  (setq-default display-time-interval 30)
-  (setq-default display-time-default-load-average nil)
-  (setq-default display-time-format "%Y-%m-%d %a %H:%M")
-  (display-time-mode t)                   ; datetime
-#+end_src
-
-** Use =all-the-icons=
-#+begin_src elisp
-  (use-package all-the-icons
-    :ensure t) ;; and M-x all-the-icons-install-fonts
-#+end_src
-
-** Choose a color theme
-#+begin_src elisp
-  (use-package doom-themes
-    :init (load-theme 'doom-city-lights t))
-#+end_src
-
-** Better mode line
-#+begin_src elisp
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-buffer-encoding nil))
-#+end_src
-
-** =exec-path-from-shell= for macOS
-#+begin_src elisp
-  (use-package exec-path-from-shell
-    :init
-    (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize)))
-#+end_src
-
-** More display config
-#+begin_src elisp
-  (setq-default cursor-type 'bar)
-#+end_src
-
-#+begin_src elisp
-  (setq-default show-trailing-whitespace t)
-#+end_src
-
-#+begin_src elisp
-  (setq-default show-paren-delay 0)
-  (show-paren-mode 1)                     ; parentheses matching
-#+end_src
-
-#+begin_src elisp
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-#+end_src
 
 The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
 
@@ -120,22 +100,81 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
   (global-visual-line-mode t)             ; line wrap
 #+end_src
 
-** More editing config
+Other configuration:
+
 #+begin_src elisp
-  (setq-default make-backup-files nil)
+  (setq-default cursor-type 'bar)
+  (setq-default show-trailing-whitespace t)
+  (setq-default show-paren-delay 0)
+  (show-paren-mode 1)                     ; parentheses matching
 #+end_src
 
 #+begin_src elisp
+  (setq-default make-backup-files nil)
   (setq-default tab-width 4)
   (setq-default indent-tabs-mode nil)
   (setq-default c-basic-offset 4)
+  (setq mac-right-option-modifier 'none)  ; option + s --> ß
+#+end_src
+
+* =exec-path-from-shell=
+#+begin_src elisp
+  (use-package exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :init
+    (exec-path-from-shell-initialize))
+#+end_src
+
+* Color theme
+#+begin_src elisp
+  (use-package doom-themes
+    :init (load-theme 'doom-city-lights t))
+#+end_src
+
+* Modeline
+#+begin_src elisp
+  (display-battery-mode t)                ; battary
+  (column-number-mode t)                  ; column number
+  (setq-default display-time-interval 30)
+  (setq-default display-time-default-load-average nil)
+  (setq-default display-time-format "%Y-%m-%d %a %H:%M")
+  (display-time-mode t)                   ; datetime
 #+end_src
 
 #+begin_src elisp
-  (setq mac-right-option-modifier 'none)
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-buffer-encoding nil))
+#+end_src
+
+* Fonts
+#+begin_src elisp
+  (setq inhibit-compacting-font-caches t)
+  (set-face-attribute 'default nil :font "Cascadia Code-14")
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+                      charset (font-spec :family "Kaiti SC")))
+  (setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
 #+end_src
 
 * Ligatures
+#+begin_src elisp
+  (defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                                ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                                "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                                "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                                "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                                "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                                "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                                "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                                ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                                "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                                "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                                "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                                "\\\\" "://"))
+#+end_src
+
 #+begin_src elisp
   (use-package ligature
     :load-path "ligature.el"
@@ -145,21 +184,8 @@ The =linum-mode= could slow down emacs when viewing large files or images. (http
     ;; Enable traditional ligature support in eww-mode, if the
     ;; `variable-pitch' face supports it
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-    (setq my/ligature-cascadia-code-ligatures-alist '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                                      ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                                      "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                                      "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                                      "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                                      "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                                      "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                                      "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                                      ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                                      "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                                      "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                                      "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                                      "\\\\" "://"))
-    (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures-alist)
-    (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
+    (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
+    (ligature-set-ligatures 'python-mode '("www" "__" "!=" "==" "..."))
     ;; enables ligature checks globally in all buffers. You can also do it
     ;; per mode with `ligature-mode'.
     (global-ligature-mode t))
@@ -208,12 +234,42 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
                    (match-string 1))))))
 #+end_src
 
+* Notifications
+From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+begin_src elisp
-  (use-package dired
-    :ensure nil
-    :bind (:map dired-mode-map
-                (("?" . my/dired-get-size))))
-  ;; (define-key dired-mode-map (kbd "?") 'my/dired-get-size)
+  (require 'appt)
+  (setq appt-time-msg-list nil)    ;; clear existing appt list
+  (setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
+  (setq
+   appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
+   appt-display-mode-line nil     ;; don't show in the modeline
+   appt-display-format 'window)   ;; pass warnings to the designated window function
+  (setq appt-disp-window-function (function ct/appt-display-native))
+
+  (appt-activate 1)                ;; activate appointment notification
+                                        ; (display-time) ;; Clock in modeline
+
+  (defun ct/send-notification (title msg)
+    (let ((notifier-path (executable-find "alerter")))
+      (start-process
+       "Appointment Alert"
+       "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
+       notifier-path
+       "-message" msg
+       "-title" title
+       "-sender" "org.gnu.Emacs"
+       "-activate" "org.gnu.Emacs")))
+
+  (defun ct/appt-display-native (min-to-app new-time msg)
+    (ct/send-notification
+     (format "Appointment in %s minutes" min-to-app) ; Title
+     (format "%s" msg)))                             ; Message/detail text
+
+
+  ;; Agenda-to-appointent hooks
+  (org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
+  (run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
+  (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
 #+end_src
 
 * Org
@@ -349,14 +405,12 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 * Org bullets
 #+begin_src elisp
   (use-package org-bullets
-    :ensure t
     :hook (org-mode . org-bullets-mode))
 #+end_src
 
 * Org roam
 #+begin_src elisp
   (use-package org-roam
-    :ensure t
     :hook
     (after-init . org-roam-mode)
     :custom
@@ -416,52 +470,14 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     (setq org-journal-file-header 'org-journal-file-header-func))
 #+end_src
 
-* Notifications
-From https://christiantietze.de/posts/2019/12/emacs-notifications/.
-#+begin_src elisp
-  (require 'appt)
-  (setq appt-time-msg-list nil)    ;; clear existing appt list
-  (setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
-  (setq
-   appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
-   appt-display-mode-line nil     ;; don't show in the modeline
-   appt-display-format 'window)   ;; pass warnings to the designated window function
-  (setq appt-disp-window-function (function ct/appt-display-native))
-
-  (appt-activate 1)                ;; activate appointment notification
-                                        ; (display-time) ;; Clock in modeline
-
-  (defun ct/send-notification (title msg)
-    (let ((notifier-path (executable-find "alerter")))
-      (start-process
-       "Appointment Alert"
-       "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
-       notifier-path
-       "-message" msg
-       "-title" title
-       "-sender" "org.gnu.Emacs"
-       "-activate" "org.gnu.Emacs")))
-
-  (defun ct/appt-display-native (min-to-app new-time msg)
-    (ct/send-notification
-     (format "Appointment in %s minutes" min-to-app) ; Title
-     (format "%s" msg)))                             ; Message/detail text
-
-
-  ;; Agenda-to-appointent hooks
-  (org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
-  (run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
-  (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
-#+end_src
-
 * Yasnippet
 #+begin_src elisp
   (use-package yasnippet
-    :ensure t
+    :hook
+    (prog-mode . yas-minor-mode)
+    (org-mode . yas-minor-mode)
     :config
     (yas-reload-all)
-    (add-hook 'prog-mode-hook #'yas-minor-mode)
-    (add-hook 'org-mode-hook #'yas-minor-mode)
     (setq yas-indent-line 'fixed))
 #+end_src
 
@@ -503,11 +519,6 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (add-hook 'ibuffer-mode-hook
               (lambda ()
                 (ibuffer-switch-to-saved-filter-groups "default"))))
-#+end_src
-
-* Dired
-#+begin_src elisp
-  (setq dired-listing-switches "-alh")
 #+end_src
 
 * Ivy
@@ -583,20 +594,31 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (setq epa-pinentry-mode 'loopback))
 #+end_src
 
-* =all-the-icons-dired=                                     :Dired:
+* =dired=
+#+begin_src elisp
+  (use-package dired
+    :ensure nil
+    :bind (:map dired-mode-map
+                (("?" . my/dired-get-size)))
+    :config
+    (setq dired-listing-switches "-alh"))
+#+end_src
+
+* =all-the-icons-dired=
 #+begin_src elisp
   (use-package all-the-icons-dired
     :ensure t
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-* =htmlize=
+* =rainbow-delimiters=
 #+begin_src elisp
-  (use-package htmlize
-    :ensure t)
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-* =markdown-mode=                                           :Text:
+
+* =markdown-mode=
 #+begin_src elisp
   (use-package markdown-mode
     :ensure t
@@ -606,28 +628,8 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :init (setq markdown-command "/usr/local/bin/multimarkdown"))
 #+end_src
 
-* =yaml-mode=                                               :Text:
-#+begin_src elisp
-  (use-package yaml-mode)
-#+end_src
+* =geiser= for Scheme                                       :Programming:
 
-* =dockerfile-mode=                                         :Text:
-#+begin_src elisp
-  (use-package dockerfile-mode)
-#+end_src
-
-* =cmake=                                                   :Programming:
-#+begin_src elisp
-(use-package cmake-mode)
-#+end_src
-
-* =nix-mode=                                                :Programming:
-#+begin_src elisp
-  (use-package nix-mode)
-#+end_src
-
-* =geiser=                                                  :Programming:
-For Scheme.
 #+begin_src elisp
   (use-package geiser
     :config
@@ -636,76 +638,36 @@ For Scheme.
     (setq geiser-default-implementation 'mit))
 #+end_src
 
-* =slime=                                                   :Programming:
-For Common Lisp.
+* =slime= for Common Lisp                                   :Programming:
+
 #+begin_src elisp
   (use-package slime
-    :ensure t
     :init
     (setq inferior-lisp-program "sbcl"))
 #+end_src
 
-* =sml-mode=                                                :Programming:
-#+begin_src elisp
-  (use-package sml-mode
-    :ensure t)
-#+end_src
-
-* =rust-mode=                                               :Programming:
-#+begin_src elisp
-  (use-package rust-mode
-    :ensure t)
-#+end_src
-
-* =haskell-mode=                                            :Programming:
-#+begin_src elisp
-  (use-package haskell-mode
-    :ensure t)
-#+end_src
-
-* =racket-mode=                                             :Programming:
-#+begin_src elisp
-  (use-package racket-mode
-    :ensure t)
-#+end_src
-
-* =php-mode=                                                :Programming:
-#+begin_src elisp
-  (use-package php-mode)
-#+end_src
-
-* =typescript-mode=                                         :Programming:
-#+begin_src elisp
-  (use-package typescript-mode)
-#+end_src
-
-* =lua-mode=                                                :Programming:
-#+begin_src elisp
-  (use-package lua-mode)
-#+end_src
-
 * =web-mode=                                                :Programming:
 #+begin_src elisp
-    (use-package web-mode
-      :config
-      (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-      (setq web-mode-code-indent-offset 2)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mode-part-padding 0)
-      (setq web-mode-script-padding 0)
-      (setq web-mode-style-padding 0))
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-part-padding 0)
+    (setq web-mode-script-padding 0)
+    (setq web-mode-style-padding 0))
 #+end_src
 
-* =js=
+* =js=                                                      :Programming:
 #+begin_src elisp
   (use-package js
     :config
@@ -717,23 +679,6 @@ For Common Lisp.
 :header-args: tangle no
 :END:
 
-** Install packages
-#+begin_src elisp
-  (defvar my/packages '(org-roam magit yasnippet)
-    "Default packages")
-  (setq packages-selected-packages my/packages)
-  (defun my/packages-installed-p ()
-    (let ((ret t))
-      (dolist (pkg my/packages)
-        (when (not (package-installed-p pkg)) (setq ret nil)))
-      ret))
-  (unless (my/packages-installed-p)
-    (message "%s" "Refreshing package database...")
-    (package-refresh-contents)
-    (dolist (pkg my/packages)
-      (when (not (package-installed-p pkg))
-        (package-install pkg))))
-#+end_src
 ** =frog-jump-buffer=
 #+begin_src elisp
   (use-package frog-jump-buffer
