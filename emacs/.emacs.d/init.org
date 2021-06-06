@@ -617,6 +617,17 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
+** =visual-fill-column=
+#+begin_src elisp
+  (use-package visual-fill-column
+    :hook
+    (org-mode . visual-fill-column-mode)
+    :config
+    (setq-default visual-fill-column-width 120
+                  visual-fill-column-center-text t)
+    ;; (global-visual-fill-column-mode)
+    )
+#+end_src
 
 * =markdown-mode=
 #+begin_src elisp
@@ -757,16 +768,6 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     (setq which-key-idle-delay 1))
 #+end_src
 
-** =visual-fill-column=
-#+begin_src elisp
-  (use-package visual-fill-column
-    :config
-    (setq-default visual-fill-column-width 140
-                  visual-fill-column-center-text t)
-    (global-visual-fill-column-mode))
-#+end_src
-
-
 ** =virtualenvwrapper=                                      :Programming:
 #+begin_src elisp
   (use-package virtualenvwrapper
@@ -808,16 +809,3 @@ From https://www.emacswiki.org/emacs/EasyCodeOutline
     :config
     (setq python-shell-interpreter "python3"))
 #+end_src
-
-** =python-mode=                                            :Programming:
-#+begin_src elisp
-  (use-package python-mode)
-#+end_src
-
-** =python=
-#+begin_src elisp
-  (use-package python
-    :ensure t
-    :mode (("\\.py\\'" . text-mode)))
-#+end_src
-

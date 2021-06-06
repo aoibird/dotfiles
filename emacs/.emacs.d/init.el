@@ -460,6 +460,15 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package visual-fill-column
+  :hook
+  (org-mode . visual-fill-column-mode)
+  :config
+  (setq-default visual-fill-column-width 120
+                visual-fill-column-center-text t)
+  ;; (global-visual-fill-column-mode)
+  )
+
 (use-package markdown-mode
   :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
