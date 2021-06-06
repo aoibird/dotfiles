@@ -68,16 +68,18 @@
 (global-hl-line-mode t)                 ; line highlighting
 (global-visual-line-mode t)             ; line wrap
 
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default c-basic-offset 4)
+
+(setq-default make-backup-files nil)
+
+(setq mac-right-option-modifier 'none)  ; option + s --> ß
+
 (setq-default cursor-type 'bar)
 (setq-default show-trailing-whitespace t)
 (setq-default show-paren-delay 0)
 (show-paren-mode 1)                     ; parentheses matching
-
-(setq-default make-backup-files nil)
-(setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
-(setq-default c-basic-offset 4)
-(setq mac-right-option-modifier 'none)  ; option + s --> ß
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))

@@ -8,6 +8,7 @@
 #+end_src
 
 * Package manager
+
 #+begin_src elisp
   (require 'package)
   (setq package-enable-at-startup nil)
@@ -24,6 +25,7 @@
 #+end_src
 
 * Packages
+
 #+begin_src elisp
   (defvar my/packages
     '(all-the-icons ;; and M-x all-the-icons-install-fonts
@@ -90,14 +92,32 @@ For macOS:
     (setq frame-title-format nil))
 #+end_src
 
-
-
 The =linum-mode= could slow down emacs when viewing large files or images. (https://www.emacswiki.org/emacs/LineNumbers and https://github.com/redguardtoo/emacs.d/issues/178)
 
 #+begin_src elisp
   (global-display-line-numbers-mode)
   (global-hl-line-mode t)                 ; line highlighting
   (global-visual-line-mode t)             ; line wrap
+#+end_src
+
+Setup indentation:
+
+#+begin_src elisp
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq-default c-basic-offset 4)
+#+end_src
+
+Don't make backup files:
+
+#+begin_src elisp
+  (setq-default make-backup-files nil)
+#+end_src
+
+Allow to type German in Emacs:
+
+#+begin_src elisp
+  (setq mac-right-option-modifier 'none)  ; option + s --> ß
 #+end_src
 
 Other configuration:
@@ -109,15 +129,8 @@ Other configuration:
   (show-paren-mode 1)                     ; parentheses matching
 #+end_src
 
-#+begin_src elisp
-  (setq-default make-backup-files nil)
-  (setq-default tab-width 4)
-  (setq-default indent-tabs-mode nil)
-  (setq-default c-basic-offset 4)
-  (setq mac-right-option-modifier 'none)  ; option + s --> ß
-#+end_src
-
 * =exec-path-from-shell=
+
 #+begin_src elisp
   (use-package exec-path-from-shell
     :if (memq window-system '(mac ns))
@@ -126,12 +139,14 @@ Other configuration:
 #+end_src
 
 * Color theme
+
 #+begin_src elisp
   (use-package doom-themes
     :init (load-theme 'doom-city-lights t))
 #+end_src
 
 * Modeline
+
 #+begin_src elisp
   (display-battery-mode t)                ; battary
   (column-number-mode t)                  ; column number
@@ -149,6 +164,7 @@ Other configuration:
 #+end_src
 
 * Fonts
+
 #+begin_src elisp
   (setq inhibit-compacting-font-caches t)
   (set-face-attribute 'default nil :font "Cascadia Code-14")
@@ -159,6 +175,7 @@ Other configuration:
 #+end_src
 
 * Ligatures
+
 #+begin_src elisp
   (defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                                 ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
@@ -192,6 +209,7 @@ Other configuration:
 #+end_src
 
 * Keybindings
+
 #+begin_src elisp
   (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
   (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
@@ -209,7 +227,9 @@ Other configuration:
 * Functions
 
 ** Add AucTeX file variables
+
 From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi.
+
 #+begin_src elisp
   (defun my/add-auctex-file-variables ()
     (interactive)
@@ -223,6 +243,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 #+end_src
 
 ** Get size of a directory
+
 #+begin_src elisp
   (defun my/dired-get-size ()
     (interactive)
@@ -236,7 +257,9 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 #+end_src
 
 * Notifications
+
 From https://christiantietze.de/posts/2019/12/emacs-notifications/.
+
 #+begin_src elisp
   (require 'appt)
   (setq appt-time-msg-list nil)    ;; clear existing appt list
@@ -274,6 +297,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Org
+
 #+begin_src elisp :noweb yes
   (use-package org
     :ensure t
@@ -306,6 +330,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Planning
+
 #+NAME: org-planning
 #+begin_src elisp :tangle no
   (setq org-agenda-files '("~/hub/schedule/"))
@@ -317,6 +342,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Babel
+
 #+NAME: org-babel
 #+begin_src elisp :tangle no
   (setq org-babel-python-command "python3")
@@ -335,6 +361,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Capture
+
 #+NAME: org-capture
 #+begin_src elisp :tangle no
   (setq org-default-notes-file "~/hub/refile.org")
@@ -351,6 +378,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Export
+
 #+NAME: org-export
 #+begin_src elisp :tangle no
   (setq org-export-backends
@@ -362,6 +390,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Tempo
+
 #+NAME: org-tempo
 #+begin_src elisp :tangle no
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
@@ -369,6 +398,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 ** Publish
+
 #+NAME: org-publish
 #+begin_src elisp :tangle no
   (setq org-publish-project-alist
@@ -404,12 +434,14 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Org bullets
+
 #+begin_src elisp
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
 #+end_src
 
 * Org roam
+
 #+begin_src elisp
   (use-package org-roam
     :hook
@@ -431,6 +463,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Org roam server
+
 #+begin_src elisp
   (use-package org-roam-server
     :ensure t
@@ -449,6 +482,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Org journal
+
 #+begin_src elisp
   (use-package org-journal
     :ensure t
@@ -472,6 +506,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Yasnippet
+
 #+begin_src elisp
   (use-package yasnippet
     :hook
@@ -483,6 +518,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Magit
+
 #+begin_src elisp
   (use-package magit
     :ensure t
@@ -492,6 +528,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Ibuffer
+
 #+begin_src elisp
   (use-package ibuffer
     :ensure t
@@ -523,6 +560,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Ivy
+
 #+begin_src elisp
   (use-package ivy
     :config
@@ -558,6 +596,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * AuCTeX
+
 #+begin_src elisp
   (use-package tex
     :defer t
@@ -571,6 +610,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Projectile
+
 #+begin_src elisp
   (use-package projectile
     :diminish projectile-mode
@@ -579,6 +619,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * Flycheck
+
 #+begin_src elisp
   (use-package flycheck
     :hook (after-init . global-flycheck-mode)
@@ -587,6 +628,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * GPG (EasyPG)
+
 #+begin_src elisp
   (use-package epa-file
     :ensure nil
@@ -596,6 +638,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =dired=
+
 #+begin_src elisp
   (use-package dired
     :ensure nil
@@ -606,6 +649,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =all-the-icons-dired=
+
 #+begin_src elisp
   (use-package all-the-icons-dired
     :ensure t
@@ -613,12 +657,14 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =rainbow-delimiters=
+
 #+begin_src elisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
 ** =visual-fill-column=
+
 #+begin_src elisp
   (use-package visual-fill-column
     :hook
@@ -631,6 +677,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =markdown-mode=
+
 #+begin_src elisp
   (use-package markdown-mode
     :ensure t
@@ -659,6 +706,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =web-mode=                                                :Programming:
+
 #+begin_src elisp
   (use-package web-mode
     :config
@@ -680,6 +728,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+end_src
 
 * =js=                                                      :Programming:
+
 #+begin_src elisp
   (use-package js
     :config
