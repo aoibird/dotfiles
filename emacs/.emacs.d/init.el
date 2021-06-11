@@ -87,7 +87,7 @@
   (exec-path-from-shell-initialize))
 
 (use-package doom-themes
-  :init (load-theme 'doom-city-lights t))
+  :init (load-theme 'doom-tomorrow-day t))
 
 (display-battery-mode t)                ; battary
 (column-number-mode t)                  ; column number
@@ -350,11 +350,8 @@
   (setq org-journal-file-header 'org-journal-file-header-func))
 
 (use-package yasnippet
-  :hook
-  (prog-mode . yas-minor-mode)
-  (org-mode . yas-minor-mode)
   :config
-  (yas-reload-all)
+  (yas-global-mode)
   (setq yas-indent-line 'fixed))
 
 (use-package magit

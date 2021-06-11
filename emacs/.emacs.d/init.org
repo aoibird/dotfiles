@@ -142,7 +142,7 @@ Other configuration:
 
 #+begin_src elisp
   (use-package doom-themes
-    :init (load-theme 'doom-city-lights t))
+    :init (load-theme 'doom-tomorrow-day t))
 #+end_src
 
 * Modeline
@@ -509,11 +509,8 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 
 #+begin_src elisp
   (use-package yasnippet
-    :hook
-    (prog-mode . yas-minor-mode)
-    (org-mode . yas-minor-mode)
     :config
-    (yas-reload-all)
+    (yas-global-mode)
     (setq yas-indent-line 'fixed))
 #+end_src
 
@@ -663,7 +660,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-** =visual-fill-column=
+* =visual-fill-column=
 
 #+begin_src elisp
   (use-package visual-fill-column
