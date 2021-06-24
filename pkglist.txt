@@ -6,7 +6,6 @@ base
 binutils
 bison
 btrfs-progs
-dhcpcd
 dosfstools
 e2fsprogs
 efibootmgr
@@ -57,7 +56,6 @@ ttf-dejavu
 ttf-fira-code
 udiskie
 which
-wpa_supplicant
 xf86-video-vesa
 xorg-bdftopcf
 xorg-docs
