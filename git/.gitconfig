@@ -1,5 +1,5 @@
 [core]
     excludesFile = ~/.gitexclude
 [alias]
-	st = status
+    st = status
     l = log
