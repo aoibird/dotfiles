@@ -1,3 +1,4 @@
+adobe-source-code-pro-fonts
 autoconf
 automake
 base
@@ -42,6 +43,9 @@ sed
 stow
 sudo
 texinfo
+ttf-cascadia-code
+ttf-dejavu
+ttf-fira-code
 which
 wpa_supplicant
 xf86-video-vesa
