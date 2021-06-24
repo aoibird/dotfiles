@@ -12,6 +12,7 @@ efibootmgr
 emacs
 etckeeper
 exfatprogs
+expac
 fakeroot
 file
 findutils
@@ -56,6 +57,7 @@ ttf-dejavu
 ttf-fira-code
 udiskie
 which
+wireshark-qt
 xf86-video-vesa
 xorg-bdftopcf
 xorg-docs
@@ -105,4 +107,5 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+yay
 zsh
