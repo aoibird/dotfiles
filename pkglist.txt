@@ -8,6 +8,7 @@ dhcpcd
 dosfstools
 e2fsprogs
 efibootmgr
+emacs
 fakeroot
 file
 findutils
