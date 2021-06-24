@@ -53,6 +53,7 @@ texinfo
 ttf-cascadia-code
 ttf-dejavu
 ttf-fira-code
+udiskie
 which
 wpa_supplicant
 xf86-video-vesa
