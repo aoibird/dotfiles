@@ -31,10 +31,13 @@ mkinitcpio
 nano
 os-prober
 pacman
+pass
 patch
 pkgconf
 sed
+stow
 sudo
 texinfo
 which
 wpa_supplicant
+zsh
