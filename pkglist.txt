@@ -5,11 +5,13 @@ automake
 base
 binutils
 bison
+btrfs-progs
 dhcpcd
 dosfstools
 e2fsprogs
 efibootmgr
 emacs
+exfatprogs
 fakeroot
 file
 findutils
@@ -36,6 +38,7 @@ m4
 make
 mkinitcpio
 nano
+ntfs-3g
 os-prober
 pacman
 pass
