@@ -11,10 +11,12 @@ dosfstools
 e2fsprogs
 efibootmgr
 emacs
+etckeeper
 exfatprogs
 fakeroot
 file
 findutils
+firefox
 flex
 gawk
 gcc
