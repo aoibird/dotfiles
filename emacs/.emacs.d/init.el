@@ -26,6 +26,7 @@
     auctex
     projectile
     flycheck
+    visual-fill-column
     all-the-icons-dired
     rainbow-delimiters
     htmlize
@@ -350,9 +351,8 @@
   (setq org-journal-file-header 'org-journal-file-header-func))
 
 (use-package yasnippet
-  :hook
-  (prog-mode . yas-minor-mode)
-  (org-mode . yas-minor-mode)
+  :hook ((prog-mode . yas-minor-mode)
+         (org-mode . yas-minor-mode))
   :config
   (yas-reload-all)
   (setq yas-indent-line 'fixed))

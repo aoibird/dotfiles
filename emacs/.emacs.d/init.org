@@ -39,6 +39,7 @@
       auctex
       projectile
       flycheck
+      visual-fill-column
       all-the-icons-dired
       rainbow-delimiters
       htmlize
@@ -55,7 +56,7 @@
       (dolist (pkg my/packages)
         (when (not (package-installed-p pkg)) (setq ret nil)))
       ret))
-  
+
   ;; Install packages
   (setq package-selected-packages my/packages)
   (unless (my/packages-installed-p)
@@ -509,9 +510,8 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 
 #+begin_src elisp
   (use-package yasnippet
-    :hook
-    (prog-mode . yas-minor-mode)
-    (org-mode . yas-minor-mode)
+    :hook ((prog-mode . yas-minor-mode)
+           (org-mode . yas-minor-mode))
     :config
     (yas-reload-all)
     (setq yas-indent-line 'fixed))
@@ -663,7 +663,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-** =visual-fill-column=
+* =visual-fill-column=
 
 #+begin_src elisp
   (use-package visual-fill-column
