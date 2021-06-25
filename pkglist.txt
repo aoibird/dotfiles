@@ -22,6 +22,7 @@ gawk
 gcc
 gettext
 git
+gnu-free-fonts
 grep
 groff
 grub
@@ -40,6 +41,8 @@ m4
 make
 mkinitcpio
 nano
+noto-fonts
+noto-fonts-emoji
 ntfs-3g
 os-prober
 pacman
@@ -55,9 +58,14 @@ texinfo
 ttf-cascadia-code
 ttf-dejavu
 ttf-fira-code
+ttf-hanazono
+ttf-sazanami
 udiskie
 which
 wireshark-qt
+wqy-bitmapfont
+wqy-microhei
+wqy-zenhei
 xf86-video-vesa
 xorg-bdftopcf
 xorg-docs
