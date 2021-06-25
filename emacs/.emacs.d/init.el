@@ -141,6 +141,7 @@
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
 (global-set-key (kbd "C-c m g") 'goto-line)
+(global-set-key (kbd "C-c m r") 'revert-buffer)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "s-，") 'customize)
