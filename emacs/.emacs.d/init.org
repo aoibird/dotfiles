@@ -203,7 +203,7 @@ Other configuration:
     ;; `variable-pitch' face supports it
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
     (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
-    (ligature-set-ligatures 'python-mode '("www" "__" "!=" "==" "..."))
+    (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
     ;; enables ligature checks globally in all buffers. You can also do it
     ;; per mode with `ligature-mode'.
     (global-ligature-mode t))
