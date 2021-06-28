@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: latexsrc
+# key: latexsrc
+# --
+#+ATTR_LATEX: :options numbers=left
+#+CAPTION:
+#+NAME:

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: lateximg
+# key: lateximg
+# --
+#+CAPTION:
+#+ATTR_LATEX: :placement [H]
+[[./

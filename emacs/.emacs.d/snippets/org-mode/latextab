@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: latextab
+# key: latextab
+# --
+#+ATTR_LATEX: :booktabs t
+#+CAPTION:
