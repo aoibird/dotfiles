@@ -14,7 +14,7 @@
 (require 'use-package)
 (setq use-package-always-ensure nil)
 
-(defvar my/packages
+(setq my/packages
   '(all-the-icons ;; and M-x all-the-icons-install-fonts
     doom-themes
     doom-modeline
@@ -35,9 +35,9 @@
     racket-mode sml-mode clojure-mode
     rust-mode haskell-mode lua-mode
     typescript-mode php-mode web-mode
+    git-annex magit-annex
     try
-    )
-  "My default packages")
+    ))
 (defun my/packages-installed-p ()
   (let ((ret t))
     (dolist (pkg my/packages)
@@ -449,6 +449,10 @@
   :config
   (epa-file-enable)
   (setq epa-pinentry-mode 'loopback))
+
+(use-package git-annex)
+
+(use-package magit-annex)
 
 (use-package dired
   :ensure nil
