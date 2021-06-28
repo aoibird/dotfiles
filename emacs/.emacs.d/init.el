@@ -221,6 +221,7 @@
   (add-to-list 'org-modules 'org-attach-git)
 
   (setq org-agenda-files '("~/hub/schedule/"))
+  (setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'") ; ".org" or ".org.gpg"
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
   (setq org-duration-format 'h:mm)   ; time format

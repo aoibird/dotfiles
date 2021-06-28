@@ -336,6 +336,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 #+NAME: org-planning
 #+begin_src elisp :tangle no
   (setq org-agenda-files '("~/hub/schedule/"))
+  (setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'") ; ".org" or ".org.gpg"
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
   (setq org-duration-format 'h:mm)   ; time format
