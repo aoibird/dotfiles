@@ -44,6 +44,7 @@ i3lock
 i3status
 intel-ucode
 iwd
+keepassxc
 libtool
 linux
 linux-firmware
@@ -60,6 +61,7 @@ noto-fonts-extra
 ntfs-3g
 os-prober
 pacman
+pam-u2f
 pass
 patch
 pcmanfm
@@ -103,6 +105,8 @@ ttf-lato
 ttf-sazanami
 ttf-ubuntu-font-family
 udiskie
+vi
+vim
 wget
 which
 wireshark-qt
@@ -110,6 +114,7 @@ wqy-bitmapfont
 wqy-microhei
 wqy-zenhei
 xbindkeys
+xclip
 xf86-video-vesa
 xorg-bdftopcf
 xorg-docs
@@ -163,8 +168,11 @@ xss-lock
 yay
 you-get
 youtube-dl
+yubikey-manager
+yubikey-personalization
 zathura
 zathura-cb
 zathura-pdf-mupdf
 zathura-ps
+zotero
 zsh
