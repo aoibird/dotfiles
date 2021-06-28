@@ -1,4 +1,5 @@
 adobe-source-code-pro-fonts
+adobe-source-han-sans-otc-fonts
 alacritty
 alsa-firmware
 alsa-tools
@@ -21,6 +22,7 @@ fcitx5
 fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
+fcitx5-mozc
 fcitx5-qt
 fcitx5-rime
 file
@@ -52,7 +54,9 @@ mkinitcpio
 nano
 neofetch
 noto-fonts
+noto-fonts-cjk
 noto-fonts-emoji
+noto-fonts-extra
 ntfs-3g
 os-prober
 pacman
@@ -89,11 +93,15 @@ texlive-pictures
 texlive-pstricks
 texlive-publishers
 texlive-science
+tmux
+ttf-arphic-ukai
 ttf-cascadia-code
 ttf-dejavu
 ttf-fira-code
 ttf-hanazono
+ttf-lato
 ttf-sazanami
+ttf-ubuntu-font-family
 udiskie
 wget
 which
@@ -151,6 +159,7 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+xss-lock
 yay
 you-get
 youtube-dl
