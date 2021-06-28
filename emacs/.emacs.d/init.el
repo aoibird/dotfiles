@@ -26,6 +26,7 @@
     auctex
     projectile
     flycheck
+    visual-fill-column
     all-the-icons-dired
     rainbow-delimiters
     htmlize
@@ -131,7 +132,7 @@
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
-  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "==" "..."))
+  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
   ;; enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
@@ -140,6 +141,7 @@
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
 (global-set-key (kbd "C-c m g") 'goto-line)
+(global-set-key (kbd "C-c m r") 'revert-buffer)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "s-，") 'customize)
@@ -350,6 +352,8 @@
   (setq org-journal-file-header 'org-journal-file-header-func))
 
 (use-package yasnippet
+  :hook ((prog-mode . yas-minor-mode)
+         (org-mode . yas-minor-mode))
   :config
   (yas-global-mode)
   (setq yas-indent-line 'fixed))
