@@ -3,3 +3,5 @@
 [alias]
     st = status
     l = log
+[credential]
+	helper = store
