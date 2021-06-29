@@ -10,6 +10,7 @@ base
 binutils
 bison
 btrfs-progs
+cabal-install
 dosfstools
 e2fsprogs
 efibootmgr
@@ -32,8 +33,11 @@ flex
 gawk
 gcc
 gettext
+ghc
 git
+git-annex
 gnu-free-fonts
+goldendict
 grep
 groff
 grub
@@ -49,6 +53,7 @@ libtool
 linux
 linux-firmware
 lvm2
+lzip
 m4
 make
 mkinitcpio
@@ -60,6 +65,7 @@ noto-fonts-emoji
 noto-fonts-extra
 ntfs-3g
 os-prober
+p7zip
 pacman
 pam-u2f
 pass
@@ -73,6 +79,7 @@ rime-pinyin-simp
 rofi
 sed
 sof-firmware
+stack
 stow
 sudo
 syncthing
@@ -105,8 +112,11 @@ ttf-lato
 ttf-sazanami
 ttf-ubuntu-font-family
 udiskie
+unrar
+unzip
 vi
 vim
+vlc
 wget
 which
 wireshark-qt
