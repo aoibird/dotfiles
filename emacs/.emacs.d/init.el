@@ -104,10 +104,15 @@
 
 (setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Cascadia Code-14")
+
+(if (memq window-system '(mac ns))
+  (setq my/chinese-font-family "Kaiti SC")
+  (setq my/chinese-font-family "AR PL UKai CN"))
+
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "Kaiti SC")))
-(setq face-font-rescale-alist '(("Kaiti SC" . 1.2)))
+                    charset (font-spec :family my/chinese-font-family)))
+(setq face-font-rescale-alist '((my/chinese-font-family . 1.2)))
 
 (defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                               ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
