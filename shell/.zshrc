@@ -18,8 +18,8 @@ export PROMPT='%F{green}%B%2~%b%f %# '
 export RPROMPT='%F{blue}%D{%H:%M}%f'
 
 export HISTFILE=~/.cache/zsh_history
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=1000000
+export SAVEHIST=1000000
 export HISTTIMEFORMAT="[%F %T] "
 
 setopt INC_APPEND_HISTORY_TIME
