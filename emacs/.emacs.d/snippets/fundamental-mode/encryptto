@@ -2,4 +2,4 @@
 # name: encryptto
 # key: encryptto
 # --
--*- mode:org; epa-file-encrypt-to: ("0x66A377F74496380E"); -*-
+-*- mode: org; epa-file-encrypt-to: ("0x66A377F74496380E"); -*-
