@@ -80,3 +80,50 @@
 #+begin_src sh
 mybackup "$HOME/test/My Dir" ~/test/Does\ Not\ Exist ~/test/hello.txt
 #+end_src
+
+* =myextract=
+#+begin_src python :shebang #!/usr/bin/env python :tangle scripts/myextract
+  import os
+  import sys
+  import zipfile
+
+  filename = sys.argv[1]
+  print("Extracting " + filename)
+  file = zipfile.ZipFile(filename, 'r')
+  for name in file.namelist():
+      unbak_name = name.encode('cp437').decode('cp936')
+      print("Extracting " + unbak_name)
+      directory = os.path.dirname(unbak_name)
+      if not os.path.exists(directory) and directory != '':
+          os.makedirs(directory)
+
+      data = file.read(name)
+      if not os.path.exists(unbak_name):
+          f = open(unbak_name, 'wb')
+          f.write(data)
+          f.close()
+  file.close()
+#+end_src
+
+* myunbake
+#+begin_src python :shebang #!/usr/bin/env python :tangle scripts/myunbake
+  import sys
+  import os
+
+  filenames = sys.argv[1:]
+
+  for filename in filenames:
+      filename_output = os.path.join(os.path.dirname(filename),
+                                     'utf8_' + os.path.basename(filename))
+
+      fi = open(filename, 'r', encoding='gbk')
+      if os.path.exists(filename_output):
+          print("Error: File '"+ filename_output +"' already exists")
+          continue
+      fo = open(filename_output, 'w', encoding='utf8')
+
+      fo.write(fi.read())
+
+      fi.close()
+      fo.close()
+#+end_src
