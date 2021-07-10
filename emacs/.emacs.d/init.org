@@ -663,7 +663,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :bind (:map dired-mode-map
                 (("?" . my/dired-get-size)))
     :config
-    (setq dired-listing-switches "-alh"))
+    (setq dired-listing-switches "-avlh"))
 #+end_src
 
 * =all-the-icons-dired=

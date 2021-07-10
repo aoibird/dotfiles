@@ -466,7 +466,7 @@
   :bind (:map dired-mode-map
               (("?" . my/dired-get-size)))
   :config
-  (setq dired-listing-switches "-alh"))
+  (setq dired-listing-switches "-avlh"))
 
 (use-package all-the-icons-dired
   :ensure t
