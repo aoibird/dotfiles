@@ -496,11 +496,11 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :ensure t
     :defer t
     :config
-    (setq org-journal-dir "~/hub/journal/")
+    (setq org-journal-dir "~/hub/")
     (setq org-journal-date-format "%Y-%m-%d")
-    (setq org-journal-file-format "%Y")
+    (setq org-journal-file-format "journal")
     (setq org-journal-encrypt-journal t)
-    (setq org-journal-file-type 'yearly)
+    (setq org-journal-file-type 'still)
     (defun org-journal-file-header-func (time)
       "Custom function to create journal header."
       (concat
@@ -508,7 +508,8 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
          (`daily "# -*- mode: org -*-\n#+TITLE: Daily Journal\n#+STARTUP: showeverything")
          (`weekly "# -*- mode: org -*-\n#+TITLE: Weekly Journal\n#+STARTUP: folded")
          (`monthly "# -*- mode: org -*-\n#+TITLE: Monthly Journal\n#+STARTUP: folded")
-         (`yearly "# -*- mode: org -*-\n#+TITLE: Yearly Journal\n#+STARTUP: folded"))))
+         (`yearly "# -*- mode: org -*-\n#+TITLE: Yearly Journal\n#+STARTUP: folded")
+         (`still "# -*- mode: org -*-\n#+TITLE: Journal\n#+STARTUP: folded"))))
 
     (setq org-journal-file-header 'org-journal-file-header-func))
 #+end_src
