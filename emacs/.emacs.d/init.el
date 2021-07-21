@@ -105,14 +105,16 @@
 (setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Cascadia Code-14")
 
-(if (memq window-system '(mac ns))
-  (setq my/chinese-font-family "Kaiti SC")
-  (setq my/chinese-font-family "AR PL UKai CN"))
+(defun my/set-fontset (font-family)
+    (progn
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset (font-spec :family font-family)))
+      (setq face-font-rescale-alist '((font-family . 1.2)))))
 
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family my/chinese-font-family)))
-(setq face-font-rescale-alist '((my/chinese-font-family . 1.2)))
+(if (memq window-system '(mac ns))
+    (my/set-fontset "Kaiti SC")
+  (my/set-fontset "AR PL UKai CN"))
 
 (defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                               ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
@@ -137,6 +139,7 @@
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
+  (ligature-set-ligatures 'haskell-mode my/ligature-cascadia-code-ligatures)
   (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
   ;; enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
@@ -247,7 +250,7 @@
                                (lua . t)
                                (js . t)))
 
-  (setq org-default-notes-file "~/hub/refile.org")
+  (setq org-default-notes-file "~/hub/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file org-default-notes-file)
