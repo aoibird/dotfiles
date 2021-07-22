@@ -5,3 +5,6 @@
     l = log
 [credential]
 	helper = store
+[user]
+	name = git
+	email = git
