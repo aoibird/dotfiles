@@ -469,7 +469,7 @@
   :bind (:map dired-mode-map
               (("?" . my/dired-get-size)))
   :config
-  (setq dired-listing-switches "-avlh --time-style=long-iso"))
+  (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first"))
 
 (use-package all-the-icons-dired
   :ensure t
