@@ -41,3 +41,5 @@ element {
 element selected {
   background-color: #2e343f;
 }
+
+element-icon { size: 32px; }
