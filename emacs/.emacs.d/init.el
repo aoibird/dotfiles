@@ -31,7 +31,7 @@
     rainbow-delimiters
     htmlize
     markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode
-    geiser slime
+    geiser geiser-chez slime
     racket-mode sml-mode clojure-mode
     rust-mode haskell-mode lua-mode
     typescript-mode php-mode web-mode
@@ -496,9 +496,8 @@
 
 (use-package geiser
   :config
-  (setq geiser-mit-binary "mit-scheme")
-  (setq geiser-active-implementations '(mit chez guile))
-  (setq geiser-default-implementation 'mit))
+  (setq geiser-chez-binary "scheme")
+  (setq geiser-default-implementation 'chez))
 
 (use-package slime
   :init
