@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: boxsizing
+# key: boxsizing
+# --
+:root {
+  box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}

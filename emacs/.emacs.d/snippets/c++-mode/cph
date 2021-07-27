@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: cph
+# key: cph
+# --
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> PII;

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: printvector
+# key: printvector
+# --
+void print_vector(vector<int> v)
+{
+    for (int i = 0; i < v.size(); i++) printf("%d%c", v[i], i+1==v.size()?'\n':' ');
+}

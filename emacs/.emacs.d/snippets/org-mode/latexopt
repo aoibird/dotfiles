@@ -1,0 +1,33 @@
+# -*- mode: snippet -*-
+# name: latexopt
+# key: latexopt
+# --
+#+TITLE:
+#+AUTHOR:
+#+DATE: \today
+#+OPTIONS: toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_COMPILER: xelatex
+#+LATEX_HEADER: \usepackage{ctex,booktabs,listings,xcolor,float,tikz}
+#+LATEX_HEADER: \usepackage{amssymb,amsmath,amsfonts,amsthm,mathtools}
+#+LATEX_HEADER: \usetikzlibrary{shapes.geometric,positioning,arrows,shadows}
+#+LATEX_HEADER: \usepackage[hmargin=1.25in,vmargin=1in]{geometry}
+#+LATEX_HEADER: \setmainfont{}
+#+LATEX_HEADER: \setCJKmainfont{}
+#+LATEX_HEADER: \setCJKsansfont{}
+#+LATEX_HEADER: \setCJKmonofont{}
+#+LATEX_HEADER: \setmonofont{}
+#+LATEX_HEADER: \usepackage{enumitem}  % list
+#+LATEX_HEADER: \setlist{nosep, leftmargin=3em}  % list
+#+LATEX_HEADER: \setlength{\parindent}{2em}  % paragraph
+#+LATEX_HEADER: \setlength{\parskip}{1.5ex plus 0.5ex minus 0.5ex}  % paragraph
+#+LATEX_HEADER: \definecolor{Base}{HTML}{073642}
+#+LATEX_HEADER: \definecolor{Red}{HTML}{dc322f}
+#+LATEX_HEADER: \definecolor{Green}{HTML}{859900}
+#+LATEX_HEADER: \definecolor{Yellow}{HTML}{b58900}
+#+LATEX_HEADER: \definecolor{Blue}{HTML}{268bd2}
+#+LATEX_HEADER: \definecolor{Magenta}{HTML}{d33682}
+#+LATEX_HEADER: \definecolor{Cyan}{HTML}{2aa198}
+#+LATEX_HEADER: \definecolor{Violet}{HTML}{6c71c4}
+#+LATEX_HEADER: \lstset{xleftmargin=\parindent, columns=flexible, numbers=left, captionpos=b, basicstyle= \ttfamily\color{Base}, commentstyle=\itshape\color{Red}, keywordstyle=\bfseries\color{Blue}, stringstyle=\color{Magenta}, identifierstyle=\color{Base}}
