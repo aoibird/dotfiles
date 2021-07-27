@@ -12,6 +12,8 @@ if [ -f ~/.env ]; then
 fi
 
 autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle :compinstall filename "$HOME/.zshrc"
 
 # last/two %
 export PROMPT='%F{green}%B%2~%b%f %# '
