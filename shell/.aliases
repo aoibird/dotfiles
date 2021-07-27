@@ -29,5 +29,5 @@ alias wl='iwctl station wlan0 '
 alias wlup='iwctl station wlan0 connect '
 alias wldown='iwctl station wlan0 disconnect'
 
-alias gg='wget www.google.com'
-alias gd='wget www.baidu.com'
+alias gg='wget www.google.com -O /tmp/gg.txt'
+alias gd='wget www.baidu.com -O /tmp/gd.txt'
