@@ -25,7 +25,7 @@
     ivy counsel swiper
     auctex
     projectile
-    flycheck
+    flycheck flycheck-haskell
     visual-fill-column
     all-the-icons-dired
     rainbow-delimiters
@@ -103,7 +103,7 @@
   (setq doom-modeline-buffer-encoding nil))
 
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Cascadia Code-14")
+(set-face-attribute 'default nil :font "Cascadia Code-16")
 
 (defun my/set-fontset (font-family)
     (progn
@@ -140,6 +140,7 @@
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
   (ligature-set-ligatures 'haskell-mode my/ligature-cascadia-code-ligatures)
+  ;; (ligature-set-ligatures 'rust-mode my/ligature-cascadia-code-ligatures)
   (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
   ;; enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
@@ -389,6 +390,11 @@
                      (name . "^\\*Messages\\*$")))
            ("emacs-config" (or (filename . ".emacs.d")
                                (filename . "init.el")))
+           ("schedule" (and (filename . "schedule/")
+                            (mode . org-mode)))
+           ("roam" (and (filename . "roam/")
+                        (or (mode . org-mode)
+                            (mode . prog-mode))))
            ("magit" (or
                      (name . "magit\*")
                      (mode . Magit)
@@ -450,8 +456,11 @@
   :bind-keymap ("C-c p" . projectile-command-map))
 
 (use-package flycheck
-  :hook (after-init . global-flycheck-mode)
+  :hook
+  (after-init . global-flycheck-mode)
+  (haskell-mode-hook . flycheck-haskell-setup)
   :config
+  (setq flycheck-haskell-hlint-executable "~/.cabal/bin/hlint")
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package epa-file
