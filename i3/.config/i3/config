@@ -114,6 +114,10 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 
+for_window [class="Emacs"] move to workspace $ws1
+for_window [class="firefox"] move to workspace $ws3
+
+
 # kill focused window
 bindsym $mod+Shift+q kill
 # reload the configuration file
