@@ -38,3 +38,4 @@ TRAPALRM() {
     zle;
     zle reset-prompt
 }
+if [ -e /home/aoi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/aoi/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

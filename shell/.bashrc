@@ -27,3 +27,5 @@ export PS1="\[$(tput bold)\]\[\033[38;5;208m\]\W \\$ \[$(tput sgr0)\]"
 
 HISTFILE=$HOME/.cache/bash_history
 HISTFILESIZE=100000
+
+if [ -e /home/aoi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/aoi/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
