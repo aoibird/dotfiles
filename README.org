@@ -136,3 +136,11 @@ mybackup "$HOME/test/My Dir" ~/test/Does\ Not\ Exist ~/test/hello.txt
       fi.close()
       fo.close()
 #+end_src
+
+** =mygadu=
+
+#+begin_src bash :shebang #!/usr/bin/env bash :tangle scripts/mygadu
+  git annex find "$@" --include '*' --format='${bytesize}\n' | awk '{ sum += $1; nfiles++; } END { printf "%d files, %.3f MB\n", nfiles, sum/1000000 } '
+#+end_src
+
+From [[https://git-annex.branchable.com/tips/yet_another_simple_disk_usage_like_utility/][yet another simple disk usage like utility]].
