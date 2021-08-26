@@ -191,7 +191,23 @@
 (appt-activate 1)                ;; activate appointment notification
                                       ; (display-time) ;; Clock in modeline
 
-(defun ct/send-notification (title msg)
+(defun my/send-notification (title msg)
+  (if (memq window-system '(mac ns))
+      (my/send-alerter title msg)
+    (my/send-dunstify title msg)))
+
+(defun my/send-dunstify (title msg)
+  (let ((notifier-path (executable-find "dunstify")))
+    (start-process
+     "Appointment Alert"
+     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
+     notifier-path
+     title
+     msg
+     "-a" "Emacs"
+     "-i" "emacs")))
+
+(defun my/send-alerter (title msg)
   (let ((notifier-path (executable-find "alerter")))
     (start-process
      "Appointment Alert"
@@ -203,7 +219,7 @@
      "-activate" "org.gnu.Emacs")))
 
 (defun ct/appt-display-native (min-to-app new-time msg)
-  (ct/send-notification
+  (my/send-notification
    (format "Appointment in %s minutes" min-to-app) ; Title
    (format "%s" msg)))                             ; Message/detail text
 
@@ -275,10 +291,10 @@
 
   (setq org-publish-project-alist
         '(
-          ("roam-html-org"
-           :base-directory "~/hub/roam"
+          ("kb-html-org"
+           :base-directory "~/hub/kb"
            :base-extension "org"
-           :publishing-directory "~/hub/roam_html"
+           :publishing-directory "~/hub/kb_html"
            :eval never-export
            :recursive t
            :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"org.css\" />"
@@ -295,14 +311,14 @@
            :sitemap-sort-files alphabetically
            :sitemap-filename "sitemap.org"
            :sitemap-title "Sitemap")
-          ("roam-html-static"
-           :base-directory "~/hub/roam"
+          ("kb-html-static"
+           :base-directory "~/hub/kb"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/hub/roam_html"
+           :publishing-directory "~/hub/kb_html"
            :recursive t
            :exclude "\\*proj\\*"
            :publishing-function org-publish-attachment)
-          ("roam-html" :components ("roam-html-org" "roam-html-static"))))
+          ("kb-html" :components ("kb-html-org" "kb-html-static"))))
   )
 
 (use-package org-bullets
@@ -312,7 +328,7 @@
   :hook
   (after-init . org-roam-mode)
   :custom
-  (org-roam-directory "~/hub/roam")
+  (org-roam-directory "~/hub/kb")
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
@@ -324,7 +340,7 @@
               (("C-c n I" . org-roam-insert-immediate)))
   :config
   (setq org-roam-graph-executable "/usr/local/bin/dot")
-  (setq org-roam-index-file "~/hub/roam/index.org"))
+  (setq org-roam-index-file "~/hub/kb/index.org"))
 
 (use-package org-roam-server
   :ensure t
@@ -345,7 +361,7 @@
   :ensure t
   :defer t
   :config
-  (setq org-journal-dir "~/hub/")
+  (setq org-journal-dir "~/hub/journal")
   (setq org-journal-date-format "%Y-%m-%d")
   (setq org-journal-file-format "journal")
   (setq org-journal-encrypt-journal t)
@@ -392,7 +408,7 @@
                                (filename . "init.el")))
            ("schedule" (and (filename . "schedule/")
                             (mode . org-mode)))
-           ("roam" (and (filename . "roam/")
+           ("kb" (and (filename . "kb/")
                         (or (mode . org-mode)
                             (mode . prog-mode))))
            ("magit" (or
