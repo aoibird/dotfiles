@@ -31,3 +31,5 @@ alias wldown='iwctl station wlan0 disconnect'
 
 alias gg='wget www.google.com -O /tmp/gg.txt'
 alias gd='wget www.baidu.com -O /tmp/gd.txt'
+
+alias ga='git-annex'
