@@ -37,6 +37,7 @@
     typescript-mode php-mode web-mode
     git-annex magit-annex
     try
+    telega alert dashboard
     ))
 (defun my/packages-installed-p ()
   (let ((ret t))
@@ -484,6 +485,10 @@
   :config
   (epa-file-enable)
   (setq epa-pinentry-mode 'loopback))
+
+(use-package telega
+:config
+(setq telega-directory "~/.telega"))
 
 (use-package git-annex)
 

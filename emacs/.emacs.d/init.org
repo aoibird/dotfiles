@@ -50,6 +50,7 @@
       typescript-mode php-mode web-mode
       git-annex magit-annex
       try
+      telega alert dashboard
       ))
   (defun my/packages-installed-p ()
     (let ((ret t))
@@ -671,6 +672,14 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :config
     (epa-file-enable)
     (setq epa-pinentry-mode 'loopback))
+#+end_src
+
+* Telega
+
+#+begin_src elisp
+  (use-package telega
+  :config
+  (setq telega-directory "~/.telega"))
 #+end_src
 
 * =git-annex=
