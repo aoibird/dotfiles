@@ -131,6 +131,10 @@ Other configuration:
   (show-paren-mode 1)                     ; parentheses matching
 #+end_src
 
+#+begin_src elisp
+  (setq ring-bell-function 'ignore)
+#+end_src
+
 * =exec-path-from-shell=
 
 #+begin_src elisp

@@ -83,6 +83,8 @@
 (setq-default show-paren-delay 0)
 (show-paren-mode 1)                     ; parentheses matching
 
+(setq ring-bell-function 'ignore)
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :init
