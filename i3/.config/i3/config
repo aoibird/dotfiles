@@ -2,8 +2,7 @@
 
 set $mod Mod4
 
-font pango:Cascadia Code 14
-# font pango:DejaVu Sans Mono 14
+font pango:Cascadia Code 0
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -16,8 +15,9 @@ bindsym $mod+Return exec i3-sensible-terminal
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-bindsym $mod+p exec --no-startup-id "i3lock -c 9acd32"
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -i ~/dotfiles/wallpaper.png --nofork
+bindsym $mod+p exec --no-startup-id "i3lock -i ~/dotfiles/wallpaper.png"
+
 bindsym $mod+d exec "rofi -modi drun,window,run,ssh -show drun"
 bindsym $mod+o exec "rofi -modi drun,window,run,ssh -show window"
 
@@ -115,7 +115,13 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 
 for_window [class="Emacs"] move to workspace $ws1
+for_window [class="Alacritty"] move to workspace $ws2
 for_window [class="firefox"] move to workspace $ws3
+for_window [class="Pcmanfm"] move to workspace $ws4
+for_window [class="Virt-manager"] move to workspace $ws5
+for_window [class="vlc"] move to workspace $ws8
+for_window [class="okular"] move to workspace $ws9
+for_window [class="TelegramDesktop"] move to workspace $ws10
 
 
 # kill focused window
@@ -149,8 +155,20 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-        status_command i3status
-}
+################################################################################
+#                                  Appearance                                  #
+################################################################################
+set $focus-color #ffb52a
+client.focused 			$focus-color $focus-color $focus-color $focus-color
+
+gaps inner 6
+gaps outer 0
+new_window pixel 3
+new_float pixel 3
+
+################################################################################
+#                                    Execute                                   #
+################################################################################
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id nitrogen --restore
