@@ -107,7 +107,7 @@
 
 (setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Cascadia Code-16")
-
+;; (set-fontset-font "fontset-default" '(#xf004 . #xf5c8) (font-spec :size 12 :name "Font Awesome"))
 (defun my/set-fontset (font-family)
     (progn
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
