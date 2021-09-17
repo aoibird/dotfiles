@@ -15,7 +15,7 @@ if [ -f ~/.env ]; then
     . ~/.env
 fi
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit -d ~/.cache/zcompdump && compinit -d ~/.cache/zcompdump
 zstyle ':completion:*' menu select
 zstyle :compinstall filename "$HOME/.zshrc"
 
