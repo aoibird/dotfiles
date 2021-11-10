@@ -3,8 +3,7 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("org"   . "https://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/")
+(setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
@@ -108,12 +107,12 @@
 (setq inhibit-compacting-font-caches t)
 (set-face-attribute 'default nil :font "Cascadia Code-16")
 ;; (set-fontset-font "fontset-default" '(#xf004 . #xf5c8) (font-spec :size 12 :name "Font Awesome"))
-(defun my/set-fontset (font-family)
+(defun my/set-fontset (my-font-family)
     (progn
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-fontset-font (frame-parameter nil 'font)
-                          charset (font-spec :family font-family)))
-      (setq face-font-rescale-alist '((font-family . 1.2)))))
+                          charset (font-spec :family my-font-family)))
+      (setq face-font-rescale-alist '(("AR PL UKai CN" . 1.15) ("Kaiti SC" . 1.2)))))
 
 (if (memq window-system '(mac ns))
     (my/set-fontset "Kaiti SC")
@@ -243,6 +242,7 @@
   (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
   (setq org-tags-column 60)        ; set position of tags
   (setq org-habit-graph-column 50) ; set position of habit graph
+  (setq org-agenda-tags-column 80)
 
   (add-to-list 'org-modules 'org-habit)
   (add-to-list 'org-modules 'org-tempo)
@@ -556,3 +556,16 @@
 (use-package js
   :config
   (setq js-indent-level 2))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(all-the-icons doom-themes doom-modeline exec-path-from-shell org org-roam org-roam-server org-bullets org-journal magit yasnippet ibuffer ivy counsel swiper auctex projectile flycheck flycheck-haskell visual-fill-column all-the-icons-dired rainbow-delimiters htmlize markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode typescript-mode php-mode web-mode git-annex magit-annex try telega alert dashboard)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

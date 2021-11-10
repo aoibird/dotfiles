@@ -175,12 +175,12 @@ Other configuration:
   (setq inhibit-compacting-font-caches t)
   (set-face-attribute 'default nil :font "Cascadia Code-16")
   ;; (set-fontset-font "fontset-default" '(#xf004 . #xf5c8) (font-spec :size 12 :name "Font Awesome"))
-  (defun my/set-fontset (font-family)
+  (defun my/set-fontset (my-font-family)
       (progn
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
           (set-fontset-font (frame-parameter nil 'font)
-                            charset (font-spec :family font-family)))
-        (setq face-font-rescale-alist '((font-family . 1.2)))))
+                            charset (font-spec :family my-font-family)))
+        (setq face-font-rescale-alist '(("AR PL UKai CN" . 1.15) ("Kaiti SC" . 1.2)))))
 
   (if (memq window-system '(mac ns))
       (my/set-fontset "Kaiti SC")
@@ -342,6 +342,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
     (setq org-tags-column 60)        ; set position of tags
     (setq org-habit-graph-column 50) ; set position of habit graph
+    (setq org-agenda-tags-column 80)
 
     (add-to-list 'org-modules 'org-habit)
     (add-to-list 'org-modules 'org-tempo)
