@@ -3,8 +3,7 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("org"   . "https://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/")
+(setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
@@ -20,7 +19,7 @@
     doom-modeline
     exec-path-from-shell
     org
-    org-roam org-roam-server org-bullets org-journal
+    org-roam org-bullets org-journal
     magit yasnippet ibuffer
     ivy counsel swiper
     auctex
@@ -323,43 +322,29 @@
            :exclude "\\*proj\\*"
            :publishing-function org-publish-attachment)
           ("kb-html" :components ("kb-html-org" "kb-html-static"))))
+
+  (setq org-attach-preferred-new-method 'id)
+  (setq org-attach-store-link-p t)
+  (setq org-attach-dir-relative t)
+  (setq org-attach-git-use-annex nil)
   )
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
 (use-package org-roam
-  :hook
-  (after-init . org-roam-mode)
-  :custom
-  (org-roam-directory "~/hub/kb")
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph)
-               ("C-c n r" . org-roam-random-note)
-               ("C-c n j" . org-roam-jump-to-index))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate)))
-  :config
-  (setq org-roam-graph-executable "/usr/local/bin/dot")
-  (setq org-roam-index-file "~/hub/kb/index.org"))
-
-(use-package org-roam-server
   :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/hub/kb"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
   :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
+  (org-roam-db-autosync-mode))
 
 (use-package org-journal
   :ensure t
@@ -521,7 +506,7 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "/usr/local/bin/multimarkdown"))
+  :init (setq markdown-command "pandoc"))
 
 (use-package geiser
   :config
