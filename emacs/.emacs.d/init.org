@@ -50,7 +50,7 @@
       typescript-mode php-mode web-mode
       git-annex magit-annex
       try
-      telega alert dashboard
+      alert dashboard
       ))
   (defun my/packages-installed-p ()
     (let ((ret t))
@@ -366,7 +366,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 
 #+NAME: org-planning
 #+begin_src elisp :tangle no
-  (setq org-agenda-files '("~/hub/schedule/"))
+  (setq org-agenda-files '("~/hub/sched/"))
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'") ; ".org" or ".org.gpg"
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
@@ -679,14 +679,6 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (setq epa-pinentry-mode 'loopback))
 #+end_src
 
-* Telega
-
-#+begin_src elisp
-  (use-package telega
-  :config
-  (setq telega-directory "~/.telega"))
-#+end_src
-
 * =git-annex=
 
 #+begin_src elisp
@@ -840,3 +832,11 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     :config
     (setq python-shell-interpreter "python3"))
 #+end_src
+** Telega
+
+#+begin_src elisp
+  (use-package telega
+  :config
+  (setq telega-directory "~/.telega"))
+#+end_src
+

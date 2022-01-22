@@ -3,7 +3,8 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
+(setq package-archives '(("org"   . "https://orgmode.org/elpa/")
+                         ("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
@@ -36,7 +37,7 @@
     typescript-mode php-mode web-mode
     git-annex magit-annex
     try
-    telega alert dashboard
+    alert dashboard
     ))
 (defun my/packages-installed-p ()
   (let ((ret t))
@@ -248,7 +249,7 @@
   (add-to-list 'org-modules 'org-tempo)
   (add-to-list 'org-modules 'org-attach-git)
 
-  (setq org-agenda-files '("~/hub/schedule/"))
+  (setq org-agenda-files '("~/hub/sched/"))
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'") ; ".org" or ".org.gpg"
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)          ; record close time for todo item
@@ -488,10 +489,6 @@
   (epa-file-enable)
   (setq epa-pinentry-mode 'loopback))
 
-(use-package telega
-:config
-(setq telega-directory "~/.telega"))
-
 (use-package git-annex)
 
 (use-package magit-annex)
@@ -556,16 +553,3 @@
 (use-package js
   :config
   (setq js-indent-level 2))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(all-the-icons doom-themes doom-modeline exec-path-from-shell org org-roam org-roam-server org-bullets org-journal magit yasnippet ibuffer ivy counsel swiper auctex projectile flycheck flycheck-haskell visual-fill-column all-the-icons-dired rainbow-delimiters htmlize markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode typescript-mode php-mode web-mode git-annex magit-annex try telega alert dashboard)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
