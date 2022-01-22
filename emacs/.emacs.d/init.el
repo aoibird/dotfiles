@@ -280,7 +280,10 @@
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
-           "* %?\n%i\n%a")))
+           "* %?\n%i\n%a")
+          ("l" "Clock" entry
+           (file+datetree org-default-notes-file)
+           "** %?\n" :clock-in t :clock-keep t)))
 
   (setq org-export-backends
         '(ascii beamer html icalendar latex man md odt texinfo))
