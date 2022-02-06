@@ -88,12 +88,34 @@ if [ "$(uname)" = "Darwin" ]; then
     export PATH=/usr/local/sbin:"$PATH"
 fi
 
-export PATH=$HOME/dotfiles/scripts:$PATH
-export LESSHISTFILE=$HOME/.cache/less_history
-export WGETRC=$HOME/.config/wget/wgetrc
-export GOPATH=$HOME/.cache/go
-# export XAUTHORITY=$HOME/.cache/Xauthority
-export PATH=$HOME/.local/bin:$PATH
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 
+export CARGO_HOME=$XDG_DATA_HOME/cargo
+export LESSHISTFILE=$XDG_DATA_HOME/less/history
+export IPYTHONDIR=$XDG_DATA_HOME/ipython
+export KDEHOME=$XDG_DATA_HOME/kde
+export RUSTUP_HOME=$XDG_DATA_HOME/rustup
+export GOPATH=$XDG_DATA_HOME/go
+export LYX_USERDIR_23x=$XDG_DATA_HOME/lyx
+export TEXMFVAR=$XDG_DATA_HOME/texlive/texmf-var
+export TEXMFHOME=$XDG_DATA_HOME/texmf
+export CONDA_ENVS_PATH=$XDG_DATA_HOME/conda
+export KERAS_HOME=$XDG_DATA_HOME/keras
+export JAVA_OPTS="-Djava.util.prefs.userRoot=$XDG_DATA_HOME/java"
+export TEXMACS_HOME_PATH=$XDG_DATA_HOME/texmacs
+
+export GTK2_RC_FILES=$XDG_CONFIG_HOME/gtk-2.0/gtkrc
+export GTK_RC_FILES=$XDG_CONFIG_HOME/gtk/gtkrc
+export JUPYTER_CONFIG_DIR=$XDG_CONFIG_HOME/jupyter
+export WGETRC=$XDG_CONFIG_HOME/wget/wgetrc
+export TEXMFCONFIG=$XDG_CONFIG_HOME/texlive/texmf-config
+
+export XAUTHORITY=$XDG_CACHE_HOME/Xauthority
+
+export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/dotfiles/scripts:$PATH
 
 # Misc
