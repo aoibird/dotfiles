@@ -33,7 +33,7 @@
     geiser geiser-chez slime
     racket-mode sml-mode clojure-mode
     rust-mode haskell-mode lua-mode
-    typescript-mode php-mode web-mode
+    typescript-mode php-mode web-mode go-mode
     git-annex magit-annex
     try
     alert dashboard
@@ -105,18 +105,7 @@
   (setq doom-modeline-buffer-encoding nil))
 
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Cascadia Code-16")
-;; (set-fontset-font "fontset-default" '(#xf004 . #xf5c8) (font-spec :size 12 :name "Font Awesome"))
-(defun my/set-fontset (my-font-family)
-    (progn
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset (font-spec :family my-font-family)))
-      (setq face-font-rescale-alist '(("AR PL UKai CN" . 1.15) ("Kaiti SC" . 1.2)))))
-
-(if (memq window-system '(mac ns))
-    (my/set-fontset "Kaiti SC")
-  (my/set-fontset "AR PL UKai CN"))
+(set-face-attribute 'default nil :font "LXGWWenKai Mono-16")
 
 (defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                               ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
