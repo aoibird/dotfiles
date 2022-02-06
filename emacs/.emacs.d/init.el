@@ -170,6 +170,12 @@
                  (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
                  (match-string 1))))))
 
+(defun my/switch-to-org-agenda-file ()
+  (interactive)
+  (let ((file (completing-read "File: " (org-agenda-files))))
+    (find-file file)))
+(global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
+
 (require 'appt)
 (setq appt-time-msg-list nil)    ;; clear existing appt list
 (setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time

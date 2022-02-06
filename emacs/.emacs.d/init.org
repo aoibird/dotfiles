@@ -260,6 +260,16 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
                    (match-string 1))))))
 #+end_src
 
+** Switch to org agenda file
+
+#+begin_src elisp
+  (defun my/switch-to-org-agenda-file ()
+    (interactive)
+    (let ((file (completing-read "File: " (org-agenda-files))))
+      (find-file file)))
+  (global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
+#+end_src
+
 * Notifications
 
 From https://christiantietze.de/posts/2019/12/emacs-notifications/.
