@@ -332,6 +332,12 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (setq org-habit-graph-column 50) ; set position of habit graph
     (setq org-agenda-tags-column 80)
 
+    (setq org-hide-emphasis-markers t)
+
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-+]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
     (add-to-list 'org-modules 'org-habit)
     (add-to-list 'org-modules 'org-tempo)
     (add-to-list 'org-modules 'org-attach-git)
