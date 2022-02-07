@@ -173,4 +173,4 @@ new_float pixel 3
 ################################################################################
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id nitrogen --restore
+exec_always --no-startup-id nitrogen --set-auto $HOME/dotfiles/wallpaper.png
