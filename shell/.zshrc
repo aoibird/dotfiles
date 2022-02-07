@@ -3,10 +3,11 @@
 # ~/.zshrc
 #
 
+function safesource { [[ -s $1 ]] && source $1 }
 
-if [ -f ~/.shell_envvars ]; then source ~/.shell_envvars; fi
-if [ -f ~/.shell_aliases ]; then source ~/.shell_aliases; fi
-if [ -f ~/.shell_secret ]; then source ~/.shell_secret; fi
+safesource ~/.shell_envvars
+safesource ~/.shell_aliases
+safesource ~/.shell_secret
 
 # Functions
 function crun { make $1 && ./$1; }
@@ -16,7 +17,6 @@ function crun { make $1 && ./$1; }
 autoload -Uz compinit -d $XDG_CACHE_HOME/zcompdump && compinit -d $XDG_CACHE_HOME/zcompdump
 zstyle ':completion:*' menu select
 zstyle :compinstall filename "$HOME/.zshrc"
-
 
 # Prompt style: last/two %
 export PROMPT='%F{green}%B%2~%b%f %# '
