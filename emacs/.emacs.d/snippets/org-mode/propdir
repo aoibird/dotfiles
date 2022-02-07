@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: propdir
+# key: propdir
+# --
+:PROPERTIES:
+:DIR:      `(format-time-string "%Y%m%d%H%M%S")`
+:END:
