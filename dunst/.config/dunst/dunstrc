@@ -1,9 +1,12 @@
 [global]
 font = "Monospace 12"
-allow_markup = yes
+markup = full
 format = "<b>%s %p</b>\n%b"
 transparency = 50
-geometry = "400x3-20+20"
+width = 400
+height = 200
+origin = top-right
+offset = 10x50
 padding = 10
 horizontal_padding = 10
 #alignment = center
