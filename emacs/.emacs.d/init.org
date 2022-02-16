@@ -135,6 +135,10 @@ Other configuration:
   (setq ring-bell-function 'ignore)
 #+end_src
 
+#+begin_src elisp
+  (setq-default major-mode 'org-mode)
+#+end_src
+
 * =exec-path-from-shell=
 
 #+begin_src elisp
@@ -280,7 +284,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
   (global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
 #+end_src
 
-* Notifications
+* COMMENT Notifications
 
 From https://christiantietze.de/posts/2019/12/emacs-notifications/.
 

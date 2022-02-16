@@ -85,6 +85,8 @@
 
 (setq ring-bell-function 'ignore)
 
+(setq-default major-mode 'org-mode)
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :init
@@ -149,56 +151,6 @@
   (let ((file (completing-read "File: " (org-agenda-files))))
     (find-file file)))
 (global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
-
-(require 'appt)
-(setq appt-time-msg-list nil)    ;; clear existing appt list
-(setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
-(setq
- appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
- appt-display-mode-line nil     ;; don't show in the modeline
- appt-display-format 'window)   ;; pass warnings to the designated window function
-(setq appt-disp-window-function (function ct/appt-display-native))
-
-(appt-activate 1)                ;; activate appointment notification
-                                      ; (display-time) ;; Clock in modeline
-
-(defun my/send-notification (title msg)
-  (if (memq window-system '(mac ns))
-      (my/send-alerter title msg)
-    (my/send-dunstify title msg)))
-
-(defun my/send-dunstify (title msg)
-  (let ((notifier-path (executable-find "dunstify")))
-    (start-process
-     "Appointment Alert"
-     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
-     notifier-path
-     title
-     msg
-     "-a" "Emacs"
-     "-i" "emacs")))
-
-(defun my/send-alerter (title msg)
-  (let ((notifier-path (executable-find "alerter")))
-    (start-process
-     "Appointment Alert"
-     "*Appointment Alert*" ; use `nil` to not capture output; this captures output in background
-     notifier-path
-     "-message" msg
-     "-title" title
-     "-sender" "org.gnu.Emacs"
-     "-activate" "org.gnu.Emacs")))
-
-(defun ct/appt-display-native (min-to-app new-time msg)
-  (my/send-notification
-   (format "Appointment in %s minutes" min-to-app) ; Title
-   (format "%s" msg)))                             ; Message/detail text
-
-
-;; Agenda-to-appointent hooks
-(org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
-(run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
-(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
 
 (use-package org
   :ensure t
