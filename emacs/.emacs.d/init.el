@@ -34,6 +34,7 @@
     racket-mode sml-mode clojure-mode
     rust-mode haskell-mode lua-mode
     typescript-mode php-mode web-mode go-mode
+    bison-mode
     git-annex magit-annex
     try
     alert dashboard
@@ -399,7 +400,7 @@
                      (name . "^\\*Messages\\*$")))
            ("emacs-config" (or (filename . ".emacs.d")
                                (filename . "init.el")))
-           ("schedule" (and (filename . "schedule/")
+           ("schedule" (and (filename . "sched/")
                             (mode . org-mode)))
            ("kb" (and (filename . "kb/")
                         (or (mode . org-mode)
