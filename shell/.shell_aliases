@@ -33,3 +33,4 @@ alias lo2pdf='libreoffice --headless --convert-to pdf '
 alias sy='sudo systemctl '
 alias syu='systemctl --user '
 alias echopath="echo $PATH | tr ':' '\n'"
+alias lo='libreoffice '
