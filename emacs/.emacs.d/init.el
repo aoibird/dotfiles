@@ -106,37 +106,10 @@
   (setq doom-modeline-buffer-encoding nil))
 
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "LXGWWenKai Mono-16")
-
-(defvar my/ligature-cascadia-code-ligatures '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                              ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                              "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                              "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                              "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                              "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                              "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                              "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                              ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                              "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                              "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                              "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                              "\\\\" "://"))
-
-(use-package ligature
-  :load-path "ligature.el"
-  :config
-  ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  (ligature-set-ligatures 'org-mode my/ligature-cascadia-code-ligatures)
-  (ligature-set-ligatures 'haskell-mode my/ligature-cascadia-code-ligatures)
-  ;; (ligature-set-ligatures 'rust-mode my/ligature-cascadia-code-ligatures)
-  (ligature-set-ligatures 'python-mode '("www" "__" "!=" "=="))
-  ;; enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+(set-face-attribute 'default nil :font "Cascadia Code-16")
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+                    charset (font-spec :family "FZKai\-Z03")))
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
