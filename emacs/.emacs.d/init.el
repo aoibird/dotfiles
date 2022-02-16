@@ -19,7 +19,7 @@
     doom-modeline
     exec-path-from-shell
     org
-    org-roam org-bullets org-journal
+    org-roam org-bullets org-journal org-noter org-alert
     magit yasnippet ibuffer
     ivy counsel swiper
     auctex
@@ -36,7 +36,7 @@
     typescript-mode php-mode web-mode go-mode
     bison-mode
     git-annex magit-annex
-    try
+    try vlf pdf-tools zotxt
     alert dashboard
     ))
 (defun my/packages-installed-p ()
@@ -111,7 +111,8 @@
 (set-face-attribute 'default nil :font "Cascadia Code-16")
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "FZKai\-Z03")))
+                    charset (font-spec :family "方正楷体_GBK")))
+(setq face-font-rescale-alist '(("方正楷体_GBK" . 1.15)))
 
 (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
@@ -182,6 +183,7 @@
   (setq org-duration-format 'h:mm)   ; time format
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-agenda-start-on-weekday nil)
 
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
@@ -296,6 +298,25 @@
        (`still "# -*- mode: org -*-\n#+TITLE: Journal\n#+STARTUP: folded"))))
 
   (setq org-journal-file-header 'org-journal-file-header-func))
+
+(use-package org-alert
+  :ensure t
+  :config
+  (setq alert-default-style 'libnotify))
+
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-height))
+
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+      TeX-source-correlate-start-server t)
+
+(add-hook 'TeX-after-compilation-finished-functions
+          #'TeX-revert-document-buffer)
+
+(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
 
 (use-package yasnippet
   :hook ((prog-mode . yas-minor-mode)

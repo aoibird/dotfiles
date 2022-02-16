@@ -32,7 +32,7 @@
       doom-modeline
       exec-path-from-shell
       org
-      org-roam org-bullets org-journal
+      org-roam org-bullets org-journal org-noter org-alert
       magit yasnippet ibuffer
       ivy counsel swiper
       auctex
@@ -49,7 +49,7 @@
       typescript-mode php-mode web-mode go-mode
       bison-mode
       git-annex magit-annex
-      try
+      try vlf pdf-tools zotxt
       alert dashboard
       ))
   (defun my/packages-installed-p ()
@@ -180,7 +180,8 @@ Other configuration:
   (set-face-attribute 'default nil :font "Cascadia Code-16")
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "FZKai\-Z03")))
+                      charset (font-spec :family "方正楷体_GBK")))
+  (setq face-font-rescale-alist '(("方正楷体_GBK" . 1.15)))
 #+end_src
 
 * Ligatures
@@ -393,6 +394,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
   (setq org-duration-format 'h:mm)   ; time format
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-agenda-start-on-weekday nil)
 #+end_src
 
 ** Babel
@@ -550,6 +552,32 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     (setq org-journal-file-header 'org-journal-file-header-func))
 #+end_src
 
+* Org alert
+
+#+begin_src elisp
+  (use-package org-alert
+    :ensure t
+    :config
+    (setq alert-default-style 'libnotify))
+#+end_src
+
+* PDF
+
+#+begin_src elisp
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-height))
+
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+        TeX-source-correlate-start-server t)
+
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+#+end_src
 
 * Yasnippet
 
