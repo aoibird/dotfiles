@@ -176,3 +176,12 @@ From [[https://git-annex.branchable.com/tips/yet_another_simple_disk_usage_like_
       print(args.input, args.outline)
       main(args.input, outline=args.outline)
 #+end_src
+
+** =myghclone=
+
+#+begin_src sh :shebang #!/usr/bin/env bash :tangle scripts/myghclone
+  url=$1
+  target=$(echo $url | awk -F'/' '{ print $5"@"$4 }')
+
+  git clone $url $target
+#+end_src
