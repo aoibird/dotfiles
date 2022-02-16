@@ -34,3 +34,5 @@ alias sy='sudo systemctl '
 alias syu='systemctl --user '
 alias echopath="echo $PATH | tr ':' '\n'"
 alias lo='libreoffice '
+alias mkdirp='mkdir -pv '
+alias tmux='tmux -u '
