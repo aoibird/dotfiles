@@ -144,3 +144,35 @@ mybackup "$HOME/test/My Dir" ~/test/Does\ Not\ Exist ~/test/hello.txt
 #+end_src
 
 From [[https://git-annex.branchable.com/tips/yet_another_simple_disk_usage_like_utility/][yet another simple disk usage like utility]].
+
+** =myppjs=
+
+#+begin_src python :shebang #!/usr/bin/env python :tangle scripts/myppjs
+  import json
+  import sys
+  import os
+  import argparse
+
+  def get_outline(j):
+      if type(j) == list and len(j) > 5:
+          return j[:5] + ['...']
+      for key in j.keys():
+          get_outline(j[key])
+      return j
+
+  def main(filepath, outline=False):
+      with open(filepath, 'r') as fin:
+          j = json.load(fin)
+          if outline:
+              j = get_outline(j)
+          obj = json.dumps(j, indent=4)
+          print(obj)
+
+  if __name__ == '__main__':
+      parser = argparse.ArgumentParser(description='Print formatted representation of json file')
+      parser.add_argument('--outline', action='store_true')
+      parser.add_argument('input')
+      args = parser.parse_args()
+      print(args.input, args.outline)
+      main(args.input, outline=args.outline)
+#+end_src
