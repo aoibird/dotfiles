@@ -173,7 +173,6 @@ From [[https://git-annex.branchable.com/tips/yet_another_simple_disk_usage_like_
       parser.add_argument('--outline', action='store_true')
       parser.add_argument('input')
       args = parser.parse_args()
-      print(args.input, args.outline)
       main(args.input, outline=args.outline)
 #+end_src
 
