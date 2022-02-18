@@ -245,6 +245,15 @@ Other configuration:
 
 * Functions
 
+** Open init file
+
+#+begin_src sh
+  (defun my/open-init-file ()
+   (interactive)
+   (find-file "~/.emacs.d/init.org"))
+  (global-set-key (kbd "C-c m i") 'my/open-init-file)
+#+end_src
+
 ** Add AucTeX file variables
 
 From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi.
@@ -364,6 +373,7 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
                                (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
     (add-to-list 'org-modules 'org-habit)
+    (add-to-list 'org-modules 'org-crypt)
     (add-to-list 'org-modules 'org-tempo)
     (add-to-list 'org-modules 'org-attach-git)
 
@@ -380,6 +390,8 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
     <<org-publish>>
 
     <<org-attach>>
+
+    <<org-crypt>>
     )
 #+end_src
 
@@ -423,16 +435,16 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
   (setq org-default-notes-file "~/hub/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file org-default-notes-file)
+           (file+headline org-default-notes-file "Ideas")
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file org-default-notes-file)
+           (file+headline org-default-notes-file "Tasks")
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
            "* %?\n%i\n%a")
           ("l" "Clock" entry
-           (file+datetree org-default-notes-file)
+           (file+headline org-default-notes-file "Clock")
            "** %?\n" :clock-in t :clock-keep t)))
 #+end_src
 
@@ -500,6 +512,16 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
   (setq org-attach-store-link-p t)
   (setq org-attach-dir-relative t)
   (setq org-attach-git-use-annex nil)
+#+end_src
+
+** Crypt
+
+#+name: org-crypt
+#+begin_src elisp :tangle no
+  (org-crypt-use-before-save-magic)
+  (setq org-tags-exclude-from-inheritance '("crypt"))
+  (setq org-crypt-key nil)
+  (setq auto-save-default nil)
 #+end_src
 
 * Org bullets

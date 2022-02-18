@@ -173,6 +173,7 @@
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
   (add-to-list 'org-modules 'org-habit)
+  (add-to-list 'org-modules 'org-crypt)
   (add-to-list 'org-modules 'org-tempo)
   (add-to-list 'org-modules 'org-attach-git)
 
@@ -202,16 +203,16 @@
   (setq org-default-notes-file "~/hub/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
-           (file org-default-notes-file)
+           (file+headline org-default-notes-file "Ideas")
            "* %U%?\n%i\n")
           ("t" "Task" entry
-           (file org-default-notes-file)
+           (file+headline org-default-notes-file "Tasks")
            "* TODO %?\n %i\n %a")
           ("c" "Clipboard" entry
            (file+headline org-default-notes-file "Clipboard")
            "* %?\n%i\n%a")
           ("l" "Clock" entry
-           (file+datetree org-default-notes-file)
+           (file+headline org-default-notes-file "Clock")
            "** %?\n" :clock-in t :clock-keep t)))
 
   (setq org-export-backends
@@ -259,6 +260,11 @@
   (setq org-attach-store-link-p t)
   (setq org-attach-dir-relative t)
   (setq org-attach-git-use-annex nil)
+
+  (org-crypt-use-before-save-magic)
+  (setq org-tags-exclude-from-inheritance '("crypt"))
+  (setq org-crypt-key nil)
+  (setq auto-save-default nil)
   )
 
 (use-package org-bullets
@@ -489,3 +495,8 @@
 (use-package js
   :config
   (setq js-indent-level 2))
+
+(defun my/open-init-file ()
+ (interactive)
+ (find-file "~/.emacs.d/init.org"))
+(global-set-key (kbd "C-c m i") 'my/open-init-file)
