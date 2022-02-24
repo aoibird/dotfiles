@@ -13,6 +13,7 @@ if [ "$(uname)" = "Linux" ]; then
     alias diff='diff --color=auto '
     alias grep='grep --color=auto '
     alias ip='ip -color=auto '
+    alias tree='tree -C '
 fi
 
 alias gitgraph='git log --graph --oneline --branches '
@@ -36,3 +37,5 @@ alias echopath="echo $PATH | tr ':' '\n'"
 alias lo='libreoffice '
 alias mkdirp='mkdir -pv '
 alias tmux='tmux -u '
+alias pyc='python -c '
+alias dc='docker-compose '
