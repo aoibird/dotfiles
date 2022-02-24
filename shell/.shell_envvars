@@ -35,6 +35,7 @@ export CONDARC=$XDG_CONFIG_HOME/conda/condarc
 export GVIMINIT='let $MYGVIMRC="$XDG_CONFIG_HOME/vim/gvimrc" | source $MYGVIMRC'
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 export CABAL_CONFIG=$XDG_CONFIG_HOME/cabal/config
+export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/startup.py
 
 export XAUTHORITY=$XDG_CACHE_HOME/Xauthority
 
