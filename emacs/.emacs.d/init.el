@@ -4,6 +4,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
@@ -13,40 +14,28 @@
 (require 'use-package)
 (setq use-package-always-ensure nil)
 
-(setq my/packages
-  '(all-the-icons ;; and M-x all-the-icons-install-fonts
-    doom-themes
-    doom-modeline
-    exec-path-from-shell
-    org
-    org-roam org-bullets org-journal org-noter org-alert
-    magit yasnippet ibuffer
-    ivy counsel swiper
-    auctex
-    projectile
-    flycheck flycheck-haskell
-    visual-fill-column
-    all-the-icons-dired
-    rainbow-delimiters
-    htmlize
-    markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode
-    geiser geiser-chez slime
-    racket-mode sml-mode clojure-mode
-    rust-mode haskell-mode lua-mode
-    typescript-mode php-mode web-mode go-mode
-    bison-mode
-    git-annex magit-annex
-    try vlf pdf-tools zotxt
-    alert dashboard
-    ))
 (defun my/packages-installed-p ()
   (let ((ret t))
-    (dolist (pkg my/packages)
+    (dolist (pkg package-selected-packages)
       (when (not (package-installed-p pkg)) (setq ret nil)))
     ret))
 
+(setq package-selected-packages
+      '(all-the-icons ;; and M-x all-the-icons-install-fonts
+        doom-themes doom-modeline
+        exec-path-from-shell
+        org org-roam org-bullets org-journal org-noter org-alert
+        magit yasnippet ibuffer ivy counsel swiper
+        projectile flycheck flycheck-haskell
+        visual-fill-column all-the-icons-dired rainbow-delimiters
+        markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode bison-mode
+        geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
+        typescript-mode php-mode web-mode go-mode
+        git-annex magit-annex auctex try vlf pdf-tools zotxt telega elfeed elfeed-org alert dashboard htmlize
+        ))
+(setq package-pinned-packages '((telega . "melpa-stable")))
+
 ;; Install packages
-(setq package-selected-packages my/packages)
 (unless (my/packages-installed-p)
   (message "%s" "Refreshing package database...")
   (package-refresh-contents)
@@ -58,39 +47,6 @@
 (setq-default inhibit-startup-screen t)
 (tool-bar-mode -1)                      ; hide toolbar
 (scroll-bar-mode -1)                    ; hide scrollbar
-
-(when (memq window-system '(mac ns))
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . light))
-  (setq ns-use-proxy-icon  nil)
-  (setq ns-pop-up-frames nil)
-  (setq frame-title-format nil))
-
-(global-display-line-numbers-mode)
-(global-hl-line-mode t)                 ; line highlighting
-(global-visual-line-mode t)             ; line wrap
-
-(setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
-(setq-default c-basic-offset 4)
-
-(setq-default make-backup-files nil)
-
-(setq mac-right-option-modifier 'none)  ; option + s --> ß
-
-(setq-default cursor-type 'bar)
-(setq-default show-trailing-whitespace t)
-(setq-default show-paren-delay 0)
-(show-paren-mode 1)                     ; parentheses matching
-
-(setq ring-bell-function 'ignore)
-
-(setq-default major-mode 'org-mode)
-
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
-  :init
-  (exec-path-from-shell-initialize))
 
 (use-package doom-themes
   :init (load-theme 'doom-tomorrow-day t))
@@ -114,18 +70,42 @@
                     charset (font-spec :family "方正楷体_GBK")))
 (setq face-font-rescale-alist '(("方正楷体_GBK" . 1.15)))
 
-(global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
-(global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
-(global-set-key (kbd "C-c m 0") 'text-scale-adjust)
-(global-set-key (kbd "C-c m g") 'goto-line)
-(global-set-key (kbd "C-c m r") 'revert-buffer)
-(global-set-key (kbd "M-[") 'previous-buffer)
-(global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "s-，") 'customize)
-(global-set-key (kbd "M-【") 'previous-buffer)
-(global-set-key (kbd "M-】") 'next-buffer)
-(global-set-key (kbd "C-<tab>") 'other-window)
-(global-set-key (kbd "C-c m v") 'add-file-local-variable-prop-line)
+(setq-default make-backup-files nil)
+
+(setq mac-right-option-modifier 'none)  ; option + s --> ß
+
+(global-display-line-numbers-mode)
+(global-hl-line-mode t)                 ; line highlighting
+(global-visual-line-mode t)             ; line wrap
+
+(setq ring-bell-function 'ignore)
+
+(setq-default
+   tab-width 4
+   indent-tabs-mode nil
+   c-basic-offset 4
+   cursor-type 'bar
+   show-trailing-whitespace t
+   show-paren-delay 0
+   major-mode 'org-mode)
+
+(show-paren-mode 1)                     ; parentheses matching
+
+(when (memq window-system '(mac ns))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . light))
+  (setq ns-use-proxy-icon  nil)
+  (setq ns-pop-up-frames nil)
+  (setq frame-title-format nil))
+
+(defun my/open-init-file ()
+  (interactive)
+  (find-file "~/.emacs.d/init.org"))
+
+(defun my/switch-to-org-agenda-file ()
+  (interactive)
+  (let ((file (completing-read "File: " (org-agenda-files))))
+    (find-file file)))
 
 (defun my/add-auctex-file-variables ()
   (interactive)
@@ -147,11 +127,50 @@
                  (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
                  (match-string 1))))))
 
-(defun my/switch-to-org-agenda-file ()
-  (interactive)
-  (let ((file (completing-read "File: " (org-agenda-files))))
-    (find-file file)))
+(global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
+(global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
+(global-set-key (kbd "C-c m 0") 'text-scale-adjust)
+(global-set-key (kbd "C-c m g") 'goto-line)
+(global-set-key (kbd "C-c m r") 'revert-buffer)
+(global-set-key (kbd "C-c m v") 'add-file-local-variable-prop-line)
+(global-set-key (kbd "C-c m o") 'org-clock-out)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
+(global-set-key (kbd "s-，") 'customize)
+(global-set-key (kbd "M-【") 'previous-buffer)
+(global-set-key (kbd "M-】") 'next-buffer)
+(global-set-key (kbd "C-<tab>") 'other-window)
+
+(global-set-key (kbd "C-c m i") 'my/open-init-file)
 (global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :init
+  (exec-path-from-shell-initialize))
+
+(use-package all-the-icons-dired
+  :ensure t
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package visual-fill-column
+  :hook
+  (org-mode . visual-fill-column-mode)
+  :config
+  (setq-default visual-fill-column-width 120
+                visual-fill-column-center-text t)
+  ;; (global-visual-fill-column-mode)
+  )
+
+(use-package dired
+  :ensure nil
+  :bind (:map dired-mode-map
+              (("?" . my/dired-get-size)))
+  :config
+  (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first"))
 
 (use-package org
   :ensure t
@@ -163,20 +182,16 @@
   :config
   (setq org-adapt-indentation nil) ; prevent demoting heading also shifting text inside sections
   (setq org-tags-column 60)        ; set position of tags
-  (setq org-habit-graph-column 50) ; set position of habit graph
-  (setq org-agenda-tags-column 80)
-
   (setq org-hide-emphasis-markers t)
-
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-+]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
   (add-to-list 'org-modules 'org-habit)
   (add-to-list 'org-modules 'org-crypt)
   (add-to-list 'org-modules 'org-tempo)
   (add-to-list 'org-modules 'org-attach-git)
-
+  (setq org-habit-graph-column 50) ; set position of habit graph
+  (setq org-agenda-tags-column 80)
   (setq org-agenda-files '("~/hub/sched/"))
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'") ; ".org" or ".org.gpg"
   (setq org-log-into-drawer t)
@@ -185,7 +200,6 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-agenda-start-on-weekday nil)
-
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
    'org-babel-load-languages '((R . t)
@@ -199,7 +213,6 @@
                                (octave . t)
                                (lua . t)
                                (js . t)))
-
   (setq org-default-notes-file "~/hub/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
@@ -214,17 +227,14 @@
           ("l" "Clock" entry
            (file+headline org-default-notes-file "Clock")
            "** %?\n" :clock-in t :clock-keep t)))
-
   (setq org-export-backends
         '(ascii beamer html icalendar latex man md odt texinfo))
   (setq org-export-coding-system 'utf-8)
   (setq org-latex-listings 'listings)
   (setq org-html-htmlize-output-type 'css)
   (setq org-html-head-include-default-style nil)
-
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("el" . "src elisp"))
-
   (setq org-publish-project-alist
         '(
           ("kb-html-org"
@@ -255,12 +265,10 @@
            :exclude "\\*proj\\*"
            :publishing-function org-publish-attachment)
           ("kb-html" :components ("kb-html-org" "kb-html-static"))))
-
   (setq org-attach-preferred-new-method 'id)
   (setq org-attach-store-link-p t)
   (setq org-attach-dir-relative t)
   (setq org-attach-git-use-annex nil)
-
   (org-crypt-use-before-save-magic)
   (setq org-tags-exclude-from-inheritance '("crypt"))
   (setq org-crypt-key nil)
@@ -302,27 +310,11 @@
        (`monthly "# -*- mode: org -*-\n#+TITLE: Monthly Journal\n#+STARTUP: folded")
        (`yearly "# -*- mode: org -*-\n#+TITLE: Yearly Journal\n#+STARTUP: folded")
        (`still "# -*- mode: org -*-\n#+TITLE: Journal\n#+STARTUP: folded"))))
-
   (setq org-journal-file-header 'org-journal-file-header-func))
 
 (use-package org-alert
-  :ensure t
   :config
   (setq alert-default-style 'libnotify))
-
-(use-package pdf-tools
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-height))
-
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-      TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
-      TeX-source-correlate-start-server t)
-
-(add-hook 'TeX-after-compilation-finished-functions
-          #'TeX-revert-document-buffer)
-
-(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
 
 (use-package yasnippet
   :hook ((prog-mode . yas-minor-mode)
@@ -330,12 +322,6 @@
   :config
   (yas-global-mode)
   (setq yas-indent-line 'fixed))
-
-(use-package magit
-  :ensure t
-  :init
-  :bind
-  ("C-x g" . magit-status))
 
 (use-package ibuffer
   :ensure t
@@ -402,6 +388,12 @@
   (setq search-default-mode #'char-fold-to-regexp)
   (global-set-key "\C-s" 'swiper))
 
+(use-package magit
+  :ensure t
+  :init
+  :bind
+  ("C-x g" . magit-status))
+
 (use-package tex
   :defer t
   :ensure auctex
@@ -410,7 +402,26 @@
   (setq TeX-parse-self t)
   (setq-default TeX-master nil)
   (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
-  (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+  (add-hook 'LaTeX-mode-hook #'turn-on-reftex))
+
+(use-package epa-file
+  :ensure nil
+  :config
+  (epa-file-enable)
+  (setq epa-pinentry-mode 'loopback))
+
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-height)
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+        TeX-source-correlate-start-server t)
+
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))))
 
 (use-package projectile
   :diminish projectile-mode
@@ -422,41 +433,29 @@
   (after-init . global-flycheck-mode)
   (haskell-mode-hook . flycheck-haskell-setup)
   :config
-  (setq flycheck-haskell-hlint-executable "~/.cabal/bin/hlint")
+  (setq flycheck-haskell-hlint-executable "~/.local/share/cabal/bin/hlint")
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(use-package epa-file
-  :ensure nil
+(use-package telega
   :config
-  (epa-file-enable)
-  (setq epa-pinentry-mode 'loopback))
+  (setq telega-directory "~/.local/share/telega")
+  (setq telega-database-dir "~/.local/share/telega")
+  ;; (define-key global-map (kbd "C-c t") telega-prefix-map)
+  (add-hook 'telega-load-hook
+            (lambda ()
+              (define-key global-map (kbd "C-c t") telega-prefix-map)))
+  (add-hook 'telega-root-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+  (add-hook 'telega-chat-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+)
 
-(use-package git-annex)
-
-(use-package magit-annex)
-
-(use-package dired
-  :ensure nil
-  :bind (:map dired-mode-map
-              (("?" . my/dired-get-size)))
-  :config
-  (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first"))
-
-(use-package all-the-icons-dired
+(use-package elfeed
   :ensure t
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package visual-fill-column
-  :hook
-  (org-mode . visual-fill-column-mode)
   :config
-  (setq-default visual-fill-column-width 120
-                visual-fill-column-center-text t)
-  ;; (global-visual-fill-column-mode)
-  )
+  (setq elfeed-db-directory "~/.local/share/elfeed"))
+
+(use-package elfeed-org
+  :config
+  (setq rmh-elfeed-org-files (list "~/hub/feeds.org")))
 
 (use-package markdown-mode
   :ensure t
@@ -495,8 +494,3 @@
 (use-package js
   :config
   (setq js-indent-level 2))
-
-(defun my/open-init-file ()
- (interactive)
- (find-file "~/.emacs.d/init.org"))
-(global-set-key (kbd "C-c m i") 'my/open-init-file)
