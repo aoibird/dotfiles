@@ -16,10 +16,10 @@ bindsym $mod+Return exec i3-sensible-terminal
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -i ~/dotfiles/wallpaper.png --nofork
-bindsym $mod+p exec --no-startup-id "i3lock -i ~/dotfiles/wallpaper.png"
+bindsym $mod+m exec --no-startup-id "i3lock -i ~/dotfiles/wallpaper.png"
 
-bindsym $mod+d exec "rofi -modi drun,window,run,ssh -show drun"
-bindsym $mod+o exec "rofi -modi drun,window,run,ssh -show window"
+bindsym $mod+s exec "rofi -modi drun,window,run,ssh -show drun"
+bindsym $mod+Tab exec "rofi -modi drun,window,run,ssh -show window"
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
@@ -58,21 +58,18 @@ bindsym $mod+v split v
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
+bindsym $mod+g layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+p layout toggle split
 # toggle tiling / floating
 bindsym $mod+Shift+equal floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+equal focus mode_toggle
-
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+minus scratchpad show
-
 # focus the parent container
 bindsym $mod+b focus parent
 # focus the child container
@@ -126,13 +123,13 @@ for_window [class="okular"] move to workspace $ws10
 
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+w kill
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Ctrl+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 
 # resize window (you can also use the mouse for that)
@@ -159,18 +156,33 @@ bindsym $mod+r mode "resize"
 ################################################################################
 #                                  Appearance                                  #
 ################################################################################
-set $focus-color #ffb52a
-set $text-color #ffffff
-client.focused 			$focus-color $focus-color $text-color $focus-color
+set $back               #1d1F21
+set $black              #282A2E
+set $grey               #373B41
+set $lightgrey          #707880
+set $white              #C5C8C6
+set $yellow             #F0C674
+set $red                #CC6666
+set $darkred            #A54242
+set $green              #B5BD56
 
-gaps inner 6
-gaps outer 0
-new_window pixel 3
-new_float pixel 3
+client.focused          $green     $green       $black      $red
+client.focused_inactive $grey       $grey       $lightgrey  $grey
+client.unfocused        $grey       $grey       $lightgrey  $grey
+client.urgent           $red        $red        $black      $red
+client.background       $back
+
+gaps inner 12
+gaps outer 12
+new_window pixel 2
+new_float pixel 2
 
 ################################################################################
 #                                    Execute                                   #
 ################################################################################
 
+exec_always --no-startup-id fcitx5
+exec_always --no-startup-id blueman-applet
+exec_always --no-startup-id udiskie --tray
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id nitrogen --set-auto $HOME/dotfiles/wallpaper.png
