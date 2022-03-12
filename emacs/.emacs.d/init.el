@@ -145,7 +145,7 @@
 (global-set-key (kbd "C-c m a") 'my/switch-to-org-agenda-file)
 
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  ;; :if (memq window-system '(mac ns))
   :init
   (exec-path-from-shell-initialize))
 
