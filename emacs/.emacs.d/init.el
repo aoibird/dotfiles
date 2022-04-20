@@ -24,11 +24,11 @@
       '(all-the-icons ;; and M-x all-the-icons-install-fonts
         doom-themes doom-modeline
         exec-path-from-shell
-        org org-roam org-bullets org-journal org-noter org-alert
+        org org-roam org-bullets org-journal org-noter org-alert org-ref
         magit yasnippet ibuffer ivy counsel swiper
         projectile flycheck flycheck-haskell
         visual-fill-column all-the-icons-dired rainbow-delimiters
-        markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode bison-mode
+        markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode bison-mode csv-mode
         geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
         typescript-mode php-mode web-mode go-mode
         git-annex magit-annex auctex try vlf pdf-tools zotxt telega elfeed elfeed-org alert dashboard htmlize
@@ -212,7 +212,8 @@
                                (awk . t)
                                (octave . t)
                                (lua . t)
-                               (js . t)))
+                               (js . t)
+                               (dot . t)))
   (setq org-default-notes-file "~/hub/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
@@ -426,6 +427,7 @@
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
+  (setq projectile-project-search-path '(("~/hub". 4)))
   :bind-keymap ("C-c p" . projectile-command-map))
 
 (use-package flycheck
