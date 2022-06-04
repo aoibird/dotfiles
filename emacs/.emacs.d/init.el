@@ -32,6 +32,7 @@
         geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
         typescript-mode php-mode web-mode go-mode
         git-annex magit-annex auctex try vlf pdf-tools zotxt telega elfeed elfeed-org alert dashboard htmlize
+        activity-watch-mode
         ))
 (setq package-pinned-packages '((telega . "melpa-stable")))
 
@@ -64,11 +65,11 @@
   (setq doom-modeline-buffer-encoding nil))
 
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Cascadia Code-16")
+(set-face-attribute 'default nil :font "Cascadia Code-14")
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset (font-spec :family "方正楷体_GBK")))
-(setq face-font-rescale-alist '(("方正楷体_GBK" . 1.15)))
+(setq face-font-rescale-alist '(("方正楷体_GBK" . 1.12)))
 
 (setq-default make-backup-files nil)
 
@@ -172,6 +173,10 @@
   :config
   (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first"))
 
+(use-package diff
+  :config
+  (setq diff-switches "-u -r"))
+
 (use-package org
   :ensure t
   :bind
@@ -214,7 +219,7 @@
                                (lua . t)
                                (js . t)
                                (dot . t)))
-  (setq org-default-notes-file "~/hub/refile.gpg")
+  (setq org-default-notes-file "~/hub/sched/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file+headline org-default-notes-file "Ideas")
@@ -459,12 +464,21 @@
   :config
   (setq rmh-elfeed-org-files (list "~/hub/feeds.org")))
 
+(use-package activity-watch-mode
+  :config
+  (global-activity-watch-mode))
+
 (use-package markdown-mode
   :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "pandoc"))
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode t))
 
 (use-package geiser
   :config

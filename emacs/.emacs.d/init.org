@@ -45,6 +45,7 @@
           geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
           typescript-mode php-mode web-mode go-mode
           git-annex magit-annex auctex try vlf pdf-tools zotxt telega elfeed elfeed-org alert dashboard htmlize
+          activity-watch-mode
           ))
   (setq package-pinned-packages '((telega . "melpa-stable")))
 
@@ -93,12 +94,13 @@
 ** Fonts
 #+begin_src elisp
   (setq inhibit-compacting-font-caches t)
-  (set-face-attribute 'default nil :font "Cascadia Code-16")
+  (set-face-attribute 'default nil :font "Cascadia Code-14")
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
                       charset (font-spec :family "方正楷体_GBK")))
-  (setq face-font-rescale-alist '(("方正楷体_GBK" . 1.15)))
+  (setq face-font-rescale-alist '(("方正楷体_GBK" . 1.12)))
 #+end_src
+
 
 ** Ligatures
 :PROPERTIES:
@@ -311,6 +313,14 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first"))
 #+end_src
 
+* =diff=
+
+#+begin_src elisp
+  (use-package diff
+    :config
+    (setq diff-switches "-u -r"))
+#+end_src
+
 * =org=
 
 #+begin_src elisp :noweb yes
@@ -390,7 +400,7 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
 
 #+NAME: org-capture
 #+begin_src elisp :tangle no
-  (setq org-default-notes-file "~/hub/refile.gpg")
+  (setq org-default-notes-file "~/hub/sched/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file+headline org-default-notes-file "Ideas")
@@ -729,6 +739,14 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
     (setq rmh-elfeed-org-files (list "~/hub/feeds.org")))
 #+end_src
 
+* =activity-watch-mode=
+
+#+begin_src elisp
+  (use-package activity-watch-mode
+    :config
+    (global-activity-watch-mode))
+#+end_src
+
 * =markdown-mode=
 
 #+begin_src elisp
@@ -738,6 +756,15 @@ From https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "pandoc"))
+#+end_src
+
+* =pyvenv=
+
+#+begin_src elisp
+  (use-package pyvenv
+    :ensure t
+    :config
+    (pyvenv-mode t))
 #+end_src
 
 * =geiser= for Scheme                                       :prog:
