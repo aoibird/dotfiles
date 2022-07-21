@@ -4,3 +4,11 @@ font:
   normal:
     family: Cascadia Code
   size: 9
+window:
+  dimensions:
+    columns: 120
+    lines: 40
+cursor:
+  style:
+    shape: Beam
+    blinking: Always
