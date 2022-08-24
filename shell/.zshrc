@@ -22,6 +22,9 @@ zstyle :compinstall filename "$HOME/.zshrc"
 export PROMPT='%F{green}%B%2~%b%f %# '
 export RPROMPT='%F{blue}%D{%H:%M}%f'
 
+# Auto-suggestions
+# https://github.com/zsh-users/zsh-autosuggestions
+safesource $XDG_CONFIG_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # History
 export HISTFILE=$XDG_DATA_HOME/zsh/history
