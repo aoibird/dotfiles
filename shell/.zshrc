@@ -45,3 +45,6 @@ TRAPALRM() {
 }
 
 # Misc
+mkcd() {
+    mkdir "$1" && cd "$1"
+}
