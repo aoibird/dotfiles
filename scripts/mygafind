@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+git annex find "$@" --include '*' --format='${humansize}    \t${file}\n'
