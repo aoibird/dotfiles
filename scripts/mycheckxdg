@@ -1,3 +1,0 @@
-#!/usr/bin/env zsh
-
-tree -C -a -L 1 ~/Downloads ~/Desktop ~/Documents ~/Music ~/Pictures ~/Public ~/Templates ~/Videos
