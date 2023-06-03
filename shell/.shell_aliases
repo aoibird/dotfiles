@@ -40,3 +40,13 @@ alias tmux='tmux -u '
 alias pyc='python -c '
 alias dc='docker-compose '
 alias pdmd2org='pandoc -f markdown -t org '
+
+
+mkcd() {
+    mkdir "$1" && cd "$1"
+}
+
+webm2mp4() {
+    video=`echo "$1" | rev | cut -d. -f2- | rev`
+    ffmpeg -i "$video.webm" -crf 40 "$video.mp4"
+}
