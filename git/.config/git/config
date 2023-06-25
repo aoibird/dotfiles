@@ -3,9 +3,6 @@
     l = log
 [credential]
 	helper = store
-[user]
-	name = git
-	email = git
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
