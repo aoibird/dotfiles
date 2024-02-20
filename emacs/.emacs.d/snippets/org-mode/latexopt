@@ -13,11 +13,12 @@
 #+LATEX_HEADER: \usepackage{amssymb,amsmath,amsfonts,amsthm,mathtools}
 #+LATEX_HEADER: \usetikzlibrary{shapes.geometric,positioning,arrows,shadows}
 #+LATEX_HEADER: \usepackage[hmargin=1.25in,vmargin=1in]{geometry}
-#+LATEX_HEADER: \setmainfont{}
-#+LATEX_HEADER: \setCJKmainfont{}
-#+LATEX_HEADER: \setCJKsansfont{}
-#+LATEX_HEADER: \setCJKmonofont{}
-#+LATEX_HEADER: \setmonofont{}
+#+LATEX_HEADER: \usepackage{libertine}
+#+LATEX_HEADER: % \setmainfont{}
+#+LATEX_HEADER: % \setCJKmainfont{}
+#+LATEX_HEADER: % \setCJKsansfont{}
+#+LATEX_HEADER: % \setCJKmonofont{}
+#+LATEX_HEADER: \setmonofont{Fira Code}
 #+LATEX_HEADER: \usepackage{enumitem}  % list
 #+LATEX_HEADER: \setlist{nosep, leftmargin=3em}  % list
 #+LATEX_HEADER: \setlength{\parindent}{2em}  % paragraph
