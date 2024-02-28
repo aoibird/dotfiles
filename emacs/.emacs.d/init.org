@@ -2,7 +2,7 @@
 #+TITLE: Emacs Configuration
 #+STARTUP: showall
 #+PROPERTY: header-args :tangle init.el
-#+time_updated: 2024-02-20T18:21:15+08:00
+#+time_updated: 2024-02-28T15:21:09+08:00
 
 #+begin_src elisp
   ;; -*- lexical-binding: t; -*-
@@ -37,44 +37,45 @@
   (setq use-package-always-ensure nil)
 #+end_src
 
-* Packages
+* Package installation
 :PROPERTIES:
 :VISIBILITY: folded
 :END:
 
 #+begin_src elisp
-  (defun my/packages-installed-p ()
-    (let ((ret t))
-      (dolist (pkg package-selected-packages)
-        (when (not (package-installed-p pkg)) (setq ret nil)))
-      ret))
+   (defun my/packages-installed-p ()
+     (let ((ret t))
+       (dolist (pkg package-selected-packages)
+         (when (not (package-installed-p pkg)) (setq ret nil)))
+       ret))
 
-  (setq package-selected-packages
-        '(;; look and feel
-          all-the-icons ;; and M-x all-the-icons-install-fonts
-          doom-themes
-          doom-modeline ;; and M-x nerd-icons-install-fonts
-          visual-fill-column all-the-icons-dired rainbow-delimiters
-          ;; org
-          org org-roam org-bullets org-journal org-noter org-alert org-ql
-          org-ref org-drill org-roam-ui org-fragtog org-contacts
-          ;; utilities
-          magit yasnippet ibuffer ivy counsel swiper projectile flycheck flycheck-haskell
-          exec-path-from-shell activity-watch-mode try vlf pangu-spacing
-          git-annex magit-annex pdf-tools zotxt telega alert dashboard htmlize simple-httpd crux deft
-          ;; markup
-          markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode bison-mode csv-mode auctex
-          ;; programming
-          numpydoc pyvenv ein matlab-mode typescript-mode php-mode web-mode go-mode ess
-          geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
-          ))
-  (setq package-pinned-packages '((telega . "melpa-stable")))
+   (setq package-selected-packages
+         '(;; look and feel
+           all-the-icons ;; and M-x all-the-icons-install-fonts
+           doom-themes
+           doom-modeline ;; and M-x nerd-icons-install-fonts
+           visual-fill-column all-the-icons-dired rainbow-delimiters
+           ;; org
+           org org-roam org-bullets org-journal org-noter org-alert org-ql
+           org-ref org-drill org-roam-ui org-fragtog org-contacts
+           ;; utilities
+           magit yasnippet ibuffer ivy counsel swiper projectile flycheck flycheck-haskell
+           exec-path-from-shell activity-watch-mode try vlf pangu-spacing
+           git-annex magit-annex pdf-tools zotxt telega alert dashboard htmlize simple-httpd
+           crux deft gptel
+           ;; markup
+           markdown-mode yaml-mode dockerfile-mode cmake-mode nix-mode bison-mode csv-mode auctex cdlatex latex-extra
+           ;; programming
+           numpydoc pyvenv ein matlab-mode typescript-mode php-mode web-mode go-mode ess
+           geiser geiser-chez slime racket-mode sml-mode clojure-mode rust-mode haskell-mode lua-mode
+           ))
+   (setq package-pinned-packages '((telega . "melpa-stable")))
 
-  ;; Install packages
-  (unless (my/packages-installed-p)
-    (message "%s" "Refreshing package database...")
-    (package-refresh-contents)
-    (package-install-selected-packages))
+   ;; Install packages
+   (unless (my/packages-installed-p)
+     (message "%s" "Refreshing package database...")
+     (package-refresh-contents)
+     (package-install-selected-packages))
 #+end_src
 
 * Customization
@@ -92,14 +93,49 @@
    cursor-type 'bar
    show-trailing-whitespace t
    show-paren-delay 0
+   make-backup-files nil                  ; don't make backup files
    ;; major-mode 'org-mode
    line-spacing 0.1)
   ;; (fringe-mode '(0 . 0))
   (fringe-mode '(1 . 1))
   (show-paren-mode 1)                     ; parentheses matching
+  (setq mac-right-option-modifier 'none)  ; option + s --> ß
   (setq ring-bell-function 'ignore)
   (setq auth-sources '("~/.emacs.d/authinfo" "~/.emacs.d/authinfo.gpg" "~/.emacs.d/netrc"))
+
+  (when (memq window-system '(mac ns))
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+    (add-to-list 'default-frame-alist '(ns-appearance . light))
+    (setq ns-use-proxy-icon  nil)
+    (setq ns-pop-up-frames nil)
+    (setq frame-title-format nil))
 #+end_src
+
+The =linum-mode= could slow down emacs when viewing large files or images. (refer to [[https://www.emacswiki.org/emacs/LineNumbers][this]] and [[https://github.com/redguardtoo/emacs.d/issues/178][this]])
+#+begin_src elisp
+  ;; (global-display-line-numbers-mode)
+  ;; (global-hl-line-mode t)                 ; line highlighting
+  ;; (global-visual-line-mode t)             ; line wrap
+  (setq display-line-numbers-width 4)
+  (dolist (mode '(text-mode-hook
+                    prog-mode-hook
+                    conf-mode-hook))
+      (add-hook mode (lambda ()
+                       (display-line-numbers-mode 1)
+                       (visual-line-mode t)
+                       (hl-line-mode t))))
+#+end_src
+
+Enable copying to the system clipboard (from [[https://www.reddit.com/r/emacs/comments/mgj9dy/emacs_nw_cant_copy_to_system_clipboard/][this]]):
+#+begin_src elisp
+  (setq
+    x-select-enable-clipboard t
+    x-select-enable-primary nil
+    x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
+    x-stretch-cursor nil)
+#+end_src
+
+* Look and feel
 
 #+begin_src elisp
   (use-package doom-themes
@@ -172,7 +208,7 @@
   (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "方正楷体_GBK"))
 #+end_src
 
-From https://zzamboni.org/post/beautifying-org-mode-in-emacs/.
+From [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/][this]].
 #+begin_src elisp
   (custom-theme-set-faces
      'user
@@ -199,266 +235,7 @@ From https://zzamboni.org/post/beautifying-org-mode-in-emacs/.
    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 #+end_src
 
-* Functionality
-
-Don't make backup files:
-
-#+begin_src elisp
-  (setq-default make-backup-files nil)
-#+end_src
-
-Allow to type German in Emacs:
-
-#+begin_src elisp
-  (setq mac-right-option-modifier 'none)  ; option + s --> ß
-#+end_src
-
-The =linum-mode= could slow down emacs when viewing large files or images. (refer to [[https://www.emacswiki.org/emacs/LineNumbers][this]] and [[https://github.com/redguardtoo/emacs.d/issues/178][this]])
-
-#+begin_src elisp
-  ;; (global-display-line-numbers-mode)
-  ;; (global-hl-line-mode t)                 ; line highlighting
-  ;; (global-visual-line-mode t)             ; line wrap
-  (setq display-line-numbers-width 4)
-  (dolist (mode '(text-mode-hook
-                    prog-mode-hook
-                    conf-mode-hook))
-      (add-hook mode (lambda ()
-                       (display-line-numbers-mode 1)
-                       (visual-line-mode t)
-                       (hl-line-mode t))))
-#+end_src
-
-
-For macOS:
-
-#+begin_src elisp
-  (when (memq window-system '(mac ns))
-    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-    (add-to-list 'default-frame-alist '(ns-appearance . light))
-    (setq ns-use-proxy-icon  nil)
-    (setq ns-pop-up-frames nil)
-    (setq frame-title-format nil))
-#+end_src
-
-
-Enable copying to the system clipboard (from [[https://www.reddit.com/r/emacs/comments/mgj9dy/emacs_nw_cant_copy_to_system_clipboard/][this]]):
-#+begin_src elisp
-  (setq
-    x-select-enable-clipboard t
-    x-select-enable-primary nil
-    x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
-    x-stretch-cursor nil)
-#+end_src
-
-* Functions
-
-** Add AucTeX file variables
-
-From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi][this]].
-#+begin_src elisp
-  (defun my/add-auctex-file-variables ()
-    (interactive)
-    (if (and (not buffer-read-only)
-             (string= (file-name-extension (buffer-file-name)) "tex"))
-        (progn
-          ;; (add-file-local-variable 'mode 'latex)
-          (add-file-local-variable 'TeX-engine 'xetex)
-          (goto-char (point-min)))))
-  ;; (add-hook 'LaTeX-mode-hook 'my/add-auctex-file-variables)
-#+end_src
-
-** Get size of a directory
-
-#+begin_src elisp
-  (defun my/dired-get-size ()
-    (interactive)
-    (let ((files (dired-get-marked-files)))
-      (with-temp-buffer
-        (apply 'call-process "/usr/bin/du" nil t nil "-sch" files)
-        (message "Size of all marked files: %s"
-                 (progn
-                   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
-                   (match-string 1))))))
-#+end_src
-
-** Enable write mode
-
-#+begin_src elisp
-  (defun my/org-enable-write-mode ()
-    (interactive)
-    (display-line-numbers-mode -1)
-    ;; (setq line-prefix "\t")
-    ;; (setq line-prefix nil)
-    (org-num-mode t)
-    (setq-local visual-fill-column-width 80)
-    (visual-fill-column-mode)
-    (hl-line-mode -1)
-    (setq-local org-bullets-bullet-list '(" "))
-    (org-bullets-mode)
-    )
-#+end_src
-
-** Set individual visibility source blocks
-
-#+begin_src elisp
-  (defun individual-visibility-source-blocks ()
-    "Fold some blocks in the current buffer."
-    (interactive)
-    (org-show-block-all)
-    (org-block-map
-     (lambda ()
-       (let ((case-fold-search t))
-         (when (and
-                (save-excursion
-                  (beginning-of-line 1)
-                  (looking-at org-block-regexp))
-                (cl-assoc
-                 ':hidden                 ;  mark blocks with :hidden
-                 (cl-third
-                  (org-babel-get-src-block-info))))
-           (org-hide-block-toggle))))))
-
-  (add-hook
-   'org-mode-hook
-   (function individual-visibility-source-blocks))
-#+end_src
-
-
-** Show heading and narrow to subtree
-
-#+begin_src elisp
-  (defun my/org-backward-narrow ()
-    (interactive)
-    (progn
-      (widen)
-      (org-backward-heading-same-level 1 t)
-      (org-narrow-to-subtree)))
-#+end_src
-
-#+begin_src elisp
-  (defun my/org-forward-narrow ()
-    (interactive)
-    (progn
-      (widen)
-      (org-forward-heading-same-level 1 t)
-      (org-narrow-to-subtree)))
-#+end_src
-
-** Open terminal
-
-#+begin_src elisp
-  ;; (defun my/open-alacritty ()
-  ;;   (interactive "@")
-  ;;   (shell-command (concat "alacritty --working-directory"
-  ;;                          (file-name-directory (or load-file-name buffer-file-name))
-  ;;                          " > /dev/null 2>&1 & disown") nil nil))
-  (defun my/open-alacritty ()
-    (interactive)
-    (call-process "alacritty" nil 0 nil "--working-directory" default-directory))
-#+end_src
-
-** Rename the current buffer file
-
-#+begin_src elisp
-(defun rename-current-buffer-file ()
-  "Renames current buffer and file it is visiting."
-  (interactive)
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: " filename)))
-        (if (get-buffer new-name)
-            (error "A buffer named '%s' already exists!" new-name)
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil)
-          (message "File '%s' successfully renamed to '%s'"
-                   name (file-name-nondirectory new-name)))))))
-#+end_src
-
-** Generate index of org-roam
-
-#+begin_src elisp
-(defun my/org-extract-index-from-directory (directory)
-  (let* ((filenames (directory-files directory nil "org$"))
-         (metadata '())
-         (text "# -*- mode: org -*-\n#+title: index\n\n"))
-    (dolist (filename filenames text)
-      (let* ((filepath (concat directory "/" filename))
-             (meta (my/org-get-metadata filepath)))
-        (add-to-list 'metadata meta)))
-    (setq metadata (sort metadata #'(lambda (x y) (string< (nth 2 x) (nth 2 y)))))
-    (dolist (meta metadata text)
-      (setq text (concat text
-                         (format "* TODO [[%s][%s]]" (nth 0 meta) (nth 2 meta))
-                         ;; (replace-regexp-in-string "/" ":" (format "%s" (nth 1 meta)))
-                         (if (nth 3 meta) (format "    %s\n" (nth 3 meta)) "\n")
-                         )))
-    text))
-
-(defun my/org-insert-index (directory outpath)
-  (with-temp-buffer
-    (insert (my/org-extract-index-from-directory directory))
-      (write-region (point-min) (point-max) outpath nil)))
-
-(defun my/org-generate-index ()
-  (interactive)
-  (my/org-insert-index "~/cloud/personal/orgroam" "~/temp/index.org")
-  (find-file "~/temp/index.org"))
-#+end_src
-
-** Insert modified time
-
-#+begin_src elisp
-(defun my/org-insert-modified-time ()
-  (when (eq major-mode 'org-mode)
-    (org-roam-set-keyword "time_updated" (format-time-string "%Y-%m-%dT%H:%M:%S%:z"))))
-(setq auto-revert-avoid-polling t)
-#+end_src
-
-* Keybindings
-
-#+begin_src elisp
-  (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
-  (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
-  (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
-  (global-set-key (kbd "C-c m g") 'goto-line)
-  (global-set-key (kbd "C-c m r") 'revert-buffer)
-  (global-set-key (kbd "C-c m v") 'add-file-local-variable-prop-line)
-  (global-set-key (kbd "M-[") 'previous-buffer)
-  (global-set-key (kbd "M-]") 'next-buffer)
-  (global-set-key (kbd "s-，") 'customize)
-  (global-set-key (kbd "M-【") 'previous-buffer)
-  (global-set-key (kbd "M-】") 'next-buffer)
-  (global-set-key (kbd "C-<tab>") 'other-window)
-  (global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
-  (global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
-  (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
-  (global-set-key (kbd "C-{") 'my/org-backward-narrow)
-  (global-set-key (kbd "C-}") 'my/org-forward-narrow)
-  (global-set-key (kbd "C-c m i") #'(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
-  (global-set-key (kbd "C-c m s") #'(lambda () (interactive) (find-file "~/.ssh/config")))
-  (global-set-key (kbd "C-c m l") #'(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
-  (global-set-key (kbd "C-c m t") 'my/org-generate-toc)
-  (global-set-key (kbd "C-c m d") 'my/org-generate-index)
-  (global-set-key (kbd "C-c m w") 'my/org-enable-write-mode)
-#+end_src
-
-* =exec-path-from-shell=
-
-#+begin_src elisp
-  (use-package exec-path-from-shell
-    ;; :if (memq window-system '(mac ns))
-    :init
-    (exec-path-from-shell-initialize)
-    :config
-    (setq exec-path-from-shell-arguments '("-l")))
-#+end_src
-
-* =all-the-icons-dired=
+** =all-the-icons-dired=
 
 #+begin_src elisp
   (use-package all-the-icons-dired
@@ -467,14 +244,14 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-* =rainbow-delimiters=
+** =rainbow-delimiters=
 
 #+begin_src elisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-* =visual-fill-column=
+** =visual-fill-column=
 
 #+begin_src elisp
   (use-package visual-fill-column
@@ -485,6 +262,38 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
                   visual-fill-column-center-text t)
     ;; (global-visual-fill-column-mode)
     )
+#+end_src
+
+* Built-in modes
+
+** =diff=                                                   :builtin:
+
+#+begin_src elisp
+  (use-package diff
+    :config
+    (setq diff-switches "-u -r"))
+#+end_src
+
+** =dired=                                                  :builtin:
+
+#+begin_src elisp
+  (use-package dired
+    :ensure nil
+    :bind (:map dired-mode-map (("?" . my/dired-get-size)))
+    :config
+    (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first")
+    (setq dired-guess-shell-alist-user '(("\\.pdf\\'" "okular")
+                                         ("\\.doc\\'" "libreoffice")
+                                         ("\\.docx\\'" "libreoffice")
+                                         ("\\.ppt\\'" "libreoffice")
+                                         ("\\.pptx\\'" "libreoffice")
+                                         ("\\.xls\\'" "libreoffice")
+                                         ("\\.xlsx\\'" "libreoffice")
+                                         ("\\.jpg\\'" "pinta")
+                                         ("\\.png\\'" "pinta")
+                                         ("\\.java\\'" "idea")))
+    (add-to-list 'display-buffer-alist
+                 (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
 #+end_src
 
 * =crux=                                                    :try:
@@ -512,42 +321,12 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
 
 #+end_src
 
-* =diff=                                                    :builtin:
-
-#+begin_src elisp
-  (use-package diff
-    :config
-    (setq diff-switches "-u -r"))
-#+end_src
-
-* =dired=                                                   :builtin:
-
-#+begin_src elisp
-  (use-package dired
-    :ensure nil
-    :bind (:map dired-mode-map (("?" . my/dired-get-size)))
-    :config
-    (setq dired-listing-switches "-avlh --time-style=long-iso --group-directories-first")
-    (setq dired-guess-shell-alist-user '(("\\.pdf\\'" "okular")
-                                         ("\\.doc\\'" "libreoffice")
-                                         ("\\.docx\\'" "libreoffice")
-                                         ("\\.ppt\\'" "libreoffice")
-                                         ("\\.pptx\\'" "libreoffice")
-                                         ("\\.xls\\'" "libreoffice")
-                                         ("\\.xlsx\\'" "libreoffice")
-                                         ("\\.jpg\\'" "pinta")
-                                         ("\\.png\\'" "pinta")
-                                         ("\\.java\\'" "idea")))
-    (add-to-list 'display-buffer-alist
-                 (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
-#+end_src
-
 * =org=
 
 #+begin_src elisp :noweb yes
   (use-package org
     :ensure t
-    :load-path "git/org-mode/lisp"
+    ;; :load-path "git/org-mode/lisp"
     :bind
     ("C-c a" . org-agenda)
     ("C-c c" . org-capture)
@@ -623,7 +402,7 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
             ))
           ("w" "Agenda for work" agenda ""
            ((org-agenda-tag-filter-preset '("+work")) (org-agenda-clockreport-mode t))
-           ("~/cloud/agenda.ics" "~/cloud/agenda.ps"))
+           ("~/cloud/personal/org/agenda.ics" "~/cloud/personal/agenda.ps"))
           ("t" "Agenda for today" agenda ""
            ((org-agenda-span 1)))
           ;; ("Y" alltodo "" nil ("~/cloud/todo.html" "~/cloud/todo.txt"))
@@ -642,29 +421,29 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
 
 #+NAME: org-babel
 #+begin_src elisp :tangle no
-  (setq org-babel-python-command "python3")
-  (setq org-export-babel-evaluate nil)
-  (setq org-confirm-babel-evaluate nil)
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((R . t)
-                               (C . t)
-                               (python . t)
-                               (shell . t)
-                               (ruby . t)
-                               (haskell . t)
-                               (scheme . t)
-                               (awk . t)
-                               (octave . t)
-                               (lua . t)
-                               (js . t)
-                               (dot . t)))
+  ;; (setq org-babel-python-command "python3")
+  ;; (setq org-export-babel-evaluate nil)
+  ;; (setq org-confirm-babel-evaluate nil)
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages '((R . t)
+  ;;                              (C . t)
+  ;;                              (python . t)
+  ;;                              (shell . t)
+  ;;                              (ruby . t)
+  ;;                              (haskell . t)
+  ;;                              (scheme . t)
+  ;;                              (awk . t)
+  ;;                              (octave . t)
+  ;;                              (lua . t)
+  ;;                              (js . t)
+  ;;                              (dot . t)))
 #+end_src
 
 ** =org-capture=
 
 #+NAME: org-capture
 #+begin_src elisp :tangle no
-  (setq org-default-notes-file "~/cloud/org/refile.gpg")
+  (setq org-default-notes-file "~/cloud/personal/org/refile.gpg")
   (setq org-capture-templates
         '(("i" "Idea" entry
            (file+headline org-default-notes-file "Ideas")
@@ -693,11 +472,18 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
   (setq org-latex-compiler "xelatex")
   (add-to-list 'org-latex-classes
                '("ctexart" "\\documentclass[11pt]{ctexart}"
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("ctexbook" "\\documentclass[11pt]{book}"
+                 ("\\part{%s}" . "\\part*{%s}")
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
   (setq org-latex-packages-alist '(("" "minted")
                                    ("" "booktabs")
                                    ("" "listings")
@@ -708,14 +494,16 @@ From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-a
                                    ("" "mathtools")
                                    ("" "ctex" t ("xelatex"))))
   (setq org-latex-pdf-process
-        '("latexmk -shell-escape -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
+        '("latexmk -shell-escape -bibtex -f -pdf -%latex -interaction=nonstopmode %f"
+          ;; "latexmk -shell-escape -bibtex -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"
+          ))
 
 
   ;; org-latex-preview
-  (setq org-latex-preview-numbered t
-        org-latex-preview-compiler-command-map '(("xelatex" . "xelatex -no-pdf -shell-escape")
-                                                 ("pdflatex" . "latex")
-                                                 ("lualatex" . "dvilualatex")))
+  ;; (setq org-latex-preview-numbered t
+  ;;       org-latex-preview-compiler-command-map '(("xelatex" . "xelatex -no-pdf -shell-escape")
+  ;;                                                ("pdflatex" . "latex")
+  ;;                                                ("lualatex" . "dvilualatex")))
 
   ;; org-html
   (setq org-html-htmlize-output-type 'css)
@@ -944,7 +732,7 @@ See [[https://github.com/abo-abo/org-download/issues/131][Issue #131]].
     (org-download-image-dir "assets")
     (org-download-heading-lvl nil)
     (org-download-timestamp "%Y-%m-%dT%H-%M-%S%:z_")
-    (org-image-actual-width 600)
+    (org-image-actual-width 800)
     (org-download-screenshot-method
      (cond
       ((eq system-type 'gnu/linux)
@@ -955,15 +743,266 @@ See [[https://github.com/abo-abo/org-download/issues/131][Issue #131]].
     ("C-M-y" . org-download-screenshot))
 #+end_src
 
-* =yasnippet=
+* =org-ref=
 
 #+begin_src elisp
-  (use-package yasnippet
-    :hook ((prog-mode . yas-minor-mode)
-           (org-mode . yas-minor-mode))
+  (use-package ivy-bibtex
+    :ensure t
     :config
-    (yas-global-mode)
-    (setq yas-indent-line 'fixed))
+    (setq
+     bibtex-completion-bibliography '("ref.bib")
+     ;; bibtex-completion-notes-path "~/Dropbox/emacs/bibliography/notes/"
+     bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+     bibtex-completion-additional-search-fields '(keywords)
+     bibtex-completion-display-formats
+     '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+       (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+       (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+       (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+       (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+     bibtex-completion-pdf-open-function
+     (lambda (fpath)
+       (call-process "open" nil 0 nil fpath))))
+
+  (use-package org-ref
+    :ensure t
+    :after org
+    ;; :load-path (lambda () (expand-file-name "org-ref" scimax-dir))
+    :init
+    ;; (add-to-list 'load-path
+    ;;              (expand-file-name "org-ref" scimax-dir))
+    :config
+    (require 'bibtex)
+    (setq bibtex-autokey-year-length 4
+  	bibtex-autokey-name-year-separator "-"
+  	bibtex-autokey-year-title-separator "-"
+  	bibtex-autokey-titleword-separator "-"
+  	bibtex-autokey-titlewords 2
+  	bibtex-autokey-titlewords-stretch 1
+  	bibtex-autokey-titleword-length 5)
+    (define-key bibtex-mode-map (kbd "H-b") 'org-ref-bibtex-hydra/body)
+    (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+    (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)
+    (require 'org-ref-ivy)
+    (require 'org-ref-arxiv)
+    (require 'org-ref-scopus)
+    (require 'org-ref-wos))
+
+
+  (use-package org-ref-ivy
+    :after org-ref
+    :ensure nil
+    ;; :load-path (lambda () (expand-file-name "org-ref" scimax-dir))
+    :config (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+  	      org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+  	      org-ref-insert-label-function 'org-ref-insert-label-link
+  	      org-ref-insert-ref-function 'org-ref-insert-ref-link
+  	      org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body))))
+#+end_src
+
+* =auctex= (TeX)
+
+Literally grabbed from [[https://karthinks.com/software/latex-input-for-impatient-scholars][this]].
+#+begin_src elisp
+  ;; AucTeX settings - almost no changes
+  (use-package latex
+    :ensure auctex
+    :hook ((LaTeX-mode . prettify-symbols-mode))
+    :bind (:map LaTeX-mode-map
+                ("C-S-e" . latex-math-from-calc))
+    :config
+    (setq TeX-engine 'xetex)
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq TeX-PDF-mode t)
+    (setq latex-run-command "xelatex")
+    (setq-default TeX-master nil)
+    (add-hook 'LaTeX-mode-hook (lambda ()
+                                 (push
+                                  '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+                                    :help "Run latexmk on file")
+                                  TeX-command-list)))
+    (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+    (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+
+    ;; Format math as a Latex string with Calc
+    (defun latex-math-from-calc ()
+      "Evaluate `calc' on the contents of line at point."
+      (interactive)
+      (cond ((region-active-p)
+             (let* ((beg (region-beginning))
+                    (end (region-end))
+                    (string (buffer-substring-no-properties beg end)))
+               (kill-region beg end)
+               (insert (calc-eval `(,string calc-language latex
+                                            calc-prefer-frac t
+                                            calc-angle-mode rad)))))
+            (t (let ((l (thing-at-point 'line)))
+                 (end-of-line 1) (kill-line 0)
+                 (insert (calc-eval `(,l
+                                      calc-language latex
+                                      calc-prefer-frac t
+                                      calc-angle-mode rad))))))))
+
+  (use-package preview
+    :after latex
+    :hook ((LaTeX-mode . preview-larger-previews))
+    :config
+    (defun preview-larger-previews ()
+      (setq preview-scale-function
+            (lambda () (* 1.25
+                          (funcall (preview-scale-from-face)))))))
+
+  ;; CDLatex settings
+  (use-package cdlatex
+    :ensure t
+    :hook (LaTeX-mode . turn-on-cdlatex)
+    :bind (:map cdlatex-mode-map
+                ("<tab>" . cdlatex-tab)))
+
+  ;; Yasnippet settings
+  (use-package yasnippet
+    :ensure t
+    :hook ((LaTeX-mode . yas-minor-mode)
+           (post-self-insert . my/yas-try-expanding-auto-snippets))
+    :config
+    (use-package warnings
+      :config
+      (cl-pushnew '(yasnippet backquote-change)
+                  warning-suppress-types
+                  :test 'equal))
+
+    (setq yas-triggers-in-field t)
+
+    ;; Function that tries to autoexpand YaSnippets
+    ;; The double quoting is NOT a typo!
+    (defun my/yas-try-expanding-auto-snippets ()
+      (when (and (boundp 'yas-minor-mode) yas-minor-mode)
+        (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
+          (yas-expand)))))
+
+  ;; CDLatex integration with YaSnippet: Allow cdlatex tab to work inside Yas
+  ;; fields
+  (use-package cdlatex
+    :hook ((cdlatex-tab . yas-expand)
+           (cdlatex-tab . cdlatex-in-yas-field))
+    :config
+    (use-package yasnippet
+      :bind (:map yas-keymap
+                  ("<tab>" . yas-next-field-or-cdlatex)
+                  ("TAB" . yas-next-field-or-cdlatex))
+      :config
+      (defun cdlatex-in-yas-field ()
+        ;; Check if we're at the end of the Yas field
+        (when-let* ((_ (overlayp yas--active-field-overlay))
+                    (end (overlay-end yas--active-field-overlay)))
+          (if (>= (point) end)
+              ;; Call yas-next-field if cdlatex can't expand here
+              (let ((s (thing-at-point 'sexp)))
+                (unless (and s (assoc (substring-no-properties s)
+                                      cdlatex-command-alist-comb))
+                  (yas-next-field-or-maybe-expand)
+                  t))
+            ;; otherwise expand and jump to the correct location
+            (let (cdlatex-tab-hook minp)
+              (setq minp
+                    (min (save-excursion (cdlatex-tab)
+                                         (point))
+                         (overlay-end yas--active-field-overlay)))
+              (goto-char minp) t))))
+
+      (defun yas-next-field-or-cdlatex nil
+        (interactive)
+        "Jump to the next Yas field correctly with cdlatex active."
+        (if
+            (or (bound-and-true-p cdlatex-mode)
+                (bound-and-true-p org-cdlatex-mode))
+            (cdlatex-tab)
+          (yas-next-field-or-maybe-expand)))))
+
+  ;; Array/tabular input with org-tables and cdlatex
+  (use-package org-table
+    :after cdlatex
+    :bind (:map orgtbl-mode-map
+                ("<tab>" . lazytab-org-table-next-field-maybe)
+                ("TAB" . lazytab-org-table-next-field-maybe))
+    :init
+    (add-hook 'cdlatex-tab-hook 'lazytab-cdlatex-or-orgtbl-next-field 90)
+    ;; Tabular environments using cdlatex
+    (add-to-list 'cdlatex-command-alist '("smat" "Insert smallmatrix env"
+                                          "\\left( \\begin{smallmatrix} ? \\end{smallmatrix} \\right)"
+                                          lazytab-position-cursor-and-edit
+                                          nil nil t))
+    (add-to-list 'cdlatex-command-alist '("bmat" "Insert bmatrix env"
+                                          "\\begin{bmatrix} ? \\end{bmatrix}"
+                                          lazytab-position-cursor-and-edit
+                                          nil nil t))
+    (add-to-list 'cdlatex-command-alist '("pmat" "Insert pmatrix env"
+                                          "\\begin{pmatrix} ? \\end{pmatrix}"
+                                          lazytab-position-cursor-and-edit
+                                          nil nil t))
+    (add-to-list 'cdlatex-command-alist '("tbl" "Insert table"
+                                          "\\begin{table}\n\\centering ? \\caption{}\n\\end{table}\n"
+                                          lazytab-position-cursor-and-edit
+                                          nil t nil))
+    :config
+    ;; Tab handling in org tables
+    (defun lazytab-position-cursor-and-edit ()
+      ;; (if (search-backward "\?" (- (point) 100) t)
+      ;;     (delete-char 1))
+      (cdlatex-position-cursor)
+      (lazytab-orgtbl-edit))
+
+    (defun lazytab-orgtbl-edit ()
+      (advice-add 'orgtbl-ctrl-c-ctrl-c :after #'lazytab-orgtbl-replace)
+      (orgtbl-mode 1)
+      (open-line 1)
+      (insert "\n|"))
+
+    (defun lazytab-orgtbl-replace (_)
+      (interactive "P")
+      (unless (org-at-table-p) (user-error "Not at a table"))
+      (let* ((table (org-table-to-lisp))
+             params
+             (replacement-table
+              (if (texmathp)
+                  (lazytab-orgtbl-to-amsmath table params)
+                (orgtbl-to-latex table params))))
+        (kill-region (org-table-begin) (org-table-end))
+        (open-line 1)
+        (push-mark)
+        (insert replacement-table)
+        (align-regexp (region-beginning) (region-end) "\\([:space:]*\\)& ")
+        (orgtbl-mode -1)
+        (advice-remove 'orgtbl-ctrl-c-ctrl-c #'lazytab-orgtbl-replace)))
+
+    (defun lazytab-orgtbl-to-amsmath (table params)
+      (orgtbl-to-generic
+       table
+       (org-combine-plists
+        '(:splice t
+                  :lstart ""
+                  :lend " \\\\"
+                  :sep " & "
+                  :hline nil
+                  :llend "")
+        params)))
+
+    (defun lazytab-cdlatex-or-orgtbl-next-field ()
+      (when (and (bound-and-true-p orgtbl-mode)
+                 (org-table-p)
+                 (looking-at "[[:space:]]*\\(?:|\\|$\\)")
+                 (let ((s (thing-at-point 'sexp)))
+                   (not (and s (assoc s cdlatex-command-alist-comb)))))
+        (call-interactively #'org-table-next-field)
+        t))
+
+    (defun lazytab-org-table-next-field-maybe ()
+      (interactive)
+      (if (bound-and-true-p cdlatex-mode)
+          (cdlatex-tab)
+        (org-table-next-field))))
+
 #+end_src
 
 * =ibuffer= (buffer)
@@ -1034,12 +1073,137 @@ See [[https://github.com/abo-abo/org-download/issues/131][Issue #131]].
     :config
     ;; enable this if you want `swiper' to use it
     (setq search-default-mode #'char-fold-to-regexp)
-    (global-set-key "\C-s" 'swiper))
+    (global-set-key "\C-s" 'swiper-isearch))
 #+end_src
 
-* =impatient-mode=
+* =projectile= (project)
 
-From https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/.
+#+begin_src elisp
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    (setq projectile-project-search-path '(("~/cloud". 4)))
+    ()
+    :bind-keymap ("C-c p" . projectile-command-map))
+#+end_src
+
+* =yasnippet= (snippet)
+
+#+begin_src elisp
+  (use-package yasnippet
+    :hook ((prog-mode . yas-minor-mode)
+           (org-mode . yas-minor-mode))
+    :config
+    (yas-global-mode)
+    (setq yas-indent-line 'fixed))
+#+end_src
+
+* =flycheck= (syntax checking)
+
+#+begin_src elisp
+  (use-package flycheck
+    :hook
+    (after-init . global-flycheck-mode)
+    (haskell-mode-hook . flycheck-haskell-setup)
+    :config
+    (setq flycheck-haskell-hlint-executable "~/.local/share/cabal/bin/hlint")
+    (flycheck-add-mode 'javascript-eslint 'web-mode))
+#+end_src
+
+* =flyspell= (spelling checking)
+
+#+begin_src elisp
+  (use-package flyspell
+    :hook (org-mode . flyspell-mode))
+#+end_src
+
+* =magit= (Git)
+
+#+begin_src elisp
+  (use-package magit
+    :ensure t
+    :init
+    :bind
+    ("C-x g" . magit-status)
+    :config
+    ;; (setq magit-display-buffer-function
+    ;;     (lambda (buffer)
+    ;;       (display-buffer buffer '(display-buffer-same-window))))
+    (setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer
+         buffer (if (and (derived-mode-p 'magit-mode)
+                         (memq (with-current-buffer buffer major-mode)
+                               '(magit-process-mode
+                                 magit-revision-mode
+                                 magit-diff-mode
+                                 magit-stash-mode
+                                 magit-status-mode)))
+                    nil
+                  '(display-buffer-same-window)))))
+    )
+#+end_src
+
+* =epg= (PGP)
+
+#+begin_src elisp
+  (use-package epa-file
+    :ensure nil
+    :config
+    (epa-file-enable)
+    (setq epa-pinentry-mode 'loopback))
+#+end_src
+
+* =pdf-tools= (PDF)
+
+#+begin_src elisp
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-height)
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+          TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+          TeX-source-correlate-start-server t)
+    ;; (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
+#+end_src
+
+* =telega= (Telegram)
+
+#+begin_src elisp
+  (use-package telega
+    :config
+    (setq telega-directory "~/.local/share/telega")
+    (setq telega-database-dir "~/.local/share/telega")
+    ;; (define-key global-map (kbd "C-c t") telega-prefix-map)
+    (add-hook 'telega-load-hook
+              (lambda ()
+                (define-key global-map (kbd "C-c t") telega-prefix-map)))
+    (add-hook 'telega-root-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+    (add-hook 'telega-chat-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+  )
+#+end_src
+
+#+begin_src elisp
+  (use-package page-break-lines
+  :ensure t
+  :hook (dashboard-mode-hook . page-break-lines-mode))
+#+end_src
+
+* =exec-path-from-shell=                                    :util:
+
+#+begin_src elisp
+  (use-package exec-path-from-shell
+    ;; :if (memq window-system '(mac ns))
+    :init
+    (exec-path-from-shell-initialize)
+    :config
+    (setq exec-path-from-shell-arguments '("-l")))
+#+end_src
+
+* =impatient-mode=                                          :util:
+
+From [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][this]].
 
 #+begin_src elisp
   (use-package simple-httpd
@@ -1074,149 +1238,7 @@ From https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/.
     (imp-visit-buffer))
 #+end_src
 
-* =magit= (Git)
-
-#+begin_src elisp
-  (use-package magit
-    :ensure t
-    :init
-    :bind
-    ("C-x g" . magit-status)
-    :config
-    ;; (setq magit-display-buffer-function
-    ;;     (lambda (buffer)
-    ;;       (display-buffer buffer '(display-buffer-same-window))))
-    (setq magit-display-buffer-function
-      (lambda (buffer)
-        (display-buffer
-         buffer (if (and (derived-mode-p 'magit-mode)
-                         (memq (with-current-buffer buffer major-mode)
-                               '(magit-process-mode
-                                 magit-revision-mode
-                                 magit-diff-mode
-                                 magit-stash-mode
-                                 magit-status-mode)))
-                    nil
-                  '(display-buffer-same-window)))))
-    )
-#+end_src
-
-* =auctex= (TeX)
-
-#+begin_src elisp
-  (use-package tex
-    :defer t
-    :ensure auctex
-    :config
-    (setq TeX-engine 'xetex)
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq TeX-PDF-mode t)
-    (setq latex-run-command "pdflatex")
-    (setq-default TeX-master nil)
-    (add-hook 'LaTeX-mode-hook (lambda ()
-                                 (push
-                                  '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-                                    :help "Run latexmk on file")
-                                  TeX-command-list)))
-    (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
-    (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-    (add-hook 'LaTeX-mode-hook
-              (defun preview-larger-previews ()
-                (setq preview-scale-function
-                      (lambda () (* 1.25
-                                    (funcall (preview-scale-from-face))))))))
-#+end_src
-
-* =epg= (PGP)
-
-#+begin_src elisp
-  (use-package epa-file
-    :ensure nil
-    :config
-    (epa-file-enable)
-    (setq epa-pinentry-mode 'loopback))
-#+end_src
-
-* =pdf-tools= (PDF)
-
-#+begin_src elisp
-  (use-package pdf-tools
-    :config
-    (pdf-tools-install)
-    (setq-default pdf-view-display-size 'fit-height)
-    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-          TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
-          TeX-source-correlate-start-server t)
-    ;; (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
-    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
-#+end_src
-
-* =projectile= (project)
-
-#+begin_src elisp
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    (setq projectile-project-search-path '(("~/cloud". 4)))
-    ()
-    :bind-keymap ("C-c p" . projectile-command-map))
-#+end_src
-
-* =flycheck=
-
-#+begin_src elisp
-  (use-package flycheck
-    :hook
-    (after-init . global-flycheck-mode)
-    (haskell-mode-hook . flycheck-haskell-setup)
-    :config
-    (setq flycheck-haskell-hlint-executable "~/.local/share/cabal/bin/hlint")
-    (flycheck-add-mode 'javascript-eslint 'web-mode))
-#+end_src
-
-* =flyspell=
-
-#+begin_src elisp
-  (use-package flyspell
-    :hook (org-mode . flyspell-mode))
-#+end_src
-
-* =telega=
-
-#+begin_src elisp
-  (use-package telega
-    :config
-    (setq telega-directory "~/.local/share/telega")
-    (setq telega-database-dir "~/.local/share/telega")
-    ;; (define-key global-map (kbd "C-c t") telega-prefix-map)
-    (add-hook 'telega-load-hook
-              (lambda ()
-                (define-key global-map (kbd "C-c t") telega-prefix-map)))
-    (add-hook 'telega-root-mode-hook (lambda () (setq show-trailing-whitespace nil)))
-    (add-hook 'telega-chat-mode-hook (lambda () (setq show-trailing-whitespace nil)))
-  )
-#+end_src
-
-#+begin_src elisp
-  (use-package page-break-lines
-  :ensure t
-  :hook (dashboard-mode-hook . page-break-lines-mode))
-#+end_src
-
-* =beancount=
-
-#+begin_src elisp
-  (use-package beancount
-    :ensure nil
-    :load-path "git/beancount-mode"
-    :mode (("\\.beancount\\'" . beancount-mode)))
-  ;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
-  ;; (require 'beancount)
-  ;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-#+end_src
-
-* =activity-watch-mode=
+* =activity-watch-mode=                                     :util:
 
 #+begin_src elisp
   (use-package activity-watch-mode
@@ -1224,7 +1246,16 @@ From https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/.
     (global-activity-watch-mode))
 #+end_src
 
-* =markdown-mode=
+* =beancount=                                               :markup:
+
+#+begin_src elisp
+  (use-package beancount
+    :ensure nil
+    :load-path "git/beancount-mode"
+    :mode (("\\.beancount\\'" . beancount-mode)))
+#+end_src
+
+* =markdown-mode=                                           :markup:
 
 #+begin_src elisp
   (use-package markdown-mode
@@ -1289,6 +1320,234 @@ From https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/.
   (use-package js
     :config
     (setq js-indent-level 2))
+#+end_src
+
+* Functions
+
+** Add AucTeX file variables
+
+From [[https://emacs.stackexchange.com/questions/27109/how-can-i-automatically-add-some-local-variables-info-to-a-c-x-c-f-new-tex-fi][this]].
+#+begin_src elisp
+  (defun my/add-auctex-file-variables ()
+    (interactive)
+    (if (and (not buffer-read-only)
+             (string= (file-name-extension (buffer-file-name)) "tex"))
+        (progn
+          ;; (add-file-local-variable 'mode 'latex)
+          (add-file-local-variable 'TeX-engine 'xetex)
+          (goto-char (point-min)))))
+  ;; (add-hook 'LaTeX-mode-hook 'my/add-auctex-file-variables)
+#+end_src
+
+** Get size of a directory
+
+#+begin_src elisp
+  (defun my/dired-get-size ()
+    (interactive)
+    (let ((files (dired-get-marked-files)))
+      (with-temp-buffer
+        (apply 'call-process "/usr/bin/du" nil t nil "-sch" files)
+        (message "Size of all marked files: %s"
+                 (progn
+                   (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
+                   (match-string 1))))))
+#+end_src
+
+** Enable write mode
+
+#+begin_src elisp
+  (defun my/org-enable-write-mode ()
+    (interactive)
+    (display-line-numbers-mode -1)
+    ;; (setq line-prefix "\t")
+    ;; (setq line-prefix nil)
+    (org-num-mode t)
+    (setq-local visual-fill-column-width 80)
+    (visual-fill-column-mode)
+    (hl-line-mode -1)
+    (setq-local org-bullets-bullet-list '(" "))
+    (org-bullets-mode)
+    )
+#+end_src
+
+** Set individual visibility source blocks
+
+#+begin_src elisp
+  (defun my/individual-visibility-source-blocks ()
+    "Fold some blocks in the current buffer."
+    (interactive)
+    (org-show-block-all)
+    (org-block-map
+     (lambda ()
+       (let ((case-fold-search t))
+         (when (and
+                (save-excursion
+                  (beginning-of-line 1)
+                  (looking-at org-block-regexp))
+                (cl-assoc
+                 ':hidden                 ;  mark blocks with :hidden
+                 (cl-third
+                  (org-babel-get-src-block-info))))
+           (org-hide-block-toggle))))))
+#+end_src
+
+** Show heading and narrow to subtree
+
+#+begin_src elisp
+  (defun my/org-backward-narrow ()
+    (interactive)
+    (progn
+      (widen)
+      (org-backward-heading-same-level 1 t)
+      (org-narrow-to-subtree)))
+#+end_src
+
+#+begin_src elisp
+  (defun my/org-forward-narrow ()
+    (interactive)
+    (progn
+      (widen)
+      (org-forward-heading-same-level 1 t)
+      (org-narrow-to-subtree)))
+#+end_src
+
+** Open terminal
+
+#+begin_src elisp
+  ;; (defun my/open-alacritty ()
+  ;;   (interactive "@")
+  ;;   (shell-command (concat "alacritty --working-directory"
+  ;;                          (file-name-directory (or load-file-name buffer-file-name))
+  ;;                          " > /dev/null 2>&1 & disown") nil nil))
+  (defun my/open-alacritty ()
+    (interactive)
+    (call-process "alacritty" nil 0 nil "--working-directory" default-directory))
+#+end_src
+
+** Rename the current buffer file
+
+#+begin_src elisp
+(defun my/rename-current-buffer-file ()
+  "Renames current buffer and file it is visiting."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: " filename)))
+        (if (get-buffer new-name)
+            (error "A buffer named '%s' already exists!" new-name)
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil)
+          (message "File '%s' successfully renamed to '%s'"
+                   name (file-name-nondirectory new-name)))))))
+#+end_src
+
+** Generate index of org-roam
+
+#+begin_src elisp
+  (defun my/org-get-metadata (filename)
+    "Get metadata of FILENAME."
+    (with-temp-buffer
+      (org-mode)
+      (insert-file-contents filename)
+      (let* ((category (org-entry-get nil "collection" t))
+             (title (nth 1 (car (org-collect-keywords '("title")))))
+             (filetags (nth 1 (car (org-collect-keywords '("filetags")))))
+             (metadata (list filename category title filetags)))
+        metadata)))
+
+  (defun my/org-extract-index-from-directory (directory)
+    (let* ((filenames (directory-files directory nil "org$"))
+           (metadata '())
+           (text "# -*- mode: org -*-\n#+title: index\n\n"))
+      (dolist (filename filenames text)
+        (let* ((filepath (concat directory "/" filename))
+               (meta (my/org-get-metadata filepath)))
+          (add-to-list 'metadata meta)))
+      (setq metadata (sort metadata #'(lambda (x y) (string< (nth 2 x) (nth 2 y)))))
+      (dolist (meta metadata text)
+        (setq text (concat text
+                           (format "* TODO [[%s][%s]]" (nth 0 meta) (nth 2 meta))
+                           ;; (replace-regexp-in-string "/" ":" (format "%s" (nth 1 meta)))
+                           (if (nth 3 meta) (format "    %s\n" (nth 3 meta)) "\n")
+                           )))
+      text))
+
+  (defun my/org-insert-index (directory outpath)
+    (with-temp-buffer
+      (insert (my/org-extract-index-from-directory directory))
+      (write-region (point-min) (point-max) outpath nil)))
+
+  (defun my/org-generate-index ()
+    (interactive)
+    (my/org-insert-index "~/cloud/personal/orgroam" "~/scratch/index.org")
+    (find-file "~/scratch/index.org"))
+#+end_src
+
+** Insert modified time
+
+#+begin_src elisp
+(defun my/org-insert-modified-time ()
+  (when (eq major-mode 'org-mode)
+
+    (org-roam-set-keyword "time_updated" (format-time-string "%Y-%m-%dT%H:%M:%S%:z"))))
+(setq auto-revert-avoid-polling t)
+#+end_src
+
+** Delete file and buffer
+
+From [[https://gist.github.com/hyOzd/23b87e96d43bca0f0b52][this]]. (replaced by =crux-delete-file-and-buffer=)
+#+begin_src elisp :tangle no
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+            (progn
+              (delete-file filename)
+              (message "Deleted file %s." filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
+#+end_src
+
+* Keybindings
+
+#+begin_src elisp
+  (global-set-key (kbd "C-c m f") 'toggle-frame-fullscreen)
+  (global-set-key (kbd "C-c m m") 'toggle-frame-maximized)
+  (global-set-key (kbd "C-c m 0") 'text-scale-adjust)
+  (global-set-key (kbd "C-c m g") 'goto-line)
+  (global-set-key (kbd "C-c m r") 'revert-buffer)
+  (global-set-key (kbd "C-c m v") 'add-file-local-variable-prop-line)
+  (global-set-key (kbd "M-[") 'previous-buffer)
+  (global-set-key (kbd "M-]") 'next-buffer)
+  (global-set-key (kbd "s-，") 'customize)
+  (global-set-key (kbd "M-【") 'previous-buffer)
+  (global-set-key (kbd "M-】") 'next-buffer)
+  (global-set-key (kbd "C-<tab>") 'other-window)
+  (global-set-key (kbd "C-c C-x C-i") 'org-clock-in)
+  (global-set-key (kbd "C-c C-x C-o") 'org-clock-out)
+  (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+  (global-set-key (kbd "C-{") 'my/org-backward-narrow)
+  (global-set-key (kbd "C-}") 'my/org-forward-narrow)
+  (global-set-key (kbd "C-c m i") #'(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
+  (global-set-key (kbd "C-c m s") #'(lambda () (interactive) (find-file "~/.ssh/config")))
+  (global-set-key (kbd "C-c m l") #'(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
+  (global-set-key (kbd "C-c m t") 'my/org-generate-toc)
+  (global-set-key (kbd "C-c m d") 'my/org-generate-index)
+  (global-set-key (kbd "C-c m w") 'my/org-enable-write-mode)
+#+end_src
+
+* Hooks
+
+#+begin_src elisp
+  (add-hook
+   'org-mode-hook
+   (function my/individual-visibility-source-blocks))
 #+end_src
 
 * COMMENT INACTIVE
@@ -1537,4 +1796,3 @@ From https://christiantietze.de/posts/2019/12/emacs-notifications/.
   (add-to-list 'load-path "~/.emacs.d/org-auctex")
   (load "org-auctex.el")
 #+end_src
-
