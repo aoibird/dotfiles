@@ -1,0 +1,4 @@
+# key: resgraph
+# name: resgraph
+# --
+:results graphics file output :file ./

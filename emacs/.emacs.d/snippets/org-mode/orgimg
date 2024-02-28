@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: orgimg
+# key: orgimg
+# --
+#+CAPTION:
+#+ATTR_ORG: :width 400
+[[./
