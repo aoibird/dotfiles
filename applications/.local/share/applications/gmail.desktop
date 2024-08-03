@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Gmail
+Exec=/usr/lib/firefox/firefox -P proxy "https://mail.google.com"
+StartupNotify=true
+Icon=emblem-mail
+StartupWMClass=firefox
+Terminal=false
+Type=Application
+Version=1.0

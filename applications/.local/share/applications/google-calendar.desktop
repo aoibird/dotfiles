@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Google Calendar
+Exec=/usr/lib/firefox/firefox -P proxy "https://calendar.google.com"
+StartupNotify=true
+Icon=x-office-calendar
+StartupWMClass=firefox
+Terminal=false
+Type=Application
+Version=1.0

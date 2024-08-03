@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ChatGPT
+Exec=/usr/lib/firefox/firefox -P proxy "https://chat.openai.com"
+StartupNotify=true
+Icon=www-browser
+StartupWMClass=firefox
+Terminal=false
+Type=Application
+Version=1.0
