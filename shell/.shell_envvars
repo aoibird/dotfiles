@@ -26,6 +26,11 @@ export JAVA_OPTS="-Djava.util.prefs.userRoot=$XDG_DATA_HOME/java"
 export TEXMACS_HOME_PATH=$XDG_DATA_HOME/texmacs
 export CABAL_DIR=$XDG_DATA_HOME/cabal
 export MAXIMA_USERDIR=$XDG_DATA_HOME/maxima
+export FIFTYONE_DATASET_ZOO_DIR=$XDG_DATA_HOME/fiftyone
+export FIFTYONE_DEFAULT_DATASET_DIR=$XDG_DATA_HOME/fiftyone
+export FIFTYONE_MODEL_ZOO_DIR=$XDG_DATA_HOME/fiftyone/__models__
+export STACK_ROOT=$XDG_DATA_HOME/stack
+export VAGRANT_HOME=$XDG_DATA_HOME/vagrant.d
 
 export GTK2_RC_FILES=$XDG_CONFIG_HOME/gtk-2.0/gtkrc
 export GTK_RC_FILES=$XDG_CONFIG_HOME/gtk/gtkrc
@@ -37,11 +42,20 @@ export GVIMINIT='let $MYGVIMRC="$XDG_CONFIG_HOME/vim/gvimrc" | source $MYGVIMRC'
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 export CABAL_CONFIG=$XDG_CONFIG_HOME/cabal/config
 export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/startup.py
+export FIFTYONE_DATABASE_DIR=$XDG_CONFIG_HOME/fiftyone/var/lib/mongo
+# export FIFTYONE_CONFIG_PATH=$XDG_CONFIG_HOME/fiftyone/config.json
+# export FIFTYONE_APP_CONFIG_PATH=$XDG_CONFIG_HOME/fiftyone/app_config.json
+
+export BUNDLE_USER_HOME=$XDG_CONFIG_HOME/bundle
+export BUNDLE_USER_CACHE=$XDG_CACHE_HOME/bundle
+export BUNDLE_USER_CONFIG=$XDG_CONFIG_HOME/bundle/config
+export BUNDLE_USER_PLUGIN=$XDG_CONFIG_HOME/bundle/plugin
 
 export XAUTHORITY=$XDG_CACHE_HOME/Xauthority
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
 
 export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/dotfiles/scripts:$PATH
+export PATH=$HOME/.local/scripts:$PATH
 
 
 export LESS='-R --use-color -Dd+r$Du+b'

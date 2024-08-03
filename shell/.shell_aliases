@@ -14,6 +14,7 @@ if [ "$(uname)" = "Linux" ]; then
     alias grep='grep --color=auto '
     alias ip='ip -color=auto '
     alias tree='tree -C '
+    alias cp='cp -i '
 fi
 
 alias gitgraph='git log --graph --oneline --branches '
@@ -40,6 +41,7 @@ alias tmux='tmux -u '
 alias pyc='python -c '
 alias dc='docker-compose '
 alias pdmd2org='pandoc -f markdown -t org '
+alias pdlatex2org='pandoc -f latex -t org '
 
 
 mkcd() {
