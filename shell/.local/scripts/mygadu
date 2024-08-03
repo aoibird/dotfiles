@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-git annex find "$@" --include '*' --format='${bytesize}\n' | awk '{ sum += $1; nfiles++; } END { printf "%d files, %.3f MB\n", nfiles, sum/1000000 } '
