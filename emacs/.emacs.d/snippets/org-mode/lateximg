@@ -3,5 +3,6 @@
 # key: lateximg
 # --
 #+CAPTION:
+#+NAME:
 #+ATTR_LATEX: :placement [H]
 [[./
