@@ -24,7 +24,9 @@ export RPROMPT='%F{blue}%D{%H:%M}%f'
 
 # Auto-suggestions
 # https://github.com/zsh-users/zsh-autosuggestions
-safesource $XDG_CONFIG_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# safesource $XDG_CONFIG_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+safesource /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+safesource /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # History
 export HISTFILE=$XDG_DATA_HOME/zsh/history
